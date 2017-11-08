@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="PWKInputItemBaseStyle">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">@dimen/pwk_input_item_text_size</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!--蓝色填充样式，平板App使用-->
+    <style name="PWKInputItemStyleBlue" parent="PWKInputItemBaseStyle">
+        <item name="android:background">@drawable/pwk_input_item_bg_fill_blue</item>
+        <item name="android:textColor">@color/pwk_input_cell_text_filled</item>
+    </style>
+
+    <!--绿色边框样式，ECP使用-->
+    <style name="PWKInputItemStyleGreen" parent="PWKInputItemBaseStyle">
+        <item name="android:background">@drawable/pwk_input_item_bg_border_green</item>
+        <item name="android:textColor">@color/pwk_input_cell_text_border</item>
+        <item name="android:layout_margin">0px</item>
+    </style>
+
+    <!--可以通过覆盖这个样式的设置来修改不同的样式-->
+    <style name="PWKInputItemStyle" parent="PWKInputItemStyleBlue"/>
+
+
+    <!--输入组件整体样式设置-->
+    <style name="PWKInputViewBaseStyle">
+        <item name="android:showDividers">middle</item>
+    </style>
+
+    <!--分离式组件样式-->
+    <style name="PWKInputViewStyleDivided" parent="PWKInputViewBaseStyle">
+        <item name="android:divider">@drawable/pwk_input_divider_space</item>
+    </style>
+
+    <!--合并在一起的组件样式-->
+    <style name="PWKInputViewStyleMixed" parent="PWKInputViewBaseStyle">
+        <item name="android:background">@drawable/pwk_input_item_border_gray_r2</item>
+        <item name="android:divider">@drawable/pwk_input_divider_line</item>
+    </style>
+
+    <style name="PWKInputViewStyle" parent="PWKInputViewStyleMixed">
+
+    </style>
+
+</resources>

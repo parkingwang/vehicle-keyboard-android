@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    tools:context="com.parkingwang.vehiclekeyboard.demo.MainActivity">
+
+    <com.parkingwang.vehiclekeyboard.view.InputView
+        android:id="@+id/input_view"
+        android:layout_margin="6dp"
+        app:pwkInputTextSize="22sp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"/>
+
+    <Button
+        android:id="@+id/lock_type"
+        android:text="@string/pwk_change_to_energy"
+        android:layout_below="@id/input_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/keyboard_types"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lock_type">
+        <Button
+            android:id="@+id/full"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="@string/full_keyboard"/>
+        <Button
+            android:id="@+id/civil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="@string/civil_keyboard"/>
+        <Button
+            android:id="@+id/civil_wj"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="@string/civil_wj_keyboard"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/locations"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/keyboard_types">
+        <Button
+            android:id="@+id/adjust_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="@string/adjust_height"/>
+        <Button
+            android:id="@+id/fixed_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="@string/fixed_height"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/test_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/locations"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/test_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="@string/test_number"/>
+
+        <Button
+            android:id="@+id/clear_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="@string/clear_number"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/popup_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/test_group"
+        android:onClick="onClick"
+        android:text="@string/popup_keyboard" />
+
+    <com.parkingwang.vehiclekeyboard.view.KeyboardView
+        android:id="@+id/keyboard_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:pwkKeyboardType="CIVIL"/>
+
+</RelativeLayout>

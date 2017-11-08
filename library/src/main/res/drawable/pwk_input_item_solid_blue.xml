@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017. Xi'an iRain IOT Technology service CO., Ltd (ShenZhen). All Rights Reserved.
+  -->
+<inset
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetBottom="1dp"
+    android:insetTop="1dp">
+    <shape>
+        <corners android:radius="@dimen/pwk_input_item_radius"/>
+        <solid android:color="@color/pwk_highlight_blue"/>
+        <stroke
+            android:width="1px"
+            android:color="@color/pwk_highlight_blue"/>
+    </shape>
+</inset>

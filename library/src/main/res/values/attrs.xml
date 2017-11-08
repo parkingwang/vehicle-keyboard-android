@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017. Xi'an iRain IOT Technology service CO., Ltd (ShenZhen). All Rights Reserved.
+  -->
+
+<resources>
+    <declare-styleable name="KeyboardView">
+        <attr name="pwkKeyboardType" format="enum">
+            <enum name="FULL" value="0"/>
+            <enum name="CIVIL" value="1"/>
+            <enum name="CIVIL_WJ" value="2"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="InputView">
+        <attr name="pwkInputTextSize" format="dimension"/>
+    </declare-styleable>
+
+</resources>

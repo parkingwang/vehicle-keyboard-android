@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017. Xi'an iRain IOT Technology service CO., Ltd (ShenZhen). All Rights Reserved.
+  -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <size android:width="@dimen/pwk_keyboard_key_space_horizontal"/>
+    <solid android:color="@android:color/transparent"/>
+</shape>
