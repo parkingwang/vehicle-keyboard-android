@@ -4,7 +4,7 @@
   -->
 
 <resources>
-    <color name="pwk_keyboard_divider">#E5E5E5</color>
+    <color name="pwk_keyboard_divider">#CCC</color>
     <color name="pwk_keyboard_background">#E9E9E9</color>
 
     <color name="pwk_text_color">#333333</color>

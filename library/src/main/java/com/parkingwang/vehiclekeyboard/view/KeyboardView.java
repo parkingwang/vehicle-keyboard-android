@@ -367,8 +367,6 @@ public class KeyboardView extends LinearLayout {
                 }
             }
         }
-//        measureChildren(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-//        setMeasuredDimension(width, height);
         super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
     }
 
