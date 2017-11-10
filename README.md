@@ -59,7 +59,7 @@ KeyboardView是车牌输入键盘组件，提供按车牌类型显示一定规�
 
 在代码中绑定输入组件与键盘的关联：
 
-**使用弹出键盘**
+##### 使用弹出键盘
 
 详见 MainActivity 的演示代码。
 
@@ -96,7 +96,7 @@ KeyboardView是车牌输入键盘组件，提供按车牌类型显示一定规�
 
 ```
 
-**不弹出键盘，直接显示**
+##### 不弹出键盘，直接显示
 
 ```java
 
@@ -159,13 +159,31 @@ mController.useDefaultMessageHandler();
 
 在项目的`styles.xml`中覆盖设置以上两种样式配置，可以切换显示不同的样式。可参考 App 的配置代码。
 
-**如何修改自己的样式**
+##### 如何修改自己的样式
 
 覆盖`PWKInputItemStyle`和`PWKInputViewStyle`来实现。
 
 - ItemStyle是输入组件内部每个输入框的样式设置
 - ViewStyle是输入组件的整体样式设置。
 
+##### InputView的样式选项
+
+通过覆盖以下样式配置，可以修改默认样式
+
+```xml
+    <!--输入框外边框宽度-->
+    <dimen name="pwk_input_view_border_width">0.7pt</dimen>
+    <!--输入框分割线的宽度，在混合组件中使用-->
+    <dimen name="pwk_input_view_divider_split_line">@dimen/pwk_input_view_border_width</dimen>
+    <!--输入框分割空间的距离，在分离组件样式中使用-->
+    <dimen name="pwk_input_view_divider_split_space">5dp</dimen>
+    <!--输入框选中状态的边框宽度，在混合组件中使用-->
+    <dimen name="pwk_input_item_highlight_border_width">1.2pt</dimen>
+    <!--输入框圆角-->
+    <dimen name="pwk_input_item_radius">4dp</dimen>
+    <!--输入框字体大小-->
+    <dimen name="pwk_input_item_text_size">24sp</dimen>
+```
 
 ## 设置键盘类型
 

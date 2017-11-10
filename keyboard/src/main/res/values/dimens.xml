@@ -18,10 +18,16 @@
 
     <!--输入组件的参数设置-->
 
+    <!--输入框外边框宽度-->
     <dimen name="pwk_input_view_border_width">0.7pt</dimen>
+    <!--输入框分割线的宽度，在混合组件中使用-->
     <dimen name="pwk_input_view_divider_split_line">@dimen/pwk_input_view_border_width</dimen>
+    <!--输入框分割空间的距离，在分离组件样式中使用-->
     <dimen name="pwk_input_view_divider_split_space">5dp</dimen>
-    <dimen name="pwk_input_item_border_width">1.2pt</dimen>
+    <!--输入框选中状态的边框宽度，在混合组件中使用-->
+    <dimen name="pwk_input_item_highlight_border_width">1.2pt</dimen>
+    <!--输入框圆角-->
+    <dimen name="pwk_input_item_radius">4dp</dimen>
+    <!--输入框字体大小-->
     <dimen name="pwk_input_item_text_size">24sp</dimen>
-    <dimen name="pwk_input_item_radius">2dp</dimen>
 </resources>
