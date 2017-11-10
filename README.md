@@ -2,10 +2,20 @@
 
 ## 添加依赖
 
+增加仓库地址：
+
 ```groovy
-    implementation 'com.parkingwang:vehicle-keyboard:0.5.2-ALPHA'
+repositories {
+    maven { url "https://dl.bintray.com/parkingwang/maven" }
+}
+```
+
+添加库依赖：
+
+```groovy
+    implementation 'com.parkingwang:keyboard:0.1-ALPHA'
     // OR
-    compile 'com.parkingwang:vehicle-keyboard:0.5.2-ALPHA'
+    compile 'com.parkingwang:vehicle-keyboard:0.1-ALPHA'
 ```
 
 ## 使用组件
@@ -97,10 +107,6 @@ mController = KeyboardInputController
 mController.useDefaultMessageHandler();
 
 ```
-
-## API doc
-
-http://githang.com/private-doc/vehicle-keyboard/
 
 ## 其他设置
 
