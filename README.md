@@ -1,4 +1,10 @@
-# Keyboard-Android 车牌专用键盘
+# VehicleKeyboard-Android 车牌专用键盘
+
+`VehicleKeyboard`是停车王品牌的各端产品线的基础组件，专为提高中国车牌号码输入速度而定制开发的专用键盘组件，包括以下三个项目：
+
+- [VehicleKeyboard-Android](https://github.com/parkingwang/vehicle-keyboard-android)即本项目，为Android客户端定制包括输入组件、键盘组件及相关控制逻辑实现；
+- [VehicleKeyboard-iOS](https://github.com/parkingwang/vehicle-keyboard-ios) 即iOS客户端项目，为iOS客户端定制包括输入组件、键盘组件及相关控制逻辑实现；
+- [VehicleKeyboard-JS](https://github.com/parkingwang/vehicle-keyboard-js) 即JavaScript项目，为H5页面定制，包括Web、微信、支付宝等，同样包括输入组件、键盘组件及相关控制逻辑实现
 
 ## 添加依赖
 
@@ -6,16 +12,16 @@
 
 ```groovy
 repositories {
-    maven { url "https://dl.bintray.com/parkingwang/maven" }
+    jcenter()
 }
 ```
 
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.1-ALPHA'
+    implementation 'com.parkingwang:keyboard:0.1-BETA'
     // OR
-    compile 'com.parkingwang:keyboard:0.1-ALPHA'
+    compile 'com.parkingwang:keyboard:0.1-BETA'
 ```
 
 ## 使用组件
