@@ -95,11 +95,11 @@
         android:onClick="onClick"
         android:text="@string/popup_keyboard" />
 
-    <com.parkingwang.vehiclekeyboard.view.KeyboardView
-        android:id="@+id/keyboard_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:pwkKeyboardType="CIVIL"/>
+    <!--<com.parkingwang.vehiclekeyboard.view.KeyboardView-->
+        <!--android:id="@+id/keyboard_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--app:pwkKeyboardType="CIVIL"/>-->
 
 </RelativeLayout>

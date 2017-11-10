@@ -33,11 +33,11 @@ public interface KeyboardCallback {
      * 车牌键盘更新后的回调事件
      * @param keyboard 键盘信息
      */
-    void onKeyboardInfo(KeyboardEntry keyboard);
+    void onUpdateKeyboard(KeyboardEntry keyboard);
 
     //////
 
-    abstract class Base implements KeyboardCallback {
+    abstract class Simple implements KeyboardCallback {
 
         @Override
         public void onTextKey(String text) {
@@ -55,7 +55,7 @@ public interface KeyboardCallback {
         }
 
         @Override
-        public void onKeyboardInfo(KeyboardEntry keyboard) {
+        public void onUpdateKeyboard(KeyboardEntry keyboard) {
 
         }
     }

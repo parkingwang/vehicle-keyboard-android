@@ -1,20 +1,29 @@
 package com.parkingwang.vehiclekeyboard.support;
 
-import android.support.v4.util.PatternsCompat;
-import android.text.TextUtils;
-import android.util.Log;
-import android.util.Patterns;
-
 import java.util.regex.Pattern;
 
-/**
- * @author
- * @version 2017-11-02
- * @since 2017-11-02
- */
 public class Texts {
-    private static final Pattern LETTER_OR_DIGIT = Pattern.compile("[^a-zA-Z0-9]");
+
     public static boolean isLetterOrDigitOnly(String str) {
-        return !LETTER_OR_DIGIT.matcher(str).find();
+        for (char c : str.toCharArray()) {
+            if (! Character.isLetterOrDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static boolean isNewEnergyType(String number) {
+        if (number != null && number.length() > 2) {
+            final int size = 8 - number.length();
+            for (int i = 0; i < size; i++) number += "0";
+            if (Pattern.matches("\\w[A-Z][0-9DF][0-9A-Z]\\d{3}[0-9DF]", number)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 }

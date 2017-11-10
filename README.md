@@ -1,18 +1,20 @@
-# Keyboard-Android
+# Keyboard-Android 车牌专用键盘
 
-## 依赖
+## 添加依赖
 
 ```groovy
-    implementation 'com.parkingwang:vehicle-keyboard:0.5.1-SNAPSHOT'
+    implementation 'com.parkingwang:vehicle-keyboard:0.5.2-ALPHA'
     // OR
-    compile 'com.parkingwang:vehicle-keyboard:0.5.1-SNAPSHOT'
+    compile 'com.parkingwang:vehicle-keyboard:0.5.2-ALPHA'
 ```
 
-## 使用
+## 使用组件
 
-### 车牌号码输入组件
+### 车牌号码输入组件 InputView
 
 ![](./PWK_INPUT_VIEW.png)
+
+InputView是用于手动输入车牌的组件，提供7-8个用户可选择修改的输入框，如上图所示。
 
 在XML中放置输入组件：
 
@@ -25,9 +27,12 @@
         android:layout_height="60dp"/>
 
 ```
-### 车牌号码键盘组件
+
+### 车牌号码键盘组件 - KeyboardView
 
 ![](./PWK_KEYBOARD_VIEW.png)
+
+KeyboardView是车牌输入键盘组件，提供按车牌类型显示一定规则的键盘布局供用户点击，如上图所示。
 
 在XML中放置键盘组件：
 
@@ -40,34 +45,62 @@
             app:pwkKeyboardType="CIVIL"/>
 ```
 
+### 输入框和键盘控制器 - KeyboardInputController
+
 在代码中绑定输入组件与键盘的关联：
+
+**使用弹出键盘**
+
+详见 MainActivity 的演示代码。
 
 ```java
     // Init Views
 
     // 输入组件View
     mInputView = findViewById(R.id.input_view);
-    // 键盘View
-    mKeyboardView = findViewById(R.id.keyboard_view);
     // 锁定新能源车牌View
     mLockType = findViewById(R.id.lock_type);
 
-    mKeyboardView.setKeyboardType(KeyboardType.CIVIL_WJ);
+    // 创建弹出键盘
+    mPopupKeyboard = new PopupKeyboard(this);
+    // 弹出键盘内部包含一个KeyboardView，在此绑定输入两者关联。
+    mPopupKeyboard.attach(mInputView, this);
+    mPopupKeyboard.getKeyboardView()
+            .setKeyboardType(KeyboardType.CIVIL_WJ);
 
-    // 绑定
-    mKeyboardBinder = KeyboardBinder.with(mKeyboardView, mInputView);
-    mKeyboardBinder.attach()
-            .setKeyboardInputChangeSync()
-            .useDefaultMessage()
-            .setLockTypeButton(mLockType)
-            .resetNumber("");
+    // KeyboardInputController提供一个默认实现的新能源车牌锁定按钮
+    mPopupKeyboard.getController()
+            .setDebugEnabled(true)
+            .bindLockTypeProxy(new KeyboardInputController.ButtonProxyImpl(mLockType) {
+                @Override
+                public void onNumberTypeChanged(boolean isNewEnergyType) {
+                    super.onNumberTypeChanged(isNewEnergyType);
+                    if (isNewEnergyType) {
+                        mLockType.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+                    } else {
+                        mLockType.setTextColor(getResources().getColor(android.R.color.black));
+                    }
+                }
+            });
 
+
+```
+
+**不弹出键盘，直接显示**
+
+```java
+
+// 使用 KeyboardInputController 来关联
+mController = KeyboardInputController
+                    .with(mKeyboardView, inputView);
+
+mController.useDefaultMessageHandler();
 
 ```
 
 ## API doc
 
-https://parkingwang.github.io/vehicle-keyboard-android/index.html
+http://githang.com/private-doc/vehicle-keyboard/
 
 ## 其他设置
 
@@ -131,4 +164,33 @@ https://parkingwang.github.io/vehicle-keyboard-android/index.html
 
 ```java
     mKeyboardView.setShowBubble(false);
+```
+
+## 混淆规则 - Proguard
+
+在项目的`proguard-rules.pro`中添加以下混淆规则：
+
+```groguard
+
+# rhino (javascript engine)
+-dontwarn org.mozilla.javascript.**
+-dontwarn org.mozilla.classfile.**
+-keep class org.mozilla.classfile.** { *; }
+-keep class org.mozilla.javascript.* { *; }
+-keep class org.mozilla.javascript.annotations.** { *; }
+-keep class org.mozilla.javascript.ast.** { *; }
+-keep class org.mozilla.javascript.commonjs.module.** { *; }
+-keep class org.mozilla.javascript.commonjs.module.provider.** { *; }
+-keep class org.mozilla.javascript.debug.** { *; }
+-keep class org.mozilla.javascript.jdk13.** { *; }
+-keep class org.mozilla.javascript.jdk15.** { *; }
+-keep class org.mozilla.javascript.json.** { *; }
+-keep class org.mozilla.javascript.optimizer.** { *; }
+-keep class org.mozilla.javascript.regexp.** { *; }
+-keep class org.mozilla.javascript.serialize.** { *; }
+-keep class org.mozilla.javascript.typedarrays.** { *; }
+-keep class org.mozilla.javascript.v8dtoa.** { *; }
+-keep class org.mozilla.javascript.xml.** { *; }
+-keep class org.mozilla.javascript.xmlimpl.** { *; }
+
 ```

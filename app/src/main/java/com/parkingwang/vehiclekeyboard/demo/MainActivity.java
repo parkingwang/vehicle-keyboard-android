@@ -6,18 +6,13 @@ package com.parkingwang.vehiclekeyboard.demo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.parkingwang.vehiclekeyboard.KeyboardBinder;
-import com.parkingwang.vehiclekeyboard.OnInputChangedListener;
 import com.parkingwang.vehiclekeyboard.core.KeyboardType;
-import com.parkingwang.vehiclekeyboard.support.PopupKeyboardHelper;
+import com.parkingwang.vehiclekeyboard.support.KeyboardInputController;
+import com.parkingwang.vehiclekeyboard.support.PopupKeyboard;
 import com.parkingwang.vehiclekeyboard.view.InputView;
-import com.parkingwang.vehiclekeyboard.view.KeyboardView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +21,12 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     private InputView mInputView;
-    private KeyboardView mKeyboardView;
-
-    private KeyboardBinder mKeyboardBinder;
 
     private final List<String> mTestNumber = new ArrayList<>();
 
     private final Random mRandom = new Random();
 
-    private KeyboardView mPopupKeyboardView;
+    private PopupKeyboard mPopupKeyboard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,34 +34,37 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mInputView = findViewById(R.id.input_view);
-        mKeyboardView = findViewById(R.id.keyboard_view);
-        final Button lockType = findViewById(R.id.lock_type);
-
-        // 绑定
-        mKeyboardBinder = KeyboardBinder.with(mKeyboardView, mInputView);
-        mKeyboardBinder.attach()
-                .setKeyboardInputChangeSync()
-                .useDefaultMessageListener()
-                .setLockTypeButton(lockType)
-                .updateNumberAndSelectFirstItem("粤L79P99");
+        final Button lockTypeButton = findViewById(R.id.lock_type);
 
         mTestNumber.add("粤A12345");
-        mTestNumber.add("粤A987654");
-        mTestNumber.add("粤A0123");
+        mTestNumber.add("粤BD12345");
+        mTestNumber.add("粤C0");
+        mTestNumber.add("粤");
         mTestNumber.add("WJ12345");
         mTestNumber.add("WJ粤12345");
 
-        mKeyboardBinder.setOnInputChangeListener(new OnInputChangedListener() {
-            @Override
-            public void onChanged(String number, boolean isCompleted) {
-                Toast.makeText(MainActivity.this, number + ", 完成：" + isCompleted, Toast.LENGTH_SHORT).show();
-            }
+        // 创建弹出键盘
+        mPopupKeyboard = new PopupKeyboard(this);
+        // 弹出键盘内部包含一个KeyboardView，在此绑定输入两者关联。
+        mPopupKeyboard.attach(mInputView, this);
+        mPopupKeyboard.getKeyboardView()
+                .setKeyboardType(KeyboardType.CIVIL_WJ);
 
-            @Override
-            public void onCompleted(String number, boolean isAutoCompleted) {
-                Toast.makeText(MainActivity.this, number + ", 自动完成：" + isAutoCompleted, Toast.LENGTH_SHORT).show();
-            }
-        });
+        // KeyboardInputController提供一个默认实现的新能源车牌锁定按钮
+        mPopupKeyboard.getController()
+                .setDebugEnabled(true)
+                .bindLockTypeProxy(new KeyboardInputController.ButtonProxyImpl(lockTypeButton) {
+                    @Override
+                    public void onNumberTypeChanged(boolean isNewEnergyType) {
+                        super.onNumberTypeChanged(isNewEnergyType);
+                        if (isNewEnergyType) {
+                            lockTypeButton.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+                        } else {
+                            lockTypeButton.setTextColor(getResources().getColor(android.R.color.black));
+                        }
+                    }
+                });
+
     }
 
     public void onClick(View view) {
@@ -77,43 +72,39 @@ public class MainActivity extends AppCompatActivity {
         // 切换键盘类型
         switch (id) {
             case R.id.full:
-                mKeyboardView.setKeyboardType(KeyboardType.FULL);
+                mPopupKeyboard.getKeyboardView().setKeyboardType(KeyboardType.FULL);
                 // 更新车牌号码
-                mKeyboardBinder.updateNumberAndSelectFirstItem(mInputView.getNumber());
+                mPopupKeyboard.getController().updateNumber(mInputView.getNumber());
                 break;
             case R.id.civil:
-                mKeyboardView.setKeyboardType(KeyboardType.CIVIL);
+                mPopupKeyboard.getKeyboardView().setKeyboardType(KeyboardType.CIVIL);
                 // 更新车牌号码
-                mKeyboardBinder.updateNumberAndSelectFirstItem(mInputView.getNumber());
+                mPopupKeyboard.getController().updateNumber(mInputView.getNumber());
                 break;
             case R.id.civil_wj:
-                mKeyboardView.setKeyboardType(KeyboardType.CIVIL_WJ);
+                mPopupKeyboard.getKeyboardView().setKeyboardType(KeyboardType.CIVIL_WJ);
                 // 更新车牌号码
-                mKeyboardBinder.updateNumberAndSelectFirstItem(mInputView.getNumber());
-                break;
-            case R.id.adjust_height:
-                mKeyboardView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                mKeyboardView.requestLayout();
-                break;
-            case R.id.fixed_height:
-                mKeyboardView.getLayoutParams().height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 260, getResources().getDisplayMetrics());
-                mKeyboardView.requestLayout();
+                mPopupKeyboard.getController().updateNumber(mInputView.getNumber());
                 break;
             case R.id.test_number:
-                mKeyboardBinder.updateNumberAndSelectLastItem(mTestNumber.get(mRandom.nextInt(mTestNumber.size())));
+                final int idx = mRandom.nextInt(mTestNumber.size());
+                if (idx == 3) {
+                    mPopupKeyboard.getController()
+                            .updateNumberLockType(mTestNumber.get(idx), true);
+                } else {
+                    mPopupKeyboard.getController()
+                            .updateNumber(mTestNumber.get(idx));
+                }
                 break;
             case R.id.clear_number:
-                mKeyboardBinder.updateNumberAndSelectFirstItem("");
+                mPopupKeyboard.getController()
+                        .updateNumber("");
                 break;
             case R.id.popup_keyboard:
-                if (mPopupKeyboardView == null) {
-                    mPopupKeyboardView = new KeyboardView(this);
-                    mPopupKeyboardView.setKeyboardType(KeyboardType.CIVIL_WJ);
-                }
-                if (PopupKeyboardHelper.showToActivity(this, mPopupKeyboardView)) {
-                    Toast.makeText(this, "弹出键盘", Toast.LENGTH_SHORT).show();
-                } else if (PopupKeyboardHelper.dismissFromActivity(this)) {
-                    Toast.makeText(this, "隐藏键盘", Toast.LENGTH_SHORT).show();
+                if (mPopupKeyboard.isShown()) {
+                    mPopupKeyboard.dismiss(MainActivity.this);
+                }else{
+                    mPopupKeyboard.show(MainActivity.this);
                 }
                 break;
         }

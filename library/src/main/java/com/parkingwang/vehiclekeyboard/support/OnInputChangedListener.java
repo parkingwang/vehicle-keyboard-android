@@ -1,4 +1,4 @@
-package com.parkingwang.vehiclekeyboard;
+package com.parkingwang.vehiclekeyboard.support;
 
 /**
  * @author 陈哈哈 (yoojiachen@gmail.com)

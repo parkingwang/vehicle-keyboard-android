@@ -17,7 +17,6 @@ import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import com.parkingwang.vehiclekeyboard.R;
-import com.parkingwang.vehiclekeyboard.core.NumberType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +25,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 /**
  * @author 陈哈哈 (yoojiachen@gmail.com)
@@ -35,49 +33,39 @@ public class InputView extends LinearLayout {
 
     private static final String KEY_INIT_NUMBER = "pwk.keyboard.key:init.number";
 
-    private final Button[] mSplitItems = new Button[8];
+    private final Button[] mButtonItems = new Button[8];
     private final HashMap<String, Object> mKeyMap = new HashMap<>();
 
-    private Set<OnItemSelectedListener> mOnItemSelectedListeners = new HashSet<>(2);
-    private Set<OnNumberTypeChangedListener> mOnNumberTypeChangedListeners = new HashSet<>(2);
-
-    private OnShowMessageListener mOnShowMessageListener;
-    private OnNewEnergyTypeLockListener mEnergyTypeLockListener;
-
-    private NumberType mNumberType = NumberType.AUTO_DETECT;
+    private final Set<OnItemSelectedListener> mOnItemSelectedListeners =
+            new HashSet<>(4);
 
     /**
-     * 是否锁定为新能源车牌类型
+     * 输入框被点击时，有以下逻辑：
+     *
+     * 1. 检查当前输入框是否可以被选中。可选中条件是：
+     *  - 选中序号为0，任何时候都可以被选中；
+     *  - 序号大于0，最大可点击序号为当前车牌长度；
+     *
+     * 2. 清除另一个被选中状态，设置当前为选中状态；
+     *
+     * 3. 触发选中回调；
      */
-    private boolean mIsNewEnergyTypeLocked = false;
-
-    private final OnClickListener mOnEachInputCellClickListener = new OnClickListener() {
+    private final OnClickListener mOnButtonItemClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            final Button current = (Button) v;
-            int currentViewIndex = 0;
-            int currentSelectedIndex = -1;
-            for (int i = 0; i < mSplitItems.length; i++) {
-                final Button cell = mSplitItems[i];
-                if (cell.isSelected()) {
-                    currentSelectedIndex = i;
+            final Meta meta = getClickedMeta((Button) v);
+            if (meta.clickIndex <= meta.numberLength) {
+                // 更新选中状态
+                if (meta.clickIndex != meta.selectedIndex) {
+                    if (meta.selectedIndex >= 0) {
+                        clearSelectedState(mButtonItems[meta.selectedIndex]);
+                    }
+                    setSelectedState(mButtonItems[meta.clickIndex]);
                 }
-                if (cell == current) {
-                    currentViewIndex = i;
+                // 触发选中回调
+                for (OnItemSelectedListener listener : mOnItemSelectedListeners) {
+                    listener.onSelected(meta.clickIndex);
                 }
-                clearSelectedState(cell);
-                // 不可跨位输入：如果当前点击的View的前面一个TextView是空的，则不可点击，保持原样。
-                final int preIndex = currentViewIndex - 1;
-                if (preIndex >= 0 &&
-                        (mSplitItems[preIndex].getText().length() <= 0) &&
-                        currentSelectedIndex >= 0) {
-                    setSelectedState(mSplitItems[currentSelectedIndex]);
-                    return;
-                }
-            }
-            setSelectedState(current);
-            for (OnItemSelectedListener listener : mOnItemSelectedListeners) {
-                listener.onSelected(currentViewIndex);
             }
         }
     };
@@ -105,81 +93,15 @@ public class InputView extends LinearLayout {
                 R.id.number_6, R.id.number_7,
         };
 
-        for (int i = 0; i < mSplitItems.length; i++) {
-            mSplitItems[i] = (Button) findViewById(resIds[i]);
-            mSplitItems[i].setOnClickListener(mOnEachInputCellClickListener);
+        for (int i = 0; i < mButtonItems.length; i++) {
+            mButtonItems[i] = (Button) findViewById(resIds[i]);
+            mButtonItems[i].setOnClickListener(mOnButtonItemClickListener);
             if (textSize > 0) {
-                mSplitItems[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+                mButtonItems[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
             }
-
         }
         // 最后一位默认隐藏
-        set8thCellShowClearText(false, true);
-
-    }
-
-    public InputView setOnNewEnergyTypeLockListener(OnNewEnergyTypeLockListener listener) {
-        mEnergyTypeLockListener = listener;
-        return this;
-    }
-
-    public InputView addOnItemSelectedListener(OnItemSelectedListener listener) {
-        mOnItemSelectedListeners.add(listener);
-        return this;
-    }
-
-    public InputView addOnNumberTypeChangedListener(OnNumberTypeChangedListener listener) {
-        mOnNumberTypeChangedListeners.add(listener);
-        return this;
-    }
-
-    public InputView setOnShowMessageListener(OnShowMessageListener listener) {
-        mOnShowMessageListener = listener;
-        return this;
-    }
-
-    ////
-
-    /**
-     * 返回当前是否锁定在新能源车牌类型状态
-     * @return 是否锁定
-     */
-    public boolean isNewEnergyTypeLocked() {
-        return mIsNewEnergyTypeLocked;
-    }
-
-    /**
-     * 返回当前的车牌号码是否为新能源车牌号码类型
-     *
-     * @return 是否为新能源类型
-     */
-    public boolean isNumberTypeOfNewEnergy() {
-        return NumberType.NEW_ENERGY.equals(mNumberType);
-    }
-
-    /**
-     * 设置是否锁定新能源车牌类型
-     *
-     * @param toLocked 是否锁定
-     */
-    public void setNewEnergyTypeLocked(boolean toLocked) {
-        final boolean isCompleted = isCompleted();
-        if (toLocked){
-            if (checkIfCanChangeToNewEnergyType()) {
-                mIsNewEnergyTypeLocked = true;
-                triggerUpdateOfLockedState(isCompleted);
-            }
-        } else {
-            mIsNewEnergyTypeLocked = false;
-            triggerUpdateOfUnlocked(isCompleted);
-        }
-    }
-
-    /**
-     * 切换新能源车牌类型锁定状态
-     */
-    public void toggleNewEnergyTypeLockState() {
-        setNewEnergyTypeLocked(!isNewEnergyTypeLocked());
+        set8thItemVisibility(false, true);
     }
 
     /**
@@ -187,7 +109,7 @@ public class InputView extends LinearLayout {
      *
      * @param text 文本字符
      */
-    public void setTextAndNext(final String text) {
+    public void updateSelectedCharAndSelectNext(final String text) {
         streamOfShownItems()
                 .filter(new Predicate<Button>() {
                     @Override
@@ -201,7 +123,7 @@ public class InputView extends LinearLayout {
                     public void accept(Button button) {
                         button.setText(text);
                         // 跳转到下一位
-                        selectNextItemBy(button);
+                        performNextItemBy(button);
                     }
                 });
     }
@@ -209,7 +131,7 @@ public class InputView extends LinearLayout {
     /**
      * 从最后一位开始删除
      */
-    public void popNumberChar() {
+    public void removeLastCharOfNumber() {
         findLastFilledTextItem()
                 .ifPresent(new Consumer<Button>() {
                     @Override
@@ -226,12 +148,12 @@ public class InputView extends LinearLayout {
     public boolean isCompleted() {
         // 所有显示的输入框都被填充了车牌号码，即输入完成状态
         return streamOfShownItems()
-                .allMatch(emptyFilter());
+                .allMatch(notEmpty());
     }
 
     /**
      * 返回当前车牌号码是否被修改过。
-     * 与通过 resetNumber 方法设置的车牌号码来对比。
+     * 与通过 updateNumber 方法设置的车牌号码来对比。
      * @return 是否修改过
      */
     public boolean isNumberChanged() {
@@ -244,14 +166,12 @@ public class InputView extends LinearLayout {
      *
      * @param number 车牌号码
      */
-    public void resetNumber(String number) {
-        // 更新车牌号码，解除锁定新能源
-        mIsNewEnergyTypeLocked = false;
+    public void updateNumber(String number) {
         // 初始化车牌
         mKeyMap.put(KEY_INIT_NUMBER, number);
         final char[] chars = number.toCharArray();
-        for (int i = 0; i < mSplitItems.length; i++) {
-            final Button view = mSplitItems[i];
+        for (int i = 0; i < mButtonItems.length; i++) {
+            final Button view = mButtonItems[i];
             if (i < chars.length) {
                 view.setText(String.valueOf(chars[i]));
             } else {
@@ -260,7 +180,7 @@ public class InputView extends LinearLayout {
         }
         // check 8th
         final boolean charsOf8 = chars.length >= 8;
-        set8thCellShowClearText(charsOf8, !charsOf8);
+        set8thItemVisibility(charsOf8, !charsOf8);
     }
 
     /**
@@ -284,173 +204,110 @@ public class InputView extends LinearLayout {
     }
 
     /**
-     * 返回当前选中输入框的序号
-     *
-     * @return 选中序号
-     */
-    public int getCurrentSelectedIndex() {
-        int index = 0;
-        for (int i = 0; i < mSplitItems.length; i++) {
-            if (mSplitItems[i].isShown() && mSplitItems[i].isSelected()) {
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
-
-    /**
-     * 获取当前车牌号码的类型
-     *
-     * @return 号码类型
-     */
-    public NumberType getNumberType() {
-        return mNumberType;
-    }
-
-    /**
-     * 更新探测到的车牌类型。用于同步外部修改车牌号码后的车牌类型和输入框长度。
-     */
-    public void updateNumberType(NumberType type) {
-        if (NumberType.NEW_ENERGY.equals(type) || mIsNewEnergyTypeLocked) {
-            mIsNewEnergyTypeLocked = true;
-        }
-        // 根据车牌类型显示输入框长度：
-        // 1. 新能源、武警地方车牌，长度为8位；
-        // 2. 锁定为新能源状态下，固定为8位；
-        if (NumberType.NEW_ENERGY.equals(type) ||
-                NumberType.WUJING_LOCAL.equals(type) ||
-                mIsNewEnergyTypeLocked) {
-            set8thCellShowClearText(true, false);
-        } else {
-            // 在车辆不完整的情况下，最后一位显示时，要删除
-            set8thCellShowClearText(false, !isCompleted());
-        }
-        changeNumberType(type);
-        // 锁定状态提示
-        if (mEnergyTypeLockListener != null) {
-            mEnergyTypeLockListener.onTypeLock(mIsNewEnergyTypeLocked);
-        }
-    }
-
-    /**
      * 选中第一个输入框
      */
-    public void selectFirstItem() {
-        performSelected(mSplitItems[0]);
+    public void performFirstItem() {
+        performItemSelected(mButtonItems[0]);
     }
 
     /**
-     * 选中最后一个可非空输入框。
+     * 选中最后一个可等待输入的输入框。
+     * 如果全部为空，则选中第1个输入框。
      */
-    public void selectLastItem() {
-        findLastFilledTextItem()
-                .ifPresent(new Consumer<Button>() {
-                    @Override
-                    public void accept(Button button) {
-                        performSelected(button);
-                    }
-                });
+    public void performLastItem() {
+        findLastFilledTextItem().ifPresentOrElse(new Consumer<Button>() {
+            @Override
+            public void accept(Button button) {
+                performNextItemBy(button);
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                performItemSelected(mButtonItems[0]);
+            }
+        });
     }
 
-    ////
-
-
-    // 当前已锁定为新能源车牌，可以转换成普通车牌
-    private void triggerUpdateOfUnlocked(boolean isCompleted) {
-        final int selectedIndex = getCurrentSelectedIndex();
-        mOnShowMessageListener.onMessageTip(R.string.pwk_now_is_normal);
-        updateNumberType(NumberType.AUTO_DETECT);
-        try {
-            for (OnNumberTypeChangedListener listener : mOnNumberTypeChangedListeners) {
-                listener.onChanged(mNumberType);
-            }
-        } finally {
-            // 从新能源车牌切换为普通车牌时：
-            // 如果当前选中最后一位，则往前跳一位。
-            if (isCompleted || selectedIndex == 7) {
-                performSelected(mSplitItems[6]);
-            }
+    /**
+     * 选中下一个输入框
+     */
+    public void performNextItem() {
+        final Meta meta = getClickedMeta(null);
+        if (meta.selectedIndex >= 0) {
+            performNextItemBy(mButtonItems[meta.selectedIndex]);
         }
     }
 
-    // 在普通车牌状态下，锁定为新能源车牌，需要检查是否符合新能源车牌规则
-    private void triggerUpdateOfLockedState(boolean isCompleted) {
-        updateNumberType(NumberType.NEW_ENERGY);
-        mOnShowMessageListener.onMessageTip(R.string.pwk_now_is_energy);
-        try {
-            for (OnNumberTypeChangedListener listener : mOnNumberTypeChangedListeners) {
-                listener.onChanged(mNumberType);
-            }
-        } finally {
-            if (isCompleted) {
-                selectNextItemBy(getCurrentSelectedItem());
-            }
+    /**
+     * 重新触发当前输入框选中状态
+     */
+    public void performCurrentItem() {
+        final Meta meta = getClickedMeta(null);
+        if (meta.selectedIndex >= 0) {
+            performItemSelected(mButtonItems[meta.selectedIndex]);
         }
     }
 
-    private void performSelected(Button button) {
+    /**
+     * 设置第8位输入框显示状态，并设置是否清空其文本
+     * @param toShow 是否显示
+     * @param clearText 是否清空其文本内容
+     */
+    public void set8thItemVisibility(boolean toShow, boolean clearText) {
+        final Button button = mButtonItems[7];
+        final boolean isShown = button.isShown();
+        if (toShow) {
+            if (!isShown) {
+                button.setVisibility(VISIBLE);
+            }
+        }else{
+            if (isShown) {
+                button.setVisibility(GONE);
+            }
+        }
+        if (clearText && !isButtonEmpty(button)) {
+            button.setText(null);
+        }
+    }
+
+    /**
+     * 是否最后一位被选中状态。
+     *
+     * @return 是否选中
+     */
+    public boolean isLastItemSelected() {
+        if (mButtonItems[7].isShown()) {
+            return mButtonItems[7].isSelected();
+        } else {
+            return mButtonItems[6].isSelected();
+        }
+    }
+
+    public InputView addOnItemSelectedListener(OnItemSelectedListener listener) {
+        mOnItemSelectedListeners.add(listener);
+        return this;
+    }
+
+    private void performItemSelected(Button button) {
         button.performClick();
         setSelectedState(button);
     }
 
-    private Optional<Button> findLastFilledTextItem() {
-        final List<Button> reverse = new ArrayList<>(Arrays.asList(mSplitItems));
-        Collections.reverse(reverse);
-        return Stream.of(reverse)
-                .filter(shownFilter())
-                .filter(emptyFilter())
-                .findFirst();
-    }
-
-    private boolean checkIfCanChangeToNewEnergyType() {
-        // 车牌类型切换在“新能源普通”和“普通车牌”两种。
-        // 1. 当前为新能源车牌，可以切换；
-        // 2. 当前是其它普通车牌，检查当前是否符合新能源车牌规则；
-        if (NumberType.NEW_ENERGY.equals(mNumberType)) {
-            return true;
-        } else {
-            String number = getNumber();
-            if (number.length() > 2) {
-                final int size = 8 - number.length();
-                for (int i = 0; i < size; i++) number += "0";
-                if (Pattern.matches("\\w[A-Z][0-9DF][0-9A-Z]\\d{3}[0-9DF]", number)) {
-                    return true;
-                } else {
-                    mOnShowMessageListener.onMessageError(R.string.pwk_change_to_energy_disallow);
-                    return false;
-                }
-            } else {
-                return true;
-            }
-        }
-    }
-
-    private void set8thCellShowClearText(boolean show, boolean clearText) {
-        mSplitItems[7].setVisibility(show ? VISIBLE : GONE);
-        if (clearText) {
-            mSplitItems[7].setText(null);
-        }
-    }
-
-    private void changeNumberType(NumberType willType) {
-        if (mIsNewEnergyTypeLocked) {
-            mNumberType = NumberType.NEW_ENERGY;
-        } else {
-            mNumberType = willType;
-        }
-    }
-
-    private Button getCurrentSelectedItem() {
-        return mSplitItems[getCurrentSelectedIndex()];
-    }
-
-    private void selectNextItemBy(Button cell) {
+    private void performNextItemBy(Button cell) {
         final List<Button> buttons = streamOfShownItems()
                 .collect(Collectors.<Button>toList());
         final int nextIndex = buttons.lastIndexOf(cell) + 1;
         final int clickIndex = Math.min(nextIndex, buttons.size() - 1);
-        buttons.get(clickIndex).performClick();
+        performItemSelected(buttons.get(clickIndex));
+    }
+
+    private Optional<Button> findLastFilledTextItem() {
+        final List<Button> reverse = new ArrayList<>(Arrays.asList(mButtonItems));
+        Collections.reverse(reverse);
+        return Stream.of(reverse)
+                .filter(shown())
+                .filter(notEmpty())
+                .findFirst();
     }
 
     private void clearSelectedState(Button item) {
@@ -458,17 +315,17 @@ public class InputView extends LinearLayout {
     }
 
     private void setSelectedState(Button cell) {
-        for (Button btn : mSplitItems) {
+        for (Button btn : mButtonItems) {
             btn.setSelected((btn == cell));
         }
     }
 
     private Stream<Button> streamOfShownItems() {
-        return Stream.of(mSplitItems)
-                .filter(shownFilter());
+        return Stream.of(mButtonItems)
+                .filter(shown());
     }
 
-    private Predicate<Button> shownFilter() {
+    private Predicate<Button> shown() {
         return new Predicate<Button>() {
             @Override
             public boolean test(Button value) {
@@ -477,13 +334,51 @@ public class InputView extends LinearLayout {
         };
     }
 
-    private Predicate<Button> emptyFilter() {
+    private Predicate<Button> notEmpty() {
         return new Predicate<Button>() {
             @Override
-            public boolean test(Button value) {
-                return value.getText().length() > 0;
+            public boolean test(Button button) {
+                return !isButtonEmpty(button);
             }
         };
+    }
+
+    private Meta getClickedMeta(Button clicked) {
+        short selected = -1;
+        short current = 0;
+        short length = 0;
+        for (int i = 0; i < mButtonItems.length; i++) {
+            final Button item = mButtonItems[i];
+            if (item == clicked) {
+                current = (short) i;
+            }
+            if (item.isSelected()) {
+                selected = (short) i;
+            }
+            if (!isButtonEmpty(item)) {
+                length += 1;
+            }
+        }
+        return new Meta(selected, current, length);
+    }
+
+    private static boolean isButtonEmpty(Button button) {
+        return button.getText().length() == 0;
+    }
+
+    //////
+
+    private static class Meta {
+
+        final short selectedIndex;
+        final short clickIndex;
+        final short numberLength;
+
+        private Meta(short selectedIndex, short clickIndex, short numberLength) {
+            this.selectedIndex = selectedIndex;
+            this.clickIndex = clickIndex;
+            this.numberLength = numberLength;
+        }
     }
 
     //////////
@@ -491,23 +386,6 @@ public class InputView extends LinearLayout {
     public interface OnItemSelectedListener {
 
         void onSelected(int index);
-    }
-
-    public interface OnNumberTypeChangedListener {
-
-        void onChanged(NumberType type);
-    }
-
-    public interface OnShowMessageListener {
-
-        void onMessageError(int message);
-
-        void onMessageTip(int message);
-    }
-
-    public interface OnNewEnergyTypeLockListener {
-
-        void onTypeLock(boolean locked);
     }
 
 }

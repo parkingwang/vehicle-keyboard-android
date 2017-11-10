@@ -35,6 +35,7 @@
 
     <Button
         android:id="@+id/number_7"
+        android:visibility="gone"
         style="@style/PWKInputItemStyle"/>
 
 </LinearLayout>

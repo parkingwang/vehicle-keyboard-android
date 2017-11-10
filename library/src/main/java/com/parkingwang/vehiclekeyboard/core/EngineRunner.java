@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author 黄浩杭 (huanghaohang@parkingwang.com)
+ * @author 黄浩杭 (huanghaohang@parkingwang.com), 陈永佳 (yoojiachen@parkingwang.com)
  * @since 2017-09-25 0.1
  */
 public class EngineRunner {
@@ -36,16 +36,15 @@ public class EngineRunner {
     private static final String JS_FILE_NAME = "engine.js";
     private static final String SOURCE_NAME = "JavaScript";
 
-    private static volatile String ENGINE_JS = null;
+    private static volatile String JS_TEXT = null;
 
     private Context mRhino;
     private ScriptableObject mEngineScope;
-    @Nullable
     private Function mUpdateFunction;
 
     public EngineRunner(android.content.Context context) {
-        if (ENGINE_JS == null) {
-            ENGINE_JS = readJSContent(context);
+        if (JS_TEXT == null) {
+            JS_TEXT = readJSContent(context);
         }
     }
 
@@ -53,11 +52,10 @@ public class EngineRunner {
         if (mUpdateFunction != null) {
             return;
         }
-
         mRhino = Context.enter();
         mRhino.setOptimizationLevel(DO_NOT_OPTIMIZE);
         mEngineScope = mRhino.initStandardObjects();
-        mRhino.evaluateString(mEngineScope, ENGINE_JS, SOURCE_NAME, 1, null);
+        mRhino.evaluateString(mEngineScope, JS_TEXT, SOURCE_NAME, 1, null);
         mRhino.evaluateString(mEngineScope, "var engine = new KeyboardEngine()", SOURCE_NAME, 1, null);
         Object object = mEngineScope.get("engine", mEngineScope);
         if (!(object instanceof Scriptable)) {

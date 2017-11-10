@@ -17,7 +17,7 @@ import com.parkingwang.vehiclekeyboard.view.KeyboardView;
  * @version 2017-11-03 0.6
  * @since 2017-11-03 0.6
  */
-public class PopupKeyboardHelper {
+class PopupHelper {
 
     public static boolean showToActivity(final Activity activity, final KeyboardView keyboardView) {
         View decorView = activity.getWindow().getDecorView();

@@ -1,10 +1,10 @@
 <resources>
 
-    <string name="pwk_change_to_normal">切换为：普通车牌</string>
-    <string name="pwk_change_to_energy">切换为：新能源车牌</string>
-    <string name="pwk_change_to_energy_disallow">当前车牌不符合新能源车牌规则\n请删除后再切换类型</string>
+    <string name="pwk_change_to_normal">变更为：普通车</string>
+    <string name="pwk_change_to_energy">变更为：新能源</string>
+    <string name="pwk_change_to_energy_disallow">当前车牌不符合新能源车牌规则\n请删除后再变更类型</string>
 
-    <string name="pwk_now_is_energy">当前：新能源车牌</string>
-    <string name="pwk_now_is_normal">当前：普通车牌</string>
+    <string name="pwk_now_is_energy">现在是：新能源</string>
+    <string name="pwk_now_is_normal">现在是：普通车</string>
 
 </resources>

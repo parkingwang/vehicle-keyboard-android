@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Consumer;
+import com.parkingwang.vehiclekeyboard.BuildConfig;
 import com.parkingwang.vehiclekeyboard.R;
 import com.parkingwang.vehiclekeyboard.core.EngineRunner;
 import com.parkingwang.vehiclekeyboard.core.KeyEntry;
@@ -34,6 +36,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 黄浩杭 (huanghaohang@parkingwang.com)
@@ -41,22 +44,13 @@ import java.util.concurrent.Executors;
  */
 public class KeyboardView extends LinearLayout {
 
-    private static ExecutorService EXECUTORS = Executors.newSingleThreadExecutor();
+    private static ExecutorService RUNNER_THREAD = Executors.newSingleThreadExecutor();
 
     private final Paint mDividerPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
 
     private int mRowSpace;
-    static {
-        // Shutdown
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                EXECUTORS.shutdown();
-            }
-        }));
-    }
 
-    private final EngineRunner mEngineRunner;
+    private final EngineRunner mEngine;
 
     private final List<KeyboardCallback> mKeyboardCallbacks = new CopyOnWriteArrayList<>();
 
@@ -109,7 +103,7 @@ public class KeyboardView extends LinearLayout {
         Resources resources = getResources();
         mDefaultKeyHeight = resources.getDimensionPixelSize(R.dimen.pwk_keyboard_key_height);
 
-        mEngineRunner = new EngineRunner(context);
+        mEngine = new EngineRunner(context);
         mKeyboardType = KeyboardType.values()[type];
 
         setOrientation(LinearLayout.VERTICAL);
@@ -170,32 +164,47 @@ public class KeyboardView extends LinearLayout {
      * @param numberType 车牌号类型
      */
     public void update(@NonNull final String number, final int showIndex, final NumberType numberType) {
-        EXECUTORS.submit(new Runnable() {
+        final long start = System.nanoTime();
+        RUNNER_THREAD.submit(new Runnable() {
             @Override
             public void run() {
-                mEngineRunner.start();
-
+                mEngine.start();
                 final int finalIndex = showIndex < 0 ? 0 : showIndex;
                 final KeyboardEntry keyboard =
-                        mEngineRunner.update(mKeyboardType, finalIndex, number, numberType);
-
-                post(new Runnable() {
+                        mEngine.update(mKeyboardType, finalIndex, number, numberType);
+                final long escaped = TimeUnit.MILLISECONDS.convert((System.nanoTime() - start), TimeUnit.NANOSECONDS);
+                if (BuildConfig.DEBUG) {
+                    Log.w("KeyboardView", "--> jskeyboard.engine.update: " + escaped + "ms");
+                }
+                KeyboardView.this.post(new Runnable() {
                     @Override
                     public void run() {
                         if (keyboard == null) {
                             return;
                         }
-                        for (KeyboardCallback callback : mKeyboardCallbacks) {
-                            callback.onKeyboardInfo(keyboard);
+                        try {
+                            updateKeyboardLayout(keyboard);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        updateKeyboard(keyboard);
+                        triggerCallback(keyboard);
                     }
                 });
             }
         });
     }
 
-    private void updateKeyboard(KeyboardEntry keyboard) {
+    private void triggerCallback(KeyboardEntry keyboard) {
+        try {
+            for (KeyboardCallback callback : mKeyboardCallbacks) {
+                callback.onUpdateKeyboard(keyboard);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateKeyboardLayout(KeyboardEntry keyboard) {
         int maxColumn = 0;
         List<List<KeyEntry>> keyRows = keyboard.keyRows;
         for (List<KeyEntry> row : keyRows) {
@@ -309,19 +318,19 @@ public class KeyboardView extends LinearLayout {
     }
 
     public void start() {
-        EXECUTORS.submit(new Runnable() {
+        RUNNER_THREAD.submit(new Runnable() {
             @Override
             public void run() {
-                mEngineRunner.start();
+                mEngine.start();
             }
         });
     }
 
     public void stop() {
-        EXECUTORS.submit(new Runnable() {
+        RUNNER_THREAD.submit(new Runnable() {
             @Override
             public void run() {
-                mEngineRunner.stop();
+                mEngine.stop();
             }
         });
     }
