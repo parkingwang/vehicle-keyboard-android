@@ -15,7 +15,7 @@ repositories {
 ```groovy
     implementation 'com.parkingwang:keyboard:0.1-ALPHA'
     // OR
-    compile 'com.parkingwang:vehicle-keyboard:0.1-ALPHA'
+    compile 'com.parkingwang:keyboard:0.1-ALPHA'
 ```
 
 ## 使用组件
@@ -108,7 +108,7 @@ mController.useDefaultMessageHandler();
 
 ```
 
-## 其他设置
+## 键盘样式设置
 
 ### 设置键盘按钮文字大小
 
@@ -118,7 +118,7 @@ mController.useDefaultMessageHandler();
     mKeyboardView.setENTextSize(float); //设置英文字母或数字字体大小
 ```
 
-### 设置确定按键及气泡字体颜色
+### 设置`确定`按键及`气泡`字体颜色
 
 在colors.xml中覆盖以下颜色值以修改键盘主色
 ```xml
@@ -135,11 +135,43 @@ mController.useDefaultMessageHandler();
             ..../>
 ```
 
-### 设置键盘类型
+### 设置输入组件的样式
+
+默认提供两种输入组件样式：
+
+#### 1. 并列表格样式（默认样式）
+
+![](./PWK_INPUT_MIXED_STYLE.png)
+
+```xml
+    <style name="PWKInputItemStyle" parent="PWKInputItemStyleGreen"/>
+    <style name="PWKInputViewStyle" parent="PWKInputViewStyleMixed"/>
+```
+
+#### 2. 分隔块状样式
+
+![](./PWK_INPUT_DIVIDED_STYLE.png)
+
+```xml
+    <style name="PWKInputItemStyle" parent="PWKInputItemStyleBlue"/>
+    <style name="PWKInputViewStyle" parent="PWKInputViewStyleDivided"/>
+```
+
+在项目的`styles.xml`中覆盖设置以上两种样式配置，可以切换显示不同的样式。可参考 App 的配置代码。
+
+**如何修改自己的样式**
+
+覆盖`PWKInputItemStyle`和`PWKInputViewStyle`来实现。
+
+- ItemStyle是输入组件内部每个输入框的样式设置
+- ViewStyle是输入组件的整体样式设置。
+
+
+## 设置键盘类型
 
 键盘组件支持三种键盘类型：
 
-- `KeyboardType.FULL` 全键盘模式，包括民用、警察、军队、民航、使馆等车牌类型；
+- `KeyboardType.FULL` 全键盘模式，包括民用、警察、军队、使馆等车牌类型；
 - `KeyboardType.CIVIC` 民用车牌键盘；
 - `KeyboardType.CIVIL_WJ` 民用车牌+武警车牌类型；
 
@@ -162,6 +194,7 @@ mController.useDefaultMessageHandler();
 1. 正确地显示气泡
 
 由于顶层按键的气泡会显示到键盘之外，因此需要键盘所在的父布局增加以下属性（如果气泡范围超出父布局，则需往上递归设置）：
+
 ```xml
     android:clipChildren="false"
 ```

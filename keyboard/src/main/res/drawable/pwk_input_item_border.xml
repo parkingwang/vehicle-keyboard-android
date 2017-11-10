@@ -6,6 +6,6 @@
     <corners android:radius="@dimen/pwk_input_item_radius"/>
     <solid android:color="@android:color/white"/>
     <stroke
-        android:width="@dimen/pwk_input_border_width"
-        android:color="@color/pwk_border_green"/>
+        android:width="@dimen/pwk_input_item_border_width"
+        android:color="@color/pwk_highlight_green"/>
 </shape>

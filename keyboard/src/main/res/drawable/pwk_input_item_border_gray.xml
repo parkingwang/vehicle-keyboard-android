@@ -4,13 +4,13 @@
   -->
 <inset
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:insetBottom="@dimen/pwk_input_border_width"
-    android:insetTop="@dimen/pwk_input_border_width">
+    android:insetBottom="@dimen/pwk_input_view_border_width"
+    android:insetTop="@dimen/pwk_input_view_border_width">
     <shape>
         <corners android:radius="@dimen/pwk_input_item_radius"/>
         <solid android:color="@android:color/white"/>
         <stroke
-            android:width="@dimen/pwk_input_border_width"
+            android:width="@dimen/pwk_input_view_border_width"
             android:color="@color/pwk_border_gray"/>
     </shape>
 </inset>

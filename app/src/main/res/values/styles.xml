@@ -13,7 +13,6 @@
 
 
     <style name="PWKInputItemStyle" parent="PWKInputItemStyleGreen"/>
-
     <style name="PWKInputViewStyle" parent="PWKInputViewStyleMixed"/>
 
 </resources>
