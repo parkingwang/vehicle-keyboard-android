@@ -130,7 +130,9 @@ public class EngineRunner {
                 numberLimitLength = (int) Context.toNumber(value);
             } else if (key.startsWith("row")) {
                 List<KeyEntry> keyList = getKeyEntries(entry);
-                if (keyList == null) continue;
+                if (keyList == null) {
+                    continue;
+                }
                 keyboard.add(keyList);
             } else if ("detectedNumberType".equals(key)) {
                 detectedNumberType = NumberType.values()[(int) Context.toNumber(value)];

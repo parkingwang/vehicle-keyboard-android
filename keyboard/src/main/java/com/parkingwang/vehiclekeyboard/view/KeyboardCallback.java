@@ -37,7 +37,7 @@ public interface KeyboardCallback {
 
     //////
 
-    abstract class Simple implements KeyboardCallback {
+    class Simple implements KeyboardCallback {
 
         @Override
         public void onTextKey(String text) {
