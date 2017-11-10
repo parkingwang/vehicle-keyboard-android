@@ -1,11 +1,10 @@
 <resources>
-    <string name="app_name">VehicleKeyboard</string>
+    <string name="app_name">车牌号码专用键盘</string>
+
     <string name="full_keyboard">全键盘</string>
     <string name="civil_keyboard">民用键盘</string>
     <string name="civil_wj_keyboard">民用武警键盘</string>
-    <string name="adjust_height">自适应高度</string>
-    <string name="fixed_height">固定高度</string>
     <string name="test_number">测试车牌</string>
     <string name="clear_number">清除车牌</string>
-    <string name="popup_keyboard">弹出键盘</string>
+    <string name="popup_keyboard">弹出/隐藏键盘</string>
 </resources>

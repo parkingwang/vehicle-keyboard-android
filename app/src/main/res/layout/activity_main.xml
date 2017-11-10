@@ -46,30 +46,12 @@
             android:onClick="onClick"
             android:text="@string/civil_wj_keyboard"/>
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/locations"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/keyboard_types">
-        <Button
-            android:id="@+id/adjust_height"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="@string/adjust_height"/>
-        <Button
-            android:id="@+id/fixed_height"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="@string/fixed_height"/>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/test_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/locations"
+        android:layout_below="@id/keyboard_types"
         android:orientation="horizontal">
 
         <Button
