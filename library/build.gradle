@@ -1,37 +1,122 @@
+buildscript {
+    dependencies {
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1"
+    }
+}
+
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.jfrog.artifactory-upload'
+
+group = GROUP
+
+boolean isReleaseBuild = gradle.startParameter.taskNames.contains('bintrayUpload')
+version = isReleaseBuild ? VERSION_NAME : "$VERSION_NAME-SNAPSHOT"
+logger.info("VehicleKeyboardAndroid using version=$project.version")
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
-
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        minSdkVersion rootProject.ext.minSdkVersion
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+    compileOptions {
+        sourceCompatibility rootProject.ext.sourceCompatibility
+        targetCompatibility rootProject.ext.sourceCompatibility
     }
-
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:support-v4:25.1.0'
+    compile 'com.android.support:support-v4:25.1.0'
 
-    implementation 'org.mozilla:rhino:1.7.7.2'
-    implementation 'com.annimon:stream:1.1.9'
+    compile 'org.mozilla:rhino:1.7.7.2'
+    compile 'com.annimon:stream:1.1.9'
 }
 
-if (hasProperty('LOCAL_USERNAME')) {
-    apply from: '../maven.gradle'
+// Create source/javadoc artifacts for publishing
+apply from: "$rootDir/gradle/artifacts.gradle"
+
+// Configure android-maven-gradle-plugin
+install {
+    repositories.mavenInstaller.pom.project {
+        name POM_NAME
+        description POM_DESCRIPTION
+        packaging POM_PACKAGING
+        url POM_URL
+
+        licenses {
+            license {
+                name POM_LICENCE_NAME
+                url POM_LICENCE_URL
+                distribution POM_LICENCE_DIST
+            }
+        }
+
+        scm {
+            url POM_SCM_URL
+            connection POM_SCM_CONNECTION
+            developerConnection POM_SCM_DEV_CONNECTION
+        }
+
+        developers {
+            developer {
+                id 'yoojia'
+                name 'Yoojia Chen'
+            }
+        }
+    }
+}
+
+artifactory {
+    contextUrl = 'https://oss.jfrog.org'
+
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local'
+
+            if (project.hasProperty('bintrayUser')) {
+                username = project.property('bintrayUser')
+                password = project.property('bintrayKey')
+            }
+        }
+
+        defaults {
+            publishConfigs('archives')
+        }
+    }
+}
+
+// Configure gradle-bintray-plugin (for publishing releases)
+bintray {
+    configurations = ['archives']
+
+    publish = true
+
+    pkg {
+        repo = 'maven'
+        name = 'VehickeKeyboardAndroid'
+        userOrg = 'parkingwang'
+        licenses = ['Apache-2.0']
+        labels = ['VehicleNumber', 'keyboard', 'android']
+        websiteUrl = 'https://github.com/parkingwang/vehicle-keyboard-android'
+        issueTrackerUrl = 'https://github.com/parkingwang/vehicle-keyboard-android/issues'
+        vcsUrl = 'https://github.com/parkingwang/vehicle-keyboard-android.git'
+    }
+}
+
+if (project.hasProperty('bintrayUser') && project.hasProperty('bintrayKey')) {
+    bintray.user = project.bintrayUser
+    bintray.key = project.bintrayKey
+}
+
+if (project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')) {
+    def sync = bintray.pkg.version.mavenCentralSync
+    sync.sync = true
+    sync.user = project.sonatypeUsername
+    sync.password = project.sonatypePassword
 }
