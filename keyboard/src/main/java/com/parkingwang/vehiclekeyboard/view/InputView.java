@@ -98,11 +98,15 @@ public class InputView extends LinearLayout {
 
         mButtonKeyOf6 = (Button) findViewById(R.id.number_6);
         mButtonEndOf6 = (Button) findViewById(R.id.number_6_as_end);
-
+        mButtonEndOf6.setOnClickListener(mOnButtonItemClickListener);
+        final boolean textSizeDefined = textSize > 0;
+        if (textSizeDefined) {
+            mButtonEndOf6.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+        }
         for (int i = 0; i < mButtonItems.length; i++) {
             mButtonItems[i] = (Button) findViewById(resIds[i]);
             mButtonItems[i].setOnClickListener(mOnButtonItemClickListener);
-            if (textSize > 0) {
+            if (textSizeDefined) {
                 mButtonItems[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
             }
         }

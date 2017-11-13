@@ -200,6 +200,8 @@ mController.useDefaultMessageHandler();
 
     <!--输入框外边框宽度-->
     <dimen name="pwk_input_view_border_width">0.7pt</dimen>
+    <!--背景缩进，必须与pwk_input_view_border_width保持一致，并且为负值-->
+    <dimen name="pwk_input_view_border_width_inset">-0.7pt</dimen>
     <!--输入框分割线的宽度，在混合组件中使用-->
     <dimen name="pwk_input_view_divider_split_line">@dimen/pwk_input_view_border_width</dimen>
     <!--输入框分割空间的距离，在分离组件样式中使用-->

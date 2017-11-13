@@ -3,6 +3,10 @@
               style="@style/PWKInputViewStyle"
               android:orientation="horizontal"
               android:layout_width="match_parent"
+              android:clipChildren="false"
+              android:paddingLeft="@dimen/pwk_input_view_border_width"
+              android:paddingRight="@dimen/pwk_input_view_border_width"
+              android:clipToPadding="false"
               android:layout_height="match_parent">
 
     <Button
