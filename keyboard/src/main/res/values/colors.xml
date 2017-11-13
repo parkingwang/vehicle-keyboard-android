@@ -10,12 +10,16 @@
     <color name="pwk_text_color">#333333</color>
     <color name="pwk_border_gray">#d8d8d8</color>
 
-    <color name="pwk_highlight_blue">#418AF9</color>
-    <color name="pwk_highlight_green">#39C179</color>
-
-    <color name="pwk_key_pressed_bubble_text">@color/pwk_keyboard_primary_color</color>
+    <color name="pwk_key_pressed_bubble_text">@color/pwk_primary_color</color>
 
     <color name="pwk_key_pressed_gray">#CECECE</color>
+
+    <!--兼容属性-->
     <color name="pwk_keyboard_primary_color">#418AF9</color>
     <color name="pwk_keyboard_primary_dark_color">#3A7CE0</color>
+
+    <!--定义键盘组件的颜色-->
+    <color name="pwk_primary_color">@color/pwk_keyboard_primary_color</color>
+    <color name="pwk_primary_dark_color">@color/pwk_keyboard_primary_dark_color</color>
+
 </resources>

@@ -33,6 +33,9 @@ public class InputView extends LinearLayout {
 
     private static final String KEY_INIT_NUMBER = "pwk.keyboard.key:init.number";
 
+    private Button mButtonKeyOf6;
+    private Button mButtonEndOf6;
+
     private final Button[] mButtonItems = new Button[8];
     private final HashMap<String, Object> mKeyMap = new HashMap<>();
 
@@ -92,6 +95,9 @@ public class InputView extends LinearLayout {
                 R.id.number_3, R.id.number_4, R.id.number_5,
                 R.id.number_6, R.id.number_7,
         };
+
+        mButtonKeyOf6 = (Button) findViewById(R.id.number_6);
+        mButtonEndOf6 = (Button) findViewById(R.id.number_6_as_end);
 
         for (int i = 0; i < mButtonItems.length; i++) {
             mButtonItems[i] = (Button) findViewById(resIds[i]);
@@ -254,19 +260,26 @@ public class InputView extends LinearLayout {
      * @param clearText 是否清空其文本内容
      */
     public void set8thItemVisibility(boolean toShow, boolean clearText) {
-        final Button button = mButtonItems[7];
-        final boolean isShown = button.isShown();
+        final Button button8th = mButtonItems[7];
+        final boolean isShown = button8th.isShown();
+        // 显示第8位
         if (toShow) {
-            if (!isShown) {
-                button.setVisibility(VISIBLE);
+            if (!isShown) {// 第8位未显示，则设置显示
+                button8th.setVisibility(VISIBLE);
             }
+            mButtonEndOf6.setVisibility(GONE);
+            mButtonKeyOf6.setVisibility(VISIBLE);
+            mButtonItems[6] = mButtonKeyOf6;
         }else{
-            if (isShown) {
-                button.setVisibility(GONE);
+            if (isShown) { // 隐藏第8位
+                button8th.setVisibility(GONE);
             }
+            mButtonEndOf6.setVisibility(VISIBLE);
+            mButtonKeyOf6.setVisibility(GONE);
+            mButtonItems[6] = mButtonEndOf6;
         }
-        if (clearText && !isButtonEmpty(button)) {
-            button.setText(null);
+        if (clearText && !isButtonEmpty(button8th)) {
+            button8th.setText(null);
         }
     }
 

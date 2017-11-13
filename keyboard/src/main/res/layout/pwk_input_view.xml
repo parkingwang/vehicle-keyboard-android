@@ -7,35 +7,42 @@
 
     <Button
         android:id="@+id/number_0"
-        style="@style/PWKInputItemStyle"/>
+        style="@style/PWKInputItemStyleLeft"/>
 
     <Button
         android:id="@+id/number_1"
-        style="@style/PWKInputItemStyle"/>
+        style="@style/PWKInputItemStyleKey"/>
 
     <Button
         android:id="@+id/number_2"
-        style="@style/PWKInputItemStyle"/>
+        style="@style/PWKInputItemStyleKey"/>
 
     <Button
         android:id="@+id/number_3"
-        style="@style/PWKInputItemStyle"/>
+        style="@style/PWKInputItemStyleKey"/>
 
     <Button
         android:id="@+id/number_4"
-        style="@style/PWKInputItemStyle"/>
+        style="@style/PWKInputItemStyleKey"/>
 
     <Button
         android:id="@+id/number_5"
-        style="@style/PWKInputItemStyle"/>
+        style="@style/PWKInputItemStyleKey"/>
+
+    <!--使用切换Button来实现动态切换Button样式-->
 
     <Button
         android:id="@+id/number_6"
-        style="@style/PWKInputItemStyle"/>
+        android:visibility="gone"
+        style="@style/PWKInputItemStyleKey"/>
+
+    <Button
+        android:id="@+id/number_6_as_end"
+        style="@style/PWKInputItemStyleRight"/>
 
     <Button
         android:id="@+id/number_7"
         android:visibility="gone"
-        style="@style/PWKInputItemStyle"/>
+        style="@style/PWKInputItemStyleRight"/>
 
 </LinearLayout>

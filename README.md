@@ -29,9 +29,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.1-BETA'
+    implementation 'com.parkingwang:keyboard:0.1.1-BETA'
     // OR
-    compile 'com.parkingwang:keyboard:0.1-BETA'
+    compile 'com.parkingwang:keyboard:0.1.1-BETA'
 ```
 
 ## 使用组件
@@ -134,14 +134,13 @@ mController.useDefaultMessageHandler();
     mKeyboardView.setENTextSize(float); //设置英文字母或数字字体大小
 ```
 
-### 设置`确定`按键及`气泡`字体颜色
+### 设置键盘主题颜色
 
-在colors.xml中覆盖以下颜色值以修改键盘主色
+在colors.xml中覆盖以下颜色值以修改键盘主题色
 ```xml
-    <!--确定按键正常状态下的颜色，以及气泡的颜色-->
-    <color name="pwk_keyboard_primary_color">#418AF9</color>
+    <color name="pwk_primary_color">#418AF9</color>
     <!--确定按键按下时的颜色-->
-    <color name="pwk_keyboard_primary_dark_color">#3A7CE0</color>
+    <color name="pwk_primary_dark_color">#3A7CE0</color>
 ```
 ### 设置输入组件字体大小：
 
@@ -155,38 +154,50 @@ mController.useDefaultMessageHandler();
 
 默认提供两种输入组件样式：
 
-#### 1. 并列表格样式（默认样式）
+#### 1. 混合紧排样式（默认样式） - MIXED
 
 ![](./PWK_INPUT_MIXED_STYLE.png)
 
 ```xml
-    <style name="PWKInputItemStyle" parent="PWKInputItemStyleGreen"/>
-    <style name="PWKInputViewStyle" parent="PWKInputViewStyleMixed"/>
+    <!--输入框按键样式，最左最右键样式设置-->
+    <style name="PWKInputItemStyleKey" parent="PWKInputItemStyle_BORDER_KEY"/>
+    <style name="PWKInputItemStyleLeft" parent="PWKInputItemStyle_BORDER_LEFT"/>
+    <style name="PWKInputItemStyleRight" parent="PWKInputItemStyle_BORDER_RIGHT"/>
+    <!--输入框外部样式-->
+    <style name="PWKInputViewStyle" parent="PWKInputViewStyle_MIXED"/>
 ```
 
-#### 2. 分隔块状样式
+#### 2. 分隔块状样式 - DIVIDED
 
 ![](./PWK_INPUT_DIVIDED_STYLE.png)
 
 ```xml
-    <style name="PWKInputItemStyle" parent="PWKInputItemStyleBlue"/>
-    <style name="PWKInputViewStyle" parent="PWKInputViewStyleDivided"/>
+    <!--输入框按键样式，最左最右键样式设置-->
+    <style name="PWKInputItemStyleKey" parent="PWKInputItemStyle_FILLED_KEY"/>
+    <style name="PWKInputItemStyleLeft" parent="PWKInputItemStyle_FILLED_LEFT"/>
+    <style name="PWKInputItemStyleRight" parent="PWKInputItemStyle_FILLED_RIGHT"/>
+    <!--输入框外部样式-->
+    <style name="PWKInputViewStyle" parent="PWKInputViewStyle_DIVIDED"/>
+
 ```
 
 在项目的`styles.xml`中覆盖设置以上两种样式配置，可以切换显示不同的样式。可参考 App 的配置代码。
 
 ##### 如何修改自己的样式
 
-覆盖`PWKInputItemStyle`和`PWKInputViewStyle`来实现。
+覆盖`PWKInputItemStyleKey / PWKInputItemStyleLeft / PWKInputItemStyleRight`和`PWKInputViewStyle`来实现。
 
-- ItemStyle是输入组件内部每个输入框的样式设置
-- ViewStyle是输入组件的整体样式设置。
+- `PWKInputItemStyleKey` 控制输入组件内每个输入框的按键Button样式，样式作用于每个Button；
+- `PWKInputItemStyleLeft` 控制输入组件内最左侧输入框的按键Button样式，样式作用于一个Button；
+- `PWKInputItemStyleRight` 控制输入组件内最右侧输入框的按键Button样式，样式作用于一个Button；
+- `PWKInputViewStyle` 控制输入组件的整体样式，作用于LinearLayout；
 
 ##### InputView的样式选项
 
 通过覆盖以下样式配置，可以修改默认样式
 
 ```xml
+
     <!--输入框外边框宽度-->
     <dimen name="pwk_input_view_border_width">0.7pt</dimen>
     <!--输入框分割线的宽度，在混合组件中使用-->
@@ -199,6 +210,7 @@ mController.useDefaultMessageHandler();
     <dimen name="pwk_input_item_radius">4dp</dimen>
     <!--输入框字体大小-->
     <dimen name="pwk_input_item_text_size">24sp</dimen>
+
 ```
 
 ## 设置键盘类型
@@ -268,6 +280,11 @@ mController.useDefaultMessageHandler();
 
 ```
 
+### v0.2-ALPHA 2017.1113
+
+- 修改键盘组件主题颜色的控制逻辑，原有的`pwk_keyboard_primary_color`修改为`pwk_primary_color`，并作为整个键盘的主题色。
+- 为输入框不同键位的增加控制主题。`PWKInputItemStyleKey / PWKInputItemStyleLeft / PWKInputItemStyleRight`。
+
 ### v0.1-BETA 2017.1108
 
 - 完成基础功能，更新文档并公开发布；
@@ -279,7 +296,7 @@ mController.useDefaultMessageHandler();
 
 ## License
 
-    Copyright 2017 Xi'an iRain
+    Copyright 2017 Xi'an iRain IOT Technology service CO., Ltd (ShenZhen)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

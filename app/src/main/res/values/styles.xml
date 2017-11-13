@@ -8,11 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!--<style name="PWKInputItemStyle" parent="PWKInputItemStyleBlue"/>-->
-    <!--<style name="PWKInputViewStyle" parent="PWKInputViewStyleDivided"/>-->
+    <!--输入框按键样式，最左最右键样式设置-->
+    <style name="PWKInputItemStyleKey" parent="PWKInputItemStyle_FILLED_KEY"/>
 
+    <style name="PWKInputItemStyleLeft" parent="PWKInputItemStyle_FILLED_LEFT"/>
 
-    <style name="PWKInputItemStyle" parent="PWKInputItemStyleGreen"/>
-    <style name="PWKInputViewStyle" parent="PWKInputViewStyleMixed"/>
+    <style name="PWKInputItemStyleRight" parent="PWKInputItemStyle_FILLED_RIGHT"/>
+    <!--输入框外部样式-->
+    <style name="PWKInputViewStyle" parent="PWKInputViewStyle_DIVIDED"/>
 
 </resources>
