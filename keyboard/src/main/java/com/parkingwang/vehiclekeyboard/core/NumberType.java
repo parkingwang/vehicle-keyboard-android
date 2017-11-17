@@ -42,5 +42,10 @@ public enum NumberType {
     /**
      * 新大使馆车牌
      */
-    EMBASSY_NEW
+    EMBASSY_NEW,
+
+    /**
+     * 民航车牌
+     */
+    AVIATION,
 }
