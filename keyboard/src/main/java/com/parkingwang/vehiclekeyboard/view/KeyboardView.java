@@ -205,13 +205,9 @@ public class KeyboardView extends LinearLayout {
     }
 
     private void updateKeyboardLayout(KeyboardEntry keyboard) {
-        int maxColumn = 0;
-        List<List<KeyEntry>> keyRows = keyboard.keyRows;
-        for (List<KeyEntry> row : keyRows) {
-            if (row.size() > maxColumn) {
-                maxColumn = row.size();
-            }
-        }
+        final List<List<KeyEntry>> keyRows = keyboard.keyRows;
+        // 以第一行的键盘数量为基准
+        final int maxColumn = keyRows.get(0).size();
 
         final int rowSize = keyRows.size();
         mKeyCacheHelper.recyclerKeyRows(this, rowSize);
