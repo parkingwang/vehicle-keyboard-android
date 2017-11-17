@@ -180,17 +180,23 @@ public class InputView extends LinearLayout {
         // 初始化车牌
         mKeyMap.put(KEY_INIT_NUMBER, number);
         final char[] chars = number.toCharArray();
-        for (int i = 0; i < mButtonItems.length; i++) {
-            final Button view = mButtonItems[i];
-            if (i < chars.length) {
-                view.setText(String.valueOf(chars[i]));
-            } else {
-                view.setText(null);
-            }
-        }
-        // check 8th
+        // check 8th input item show
         final boolean charsOf8 = chars.length >= 8;
         set8thItemVisibility(charsOf8, !charsOf8);
+        // 显示到对应键位
+        // reset first
+        mButtonEndOf6.setText(null);
+        mButtonKeyOf6.setText(null);
+        // setup text
+        for (int i = 0; i < mButtonItems.length; i++) {
+            final String text;
+            if (i < chars.length) {
+                text = String.valueOf(chars[i]);
+            } else {
+                text = null;
+            }
+            mButtonItems[i].setText(text);
+        }
     }
 
     /**
