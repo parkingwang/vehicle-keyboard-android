@@ -3,14 +3,10 @@ package com.parkingwang.vehiclekeyboard.support;
 import java.util.regex.Pattern;
 
 public class Texts {
+    private static Pattern ENGLISH_LETTER_DIGITS = Pattern.compile("[^a-zA-Z0-9]");
 
-    public static boolean isLetterOrDigitOnly(String str) {
-        for (char c : str.toCharArray()) {
-            if (! Character.isLetterOrDigit(c)) {
-                return false;
-            }
-        }
-        return true;
+    public static boolean isEnglishLetterOrDigit(String str) {
+        return !ENGLISH_LETTER_DIGITS.matcher(str).find();
     }
 
     static boolean isNewEnergyType(String number) {

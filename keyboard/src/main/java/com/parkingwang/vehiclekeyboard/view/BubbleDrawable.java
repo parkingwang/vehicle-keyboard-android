@@ -45,7 +45,7 @@ public class BubbleDrawable extends Drawable {
 
     public void setText(String text) {
         mText = text;
-        if (Texts.isLetterOrDigitOnly(text)) {
+        if (Texts.isEnglishLetterOrDigit(text)) {
             mTextPaint.setTextSize(mENTextSize);
         } else {
             mTextPaint.setTextSize(mCNTextSize);
