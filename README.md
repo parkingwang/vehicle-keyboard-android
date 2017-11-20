@@ -40,9 +40,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.2.2-ALPHA'
+    implementation 'com.parkingwang:keyboard:0.2.3-ALPHA'
     // OR
-    compile 'com.parkingwang:keyboard:0.2.2-ALPHA'
+    compile 'com.parkingwang:keyboard:0.2.3-ALPHA'
 ```
 
 ## 使用组件
@@ -292,6 +292,11 @@ mController.useDefaultMessageHandler();
 -keep class org.mozilla.javascript.xmlimpl.** { *; }
 
 ```
+### v0.3-ALPHA 2017.1120
+
+- 更新JS文件(JS压缩)；
+- 全键盘模式下，增加“民航”车牌类型；
+- 修改KeyboardView每行键位数的基准为第一行；
 
 ### v0.2-ALPHA 2017.1113
 
