@@ -294,6 +294,8 @@ mController.useDefaultMessageHandler();
 ```
 ### v0.3-ALPHA 2017.1120
 
+- 修复Texts关于字符判断的问题；
+- 更新Gradle版本为3.3.0；
 - 更新JS文件(JS压缩)；
 - 全键盘模式下，增加“民航”车牌类型；
 - 修改KeyboardView每行键位数的基准为第一行；

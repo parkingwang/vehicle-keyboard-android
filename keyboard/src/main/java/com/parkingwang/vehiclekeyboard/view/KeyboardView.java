@@ -236,7 +236,7 @@ public class KeyboardView extends LinearLayout {
                 } else {
                     keyView.setText(key.text);
                 }
-                if(Texts.isLetterOrDigitOnly(key.text)) {
+                if(Texts.isEnglishLetterOrDigit(key.text)) {
                     keyView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mENTextSize);
                 } else {
                     keyView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mCNTextSize);
