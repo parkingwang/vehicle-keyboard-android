@@ -40,9 +40,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.3-BETA'
+    implementation 'com.parkingwang:keyboard:0.3.1-ALPHA'
     // OR
-    compile 'com.parkingwang:keyboard:0.3-BETA'
+    compile 'com.parkingwang:keyboard:0.3.1-ALPHA'
 ```
 
 ## 使用组件
