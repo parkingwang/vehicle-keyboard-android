@@ -16,8 +16,7 @@ import com.parkingwang.vehiclekeyboard.support.Texts;
 
 /**
  * @author 黄浩杭 (huanghaohang@parkingwang.com)
- * @version 2017-11-02 0.6
- * @since 2017-11-02 0.6
+ * @version 0.1
  */
 public class BubbleDrawable extends Drawable {
 

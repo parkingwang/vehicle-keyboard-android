@@ -13,9 +13,8 @@ import com.parkingwang.vehiclekeyboard.R;
 import com.parkingwang.vehiclekeyboard.view.KeyboardView;
 
 /**
- * @author 黄浩杭
- * @version 2017-11-03 0.6
- * @since 2017-11-03 0.6
+ * @author 黄浩杭 (huanghaohang@parkingwang.com)
+ * @version 2017-11-03 0.1
  */
 class PopupHelper {
 

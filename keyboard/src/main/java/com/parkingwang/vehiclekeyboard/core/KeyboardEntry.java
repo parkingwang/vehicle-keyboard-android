@@ -8,8 +8,7 @@ import java.util.List;
 
 /**
  * @author 黄浩杭 (huanghaohang@parkingwang.com)
- * @since 2017-09-26 0.1
- * @version 2017-9-26 0.3
+ * @version 2017-9-26 0.1
  */
 public class KeyboardEntry {
     /**

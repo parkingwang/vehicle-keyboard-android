@@ -11,6 +11,14 @@ if (project.plugins.hasPlugin('com.android.library')) {
             String androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
             classpath = variant.javaCompiler.classpath + files(androidJar)
 
+            // Charset
+            options.encoding 'UTF-8'
+            options.charSet 'UTF-8'
+
+            // Show author and version
+            options.author true
+            options.version true
+
             // The Android online reference doesn't include package-list, so we have to use the local one
             String packageListRef = "${android.sdkDirectory}/docs/reference/"
             options.linksOffline 'http://d.android.com/reference/', packageListRef
@@ -55,6 +63,11 @@ if (project.plugins.hasPlugin('com.android.library')) {
             // just to embrace it rather than try to configure around it
             artifacts {
                 archives javadocJarTask, sourcesJarTask
+            }
+
+            task('syncJavadoc', type: Sync, dependsOn: javadocTask) {
+                from javadocTask.destinationDir
+                into rootProject.file('docs')
             }
         }
         else {

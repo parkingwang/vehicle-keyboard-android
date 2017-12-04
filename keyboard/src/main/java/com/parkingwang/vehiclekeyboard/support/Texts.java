@@ -2,6 +2,11 @@ package com.parkingwang.vehiclekeyboard.support;
 
 import java.util.regex.Pattern;
 
+/**
+ * @author 黄浩杭 (huanghaohang@parkingwang.com), 陈哈哈
+ * @since 0.1
+ * @version 0.3-ALPHA
+ */
 public class Texts {
     private static Pattern ENGLISH_LETTER_DIGITS = Pattern.compile("[^a-zA-Z0-9]");
 

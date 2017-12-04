@@ -8,9 +8,8 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.graphics.drawable.TintAwareDrawable;
 
 /**
- * @author
- * @version 2017-11-03
- * @since 2017-11-03
+ * @author 黄浩杭 (huanghaohang@parkingwang.com)
+ * @version 2017-11-03 0.1
  */
 public class DrawableTint {
 
@@ -26,7 +25,7 @@ public class DrawableTint {
     @SuppressLint("RestrictedApi")
     private static void setTintMode(Drawable drawable, PorterDuff.Mode mode) {
         if (drawable instanceof TintAwareDrawable) {
-            ((TintAwareDrawable)drawable).setTintMode(mode);
+            ((TintAwareDrawable) drawable).setTintMode(mode);
         } else {
             DrawableCompat.setTintMode(drawable, mode);
         }

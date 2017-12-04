@@ -11,8 +11,8 @@ import static com.parkingwang.vehiclekeyboard.support.PopupHelper.showToActivity
 
 /**
  * @author Yoojia Chen (yoojiachen@gmail.com)
- * @version 2017-11-03 0.6
- * @since 2017-11-03 0.6
+ * @version 2017-11-03 0.1
+ * @since 2017-11-03 0.1
  */
 public class PopupKeyboard {
 
