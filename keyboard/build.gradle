@@ -63,6 +63,10 @@ install {
                 id 'yoojia'
                 name 'Yoojia Chen'
             }
+            developer {
+                id 'msdx'
+                name 'Huang Haohang'
+            }
         }
     }
 }
