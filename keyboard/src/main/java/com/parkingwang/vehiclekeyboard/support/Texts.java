@@ -14,7 +14,7 @@ public class Texts {
         return !ENGLISH_LETTER_DIGITS.matcher(str).find();
     }
 
-    static boolean isNewEnergyType(String number) {
+    public static boolean isNewEnergyType(String number) {
         if (number != null && number.length() > 2) {
             final int size = 8 - number.length();
             for (int i = 0; i < size; i++) {
