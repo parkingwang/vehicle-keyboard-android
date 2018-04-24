@@ -68,9 +68,10 @@ public class KeyboardInputController {
     }
 
     /**
-     * 绑定新能源车牌类型锁定按钮
+     * 绑定新能源车牌类型锁定按钮实现接口。
+     * 当键盘切换新能源车牌时，会调用此接口相关函数来更改锁定按钮状态。
      *
-     * @param proxy 锁定按钮
+     * @param proxy 锁定按钮代理实现接口
      * @return KeyboardInputController
      */
     public KeyboardInputController bindLockTypeProxy(final LockNewEnergyProxy proxy) {
@@ -103,7 +104,8 @@ public class KeyboardInputController {
     }
 
     /**
-     * 使用默认Toast的消息显示处理接口
+     * 使用默认Toast的消息显示处理接口。
+     * 默认时，键盘状态切换的提示消息，通过Toast接口来显示。
      *
      * @return KeyboardBinder
      */
@@ -143,6 +145,12 @@ public class KeyboardInputController {
         return this;
     }
 
+    /**
+     * 移除号码类型变化回调接口
+     *
+     * @param listener 回调接口
+     * @return KeyboardInputController
+     */
     public KeyboardInputController removeOnNumberTypeChangedListener(OnNumberTypeChangedListener listener) {
         mOnNumberTypeChangedListeners.remove(listener);
         return this;
@@ -159,6 +167,12 @@ public class KeyboardInputController {
         return this;
     }
 
+    /**
+     * 移除输入变更回调接口
+     *
+     * @param listener 回调接口
+     * @return KeyboardInputController
+     */
     public KeyboardInputController removeOnInputChangedListener(OnInputChangedListener listener) {
         mOnInputChangedListeners.remove(listener);
         return this;
