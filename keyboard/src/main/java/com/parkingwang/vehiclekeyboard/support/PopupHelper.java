@@ -16,12 +16,12 @@ import com.parkingwang.vehiclekeyboard.view.KeyboardView;
  * @author 黄浩杭 (huanghaohang@parkingwang.com)
  * @version 2017-11-03 0.1
  */
-class PopupHelper {
+public class PopupHelper {
 
     public static boolean showToActivity(final Activity activity, final KeyboardView keyboardView) {
         View decorView = activity.getWindow().getDecorView();
 
-        FrameLayout keyboardWrapper = (FrameLayout) decorView.findViewById(R.id.keyboard_wrapper_id);
+        FrameLayout keyboardWrapper = decorView.findViewById(R.id.keyboard_wrapper_id);
         if (keyboardWrapper == null) {
             ViewParent keyboardViewParent = keyboardView.getParent();
             if (keyboardViewParent != null) {
