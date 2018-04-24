@@ -40,9 +40,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.3.1-ALPHA'
+    implementation 'com.parkingwang:keyboard:0.4.0'
     // OR
-    compile 'com.parkingwang:keyboard:0.3.1-ALPHA'
+    compile 'com.parkingwang:keyboard:0.4.0'
 ```
 
 ## 使用组件
@@ -292,12 +292,26 @@ mController.useDefaultMessageHandler();
 -keep class org.mozilla.javascript.xmlimpl.** { *; }
 
 ```
+## 文档
+
+KeyboardInputController提供一系列有用的方法，详细参见DOC文档对应的类方法说明：
+
+[DOC文档](https://parkingwang.github.io/vehicle-keyboard-android/)
+
 ## RoadMap
 
 - 使用Java原生代码来替代JavaScript脚本实现核心引擎逻辑；
 - 增加二级键盘提示，应对特定场景下显示超出键盘布局容量的按键；
 
 ## 版本更新
+
+### v0.4.0 2018.0424
+
+> 说明：在此版本中，如果使用`com.parkingwang.vehiclekeyboard.support.KeyboardInputController`包的相关类，
+> 会报告Deprecated,使用`com.parkingwang.vehiclekeyboard.KeyboardInputController`包的类即可。
+
+- 更新KeyboardInputController及相关类的包结构；
+- 增加Controller各个Set和Add接口的NullPointer检查；
 
 ### v0.3-ALPHA 2017.1120
 
@@ -316,7 +330,12 @@ mController.useDefaultMessageHandler();
 
 - 完成基础功能，更新文档并公开发布；
 
-## 维护
+## Contributors
+
+[VehicleKeyboard-Android](https://github.com/parkingwang/vehicle-keyboard-android)
+由西安艾润物联网技术服务有限公司第一事业部深圳研发中心开发和维护，旨在为停车行业同行进行技术交流和分享。
+
+目前在两位开发者在开发维护，如您有相关问题，可以通过PullRequest和Issues来提交，也可以通过邮件与我们联系。
 
 - [陈永佳](https://github.com/yoojia) 联系方式：chenyongjia@parkingwang.com
 - [黄浩杭](https://github.com/msdx) 联系方式：huanghaohang@parkingwang.com
