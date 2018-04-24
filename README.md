@@ -292,6 +292,13 @@ mController.useDefaultMessageHandler();
 -keep class org.mozilla.javascript.xmlimpl.** { *; }
 
 ```
+## RoadMap
+
+- 使用Java原生代码来替代JavaScript脚本实现核心引擎逻辑；
+- 增加二级键盘提示，应对特定场景下显示超出键盘布局容量的按键；
+
+## 版本更新
+
 ### v0.3-ALPHA 2017.1120
 
 - 修复Texts关于字符判断的问题；
