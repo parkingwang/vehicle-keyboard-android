@@ -130,7 +130,7 @@ public class KeyboardInputController {
      * @return KeyboardBinder
      */
     public KeyboardInputController setMessageHandler(MessageHandler handler) {
-        mMessageHandler = handler;
+        mMessageHandler = Objects.notNull(handler);
         return this;
     }
 
@@ -141,7 +141,7 @@ public class KeyboardInputController {
      * @return KeyboardInputController
      */
     public KeyboardInputController addOnNumberTypeChangedListener(OnNumberTypeChangedListener listener) {
-        mOnNumberTypeChangedListeners.add(listener);
+        mOnNumberTypeChangedListeners.add(Objects.notNull(listener));
         return this;
     }
 
@@ -152,7 +152,7 @@ public class KeyboardInputController {
      * @return KeyboardInputController
      */
     public KeyboardInputController removeOnNumberTypeChangedListener(OnNumberTypeChangedListener listener) {
-        mOnNumberTypeChangedListeners.remove(listener);
+        mOnNumberTypeChangedListeners.remove(Objects.notNull(listener));
         return this;
     }
 
@@ -163,7 +163,7 @@ public class KeyboardInputController {
      * @return KeyboardInputController
      */
     public KeyboardInputController addOnInputChangedListener(OnInputChangedListener listener) {
-        mOnInputChangedListeners.add(listener);
+        mOnInputChangedListeners.add(Objects.notNull(listener));
         return this;
     }
 
@@ -174,7 +174,7 @@ public class KeyboardInputController {
      * @return KeyboardInputController
      */
     public KeyboardInputController removeOnInputChangedListener(OnInputChangedListener listener) {
-        mOnInputChangedListeners.remove(listener);
+        mOnInputChangedListeners.remove(Objects.notNull(listener));
         return this;
     }
 
