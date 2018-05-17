@@ -77,6 +77,11 @@
         android:onClick="onClick"
         android:text="@string/popup_keyboard" />
 
+    <EditText
+        android:id="@+id/edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/popup_keyboard"/>
     <!--<com.parkingwang.vehiclekeyboard.view.KeyboardView-->
         <!--android:id="@+id/keyboard_view"-->
         <!--android:layout_width="match_parent"-->

@@ -102,8 +102,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.popup_keyboard:
                 if (mPopupKeyboard.isShown()) {
+                    findViewById(R.id.edit_text).setEnabled(true);
                     mPopupKeyboard.dismiss(MainActivity.this);
                 }else{
+                    findViewById(R.id.edit_text).setEnabled(false);
                     mPopupKeyboard.show(MainActivity.this);
                 }
                 break;

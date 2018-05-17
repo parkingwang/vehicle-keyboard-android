@@ -21,7 +21,7 @@ subprojects {
 }
 
 ext {
-    minSdkVersion = 11
+    minSdkVersion = 13
     compileSdkVersion = 26
     buildToolsVersion = '26.0.2'
     sourceCompatibility = JavaVersion.VERSION_1_7
