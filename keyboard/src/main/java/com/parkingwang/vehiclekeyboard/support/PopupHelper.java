@@ -1,20 +1,29 @@
 package com.parkingwang.vehiclekeyboard.support;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.parkingwang.vehiclekeyboard.R;
 import com.parkingwang.vehiclekeyboard.view.KeyboardView;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * @author 黄浩杭 (huanghaohang@parkingwang.com)
- * @version 2017-11-03 0.1
+ * @version 0.4.1
+ * @since 2017-11-03 0.1
  */
 public class PopupHelper {
 
@@ -35,11 +44,11 @@ public class PopupHelper {
                 keyboardWrapper = wrapKeyboardView(activity, keyboardView);
             }
 
-            insetKeyboardView(decorView, keyboardWrapper);
-
             if (decorView instanceof FrameLayout) {
-                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 params.gravity = Gravity.BOTTOM;
+                params.bottomMargin = getNavigationBarHeight(activity);
                 ((ViewGroup) decorView).addView(keyboardWrapper, params);
             }
             return true;
@@ -62,11 +71,24 @@ public class PopupHelper {
         return keyboardWrapper;
     }
 
-    private static void insetKeyboardView(View decorView, FrameLayout keyboardWrapper) {
-        final Rect rect = new Rect();
-        decorView.getWindowVisibleDisplayFrame(rect);
-        final int paddingBottom = decorView.getHeight() - rect.bottom;
-        keyboardWrapper.setPadding(0, 0, 0, paddingBottom);
+    private static int getNavigationBarHeight(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        final int appUsableHeight = size.y;
+
+        if (Build.VERSION.SDK_INT >= 17) {
+            display.getRealSize(size);
+
+        } else {
+            try {
+                size.y = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
+            } catch (Exception e) {
+                return 0;
+            }
+        }
+        return size.y - appUsableHeight;
     }
 
     private static void makeSureHasNoParent(View view) {
