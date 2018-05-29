@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,9 +21,8 @@ import android.widget.LinearLayout;
 
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Consumer;
-import com.parkingwang.vehiclekeyboard.BuildConfig;
 import com.parkingwang.vehiclekeyboard.R;
-import com.parkingwang.vehiclekeyboard.core.EngineRunner;
+import com.parkingwang.vehiclekeyboard.core.Engine;
 import com.parkingwang.vehiclekeyboard.core.KeyEntry;
 import com.parkingwang.vehiclekeyboard.core.KeyType;
 import com.parkingwang.vehiclekeyboard.core.KeyboardEntry;
@@ -34,9 +32,6 @@ import com.parkingwang.vehiclekeyboard.support.Texts;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author 黄浩杭 (huanghaohang@parkingwang.com)
@@ -44,17 +39,15 @@ import java.util.concurrent.TimeUnit;
  */
 public class KeyboardView extends LinearLayout {
 
-    private static ExecutorService RUNNER_THREAD = Executors.newSingleThreadExecutor();
+//    private static ExecutorService RUNNER_THREAD = Executors.newSingleThreadExecutor();
+
+    private final Engine mEngine = new Engine();
 
     private final Paint mDividerPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
 
     private int mRowSpace;
 
-    private final EngineRunner mEngine;
-
     private final List<KeyboardCallback> mKeyboardCallbacks = new CopyOnWriteArrayList<>();
-
-    private KeyboardType mKeyboardType;
 
     private int mDefaultKeyHeight;
 
@@ -102,9 +95,6 @@ public class KeyboardView extends LinearLayout {
 
         Resources resources = getResources();
         mDefaultKeyHeight = resources.getDimensionPixelSize(R.dimen.pwk_keyboard_key_height);
-
-        mEngine = new EngineRunner(context);
-        mKeyboardType = KeyboardType.values()[type];
 
         setOrientation(LinearLayout.VERTICAL);
         final Drawable rowDivider = ContextCompat.getDrawable(context, R.drawable.pwk_space_vertical);
@@ -164,34 +154,37 @@ public class KeyboardView extends LinearLayout {
      * @param numberType 车牌号类型
      */
     public void update(@NonNull final String number, final int showIndex, final NumberType numberType) {
-        final long start = System.nanoTime();
-        RUNNER_THREAD.submit(new Runnable() {
-            @Override
-            public void run() {
-                mEngine.start();
-                final int finalIndex = showIndex < 0 ? 0 : showIndex;
-                final KeyboardEntry keyboard =
-                        mEngine.update(mKeyboardType, finalIndex, number, numberType);
-                final long escaped = TimeUnit.MILLISECONDS.convert((System.nanoTime() - start), TimeUnit.NANOSECONDS);
-                if (BuildConfig.DEBUG) {
-                    Log.w("KeyboardView", "--> jskeyboard.engine.update: " + escaped + "ms");
-                }
-                KeyboardView.this.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (keyboard == null) {
-                            return;
-                        }
-                        try {
-                            updateKeyboardLayout(keyboard);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        triggerCallback(keyboard);
-                    }
-                });
-            }
-        });
+        KeyboardEntry layout = mEngine.update(number, showIndex, numberType);
+        updateKeyboardLayout(layout);
+        triggerCallback(layout);
+//        final long start = System.nanoTime();
+//        RUNNER_THREAD.submit(new Runnable() {
+//            @Override
+//            public void run() {
+//                mEngine.start();
+//                final int finalIndex = showIndex < 0 ? 0 : showIndex;
+//                final KeyboardEntry keyboard =
+//                        mEngine.update(mKeyboardType, finalIndex, number, numberType);
+//                final long escaped = TimeUnit.MILLISECONDS.convert((System.nanoTime() - start), TimeUnit.NANOSECONDS);
+//                if (BuildConfig.DEBUG) {
+//                    Log.w("KeyboardView", "--> jskeyboard.engine.update: " + escaped + "ms");
+//                }
+//                KeyboardView.this.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (keyboard == null) {
+//                            return;
+//                        }
+//                        try {
+//                            updateKeyboardLayout(keyboard);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                        triggerCallback(keyboard);
+//                    }
+//                });
+//            }
+//        });
     }
 
     private void triggerCallback(KeyboardEntry keyboard) {
@@ -252,7 +245,7 @@ public class KeyboardView extends LinearLayout {
      * @param keyboardType 要设置的键盘类型
      */
     public void setKeyboardType(@NonNull KeyboardType keyboardType) {
-        mKeyboardType = keyboardType;
+        mEngine.SetKeyboardType(keyboardType);
     }
 
     /**
@@ -314,21 +307,21 @@ public class KeyboardView extends LinearLayout {
     }
 
     public void start() {
-        RUNNER_THREAD.submit(new Runnable() {
-            @Override
-            public void run() {
-                mEngine.start();
-            }
-        });
+//        RUNNER_THREAD.submit(new Runnable() {
+//            @Override
+//            public void run() {
+//                mEngine.start();
+//            }
+//        });
     }
 
     public void stop() {
-        RUNNER_THREAD.submit(new Runnable() {
-            @Override
-            public void run() {
-                mEngine.stop();
-            }
-        });
+//        RUNNER_THREAD.submit(new Runnable() {
+//            @Override
+//            public void run() {
+//                mEngine.stop();
+//            }
+//        });
     }
 
     @Override

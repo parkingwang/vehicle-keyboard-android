@@ -1,25 +1,21 @@
-/*
- * Copyright (c) 2017. Xi'an iRain IOT Technology service CO., Ltd (ShenZhen). All Rights Reserved.
- */
-
 package com.parkingwang.vehiclekeyboard.core;
 
 /**
- * 键盘类型
- * @author 黄浩杭 (huanghaohang@parkingwang.com)
- * @since 2017-09-26 0.1
+ * @author 陈哈哈 yoojiachen@gmail.com
  */
 public enum KeyboardType {
     /**
      * 全键盘
      */
     FULL,
+
     /**
-     * 民用键盘
+     * 纯民用键盘
      */
-    CIVIL,
+    CIVIL_ONLY,
+
     /**
-     * 民用+武警键盘
+     * 民用+武警
      */
-    CIVIL_WJ
+    CIVIL_SPEC,
 }

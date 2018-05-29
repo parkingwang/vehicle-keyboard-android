@@ -1,51 +1,124 @@
-/*
- * Copyright (c) 2017. Xi'an iRain IOT Technology service CO., Ltd (ShenZhen). All Rights Reserved.
- */
-
 package com.parkingwang.vehiclekeyboard.core;
 
 /**
- * 车牌号类型
- *
- * @author 黄浩杭 (huanghaohang@parkingwang.com)
- * @since 2017-09-26 0.1
+ * @author 陈哈哈 yoojiachen@gmail.com
  */
 public enum NumberType {
     /**
-     * 自动探测试
+     * 未知类型
      */
     AUTO_DETECT,
+
     /**
-     * 民用车牌
+     * 民用
      */
     CIVIL,
-    /**
-     * 武警总队
-     */
-    WUJING,
-    /**
-     * 武警地方
-     */
-    WUJING_LOCAL,
-    /**
-     * 军队车牌
-     */
-    ARMY,
+
     /**
      * 新能源车牌
      */
     NEW_ENERGY,
+
     /**
-     * 大使馆车牌
+     * 港澳
      */
-    EMBASSY,
+    HK_MACAO,
+
     /**
-     * 新大使馆车牌
+     * 新式武警车牌
      */
-    EMBASSY_NEW,
+    WJ2012,
+
+    /**
+     * 新式军车车牌
+     */
+    PLA2012,
+
+    /**
+     * 旧式大使馆车牌
+     */
+    SHI2012,
+
+    /**
+     * 新式大使馆车牌
+     */
+    SHI2017,
+
+    /**
+     * 旧式领事馆车牌
+     */
+    LING2012,
+
+    /**
+     * 新式领事馆车牌
+     */
+    LING2018,
 
     /**
      * 民航车牌
      */
-    AVIATION,
+    AVIATION;
+
+    public static NumberType detect(String number) {
+        if (null == number) {
+            return NumberType.AUTO_DETECT;
+        }
+        final int size = number.length();
+        if (0 == size) {
+            return NumberType.AUTO_DETECT;
+        }
+        number = number.toUpperCase();
+        final char firstChar = number.charAt(0);
+        // 军队
+        if (contains(VNumberChars.PLA2012_IDX0, firstChar)) {
+            return PLA2012;
+        }
+        // 使147001
+        if (VNumberChars.SHI == firstChar) {
+            return SHI2012;
+        }
+        // 146001使
+        if (contains(VNumberChars.NUMERIC_123, firstChar)) {
+            return SHI2017;
+        }
+        // 民航
+        if (VNumberChars.MIN == firstChar) {
+            return AVIATION;
+        }
+        // 武警
+        if (VNumberChars.WJ_W == firstChar) {
+            return WJ2012;
+        }
+        final char lastChar = number.charAt(Math.max(0, size - 1));
+        // 领事馆
+        if (VNumberChars.LING == lastChar) {
+            // 粤17601领
+            // 粤A0011领
+            if (size > 2) {
+                final char secondChar = number.charAt(1);
+                if (contains(VNumberChars.LETTERS_has_O, secondChar)) {
+                    return LING2012;
+                } else {
+                    return LING2018;
+                }
+            } else {
+                return LING2018;
+            }
+        }
+        // 港澳
+        if (number.startsWith("粤Z") || number.contains(VNumberChars.CHARS_HK_MACAO)) {
+            return HK_MACAO;
+        }
+        if (size == 8) {
+            return NEW_ENERGY;
+        } else {
+            return CIVIL;
+        }
+    }
+
+    private static boolean contains(String s, char c) {
+        return s.indexOf(c) >= 0;
+    }
 }
+
+

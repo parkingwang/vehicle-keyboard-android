@@ -1,14 +1,9 @@
-/*
- * Copyright (c) 2017. Xi'an iRain IOT Technology service CO., Ltd (ShenZhen). All Rights Reserved.
- */
-
 package com.parkingwang.vehiclekeyboard.core;
 
 import java.util.List;
 
 /**
- * @author 黄浩杭 (huanghaohang@parkingwang.com)
- * @version 2017-9-26 0.1
+ * @author 陈哈哈 yoojiachen@gmail.com
  */
 public class KeyboardEntry {
     /**
@@ -25,7 +20,6 @@ public class KeyboardEntry {
     public final KeyboardType keyboardType;
     /**
      * 当前预设的车牌号码类型
-     * @since 0.3
      */
     public final NumberType presetNumberType;
     /**
@@ -40,18 +34,14 @@ public class KeyboardEntry {
      * 键盘里的所有键位
      */
     public final List<List<KeyEntry>> keyRows;
+
     /**
      * 当前车牌号码的检测类型
-     * @since 0.3
      */
     public final NumberType detectedNumberType;
 
-    /**
-     * @since 0.3
-     */
-    public KeyboardEntry(int index, String presetNumber, KeyboardType keyboardType,
-                         NumberType presetNumberType, int numberLength, int numberLimitLength,
-                         List<List<KeyEntry>> keyRows, NumberType detectedNumberType) {
+    public KeyboardEntry(int index, String presetNumber, KeyboardType keyboardType, NumberType presetNumberType,
+                         int numberLength, int numberLimitLength, List<List<KeyEntry>> keyRows, NumberType detectedNumberType) {
         this.index = index;
         this.presetNumber = presetNumber;
         this.keyboardType = keyboardType;

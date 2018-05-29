@@ -1,5 +1,6 @@
 package com.parkingwang.vehiclekeyboard;
 
+
 import com.parkingwang.vehiclekeyboard.core.NumberType;
 
 /**

@@ -231,9 +231,7 @@ public class KeyboardInputController {
     private void updateInputViewItemsByNumberType(NumberType type) {
         changeNumberType(type);
         // 如果检测到的车牌号码为新能源、地方武警，需要显示第8位车牌
-        if (NumberType.NEW_ENERGY.equals(type) ||
-                NumberType.WUJING_LOCAL.equals(type) ||
-                mLockedOnNewEnergyType) {
+        if (NumberType.NEW_ENERGY.equals(type) || NumberType.WJ2012.equals(type) || mLockedOnNewEnergyType) {
             mInputView.set8thItemVisibility(true, false);
         } else {
             // 在车辆不完整的情况下，最后一位显示时，要删除
