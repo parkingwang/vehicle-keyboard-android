@@ -20,11 +20,11 @@ import static com.parkingwang.vehiclekeyboard.core.Utils.mkEntitiesOf;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.CHARS_HK_MACAO;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.CIVIL_POST;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.CIVIL_PROVINCES;
-import static com.parkingwang.vehiclekeyboard.core.VNumberChars.LETTERS_has_O;
-import static com.parkingwang.vehiclekeyboard.core.VNumberChars.LETTERS_no_O;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.NUMERIC;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.NUMERIC_123;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.PLA2012_IDX0;
+import static com.parkingwang.vehiclekeyboard.core.VNumberChars.QWERTY_has_O;
+import static com.parkingwang.vehiclekeyboard.core.VNumberChars.QWERTY_no_O;
 
 /**
  * 键盘布局注册管理器。
@@ -38,9 +38,9 @@ class KeysRegistry {
 
     KeysRegistry() {
         //// 民用车牌
-        final List<KeyEntry> lettersNumeric = mkEntitiesOf(LETTERS_no_O + NUMERIC);
+        final List<KeyEntry> lettersNumeric = mkEntitiesOf(QWERTY_no_O + NUMERIC);
         final List<KeyEntry> civilProvince = mkEntitiesOf(CIVIL_PROVINCES);
-        final List<KeyEntry> lettersHasO = mkEntitiesOf(LETTERS_has_O);
+        final List<KeyEntry> lettersHasO = mkEntitiesOf(QWERTY_has_O);
         final List<KeyEntry> civilPost = append(lettersNumeric, mkEntitiesOf(CIVIL_POST));
         mKeys.put(mkKey(CIVIL, 0), civilProvince);
         mKeys.put(mkKey(CIVIL, 1), lettersHasO);
@@ -137,7 +137,7 @@ class KeysRegistry {
         mKeys.put(mkKey(AVIATION, 6), lettersNumeric);
 
         //// 未知类型
-        mKeys.put(mkKey(AUTO_DETECT, 0), append(civilProvince, pla2012_0, mkEntitiesOf("民使W")));
+        mKeys.put(mkKey(AUTO_DETECT, 0), append(civilProvince, pla2012_0, mkEntitiesOf("民使W123")));
         mKeys.put(mkKey(AUTO_DETECT, 1), append(lettersHasO, mkEntitiesOf("航J")));
         mKeys.put(mkKey(AUTO_DETECT, 2), lettersNumeric);
         mKeys.put(mkKey(AUTO_DETECT, 3), lettersNumeric);

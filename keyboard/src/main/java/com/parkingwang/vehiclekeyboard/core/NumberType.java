@@ -96,7 +96,7 @@ public enum NumberType {
             // 粤A0011领
             if (size > 2) {
                 final char secondChar = number.charAt(1);
-                if (contains(VNumberChars.LETTERS_has_O, secondChar)) {
+                if (contains(VNumberChars.QWERTY_has_O, secondChar)) {
                     return LING2012;
                 } else {
                     return LING2018;

@@ -9,8 +9,8 @@ class VNumberChars {
     static final String PLA2012_IDX0 = "QZVEHKBSLJNGC";
     static final String NUMERIC_123 = "123";
     static final String NUMERIC = "0123456789";
-    static final String LETTERS_has_O = "ABCDEFGHJKLMNOPRSTUVXY";
-    static final String LETTERS_no_O = "ABCDEFGHJKLMNPRSTUVXY";
+    static final String QWERTY_has_O = "QWERTYUOPASDFGHJKLZXCVBNM";
+    static final String QWERTY_no_O = "QWERTYUPASDFGHJKLZXCVBNM";
     static final String CHARS_HK_MACAO = "港澳";
     static final String CIVIL_POST = "警学挂试超" + CHARS_HK_MACAO;
     static final char MIN = '民';
