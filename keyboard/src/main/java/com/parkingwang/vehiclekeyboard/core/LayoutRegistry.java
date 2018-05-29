@@ -81,17 +81,17 @@ class LayoutRegistry {
         ));
         mLayouts.put(mkKey(KeyboardType.FULL, 1), rows(
                 "1234567890",
-                "QWERTYUOP",
-                "ASDFGHJKL",
-                "ZXCVBNM学航",
-                "港澳领使警挂试超-"
+                "QWERTYUP港澳",
+                "ASDFGHJKL学",
+                "ZXCVBNM警",
+                "领使航挂试超-+"
         ));
         final List<List<KeyEntry>> full = rows(
                 "1234567890",
-                "QWERTYUOP",
-                "ASDFGHJKL",
-                "ZXCVBNM学",
-                "港澳领使警挂试超-"
+                "QWERTYUP港澳",
+                "ASDFGHJKL学",
+                "ZXCVBNM警",
+                "领使挂试超-+"
         );
         mLayouts.put(mkKey(KeyboardType.FULL, 2), full);
         mLayouts.put(mkKey(KeyboardType.FULL, 3), full);
