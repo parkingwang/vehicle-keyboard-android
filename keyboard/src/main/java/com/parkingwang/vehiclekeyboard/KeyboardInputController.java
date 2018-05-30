@@ -231,7 +231,7 @@ public class KeyboardInputController {
         if (completed || lastItemSelected) {
             mInputView.performLastPendingFieldView();
         } else {
-            mInputView.performCurrentFieldView();
+            mInputView.rePerformCurrentFieldView();
         }
     }
 
@@ -244,7 +244,7 @@ public class KeyboardInputController {
             if (completed) {
                 mInputView.performNextFieldView();
             } else {
-                mInputView.performCurrentFieldView();
+                mInputView.rePerformCurrentFieldView();
             }
         } else {
             mMessageHandler.onMessageError(R.string.pwk_change_to_energy_disallow);

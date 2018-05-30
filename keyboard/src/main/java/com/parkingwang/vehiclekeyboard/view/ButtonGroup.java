@@ -1,6 +1,7 @@
 package com.parkingwang.vehiclekeyboard.view;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,8 @@ import java.util.List;
  * @author 陈小锅 (yoojiachen@gmail.com)
  */
 abstract class ButtonGroup {
+
+    private static final String TAG = "InputView.ButtonGroup";
 
     private final Button[] mFieldViews = new Button[9];
 
@@ -35,6 +38,7 @@ abstract class ButtonGroup {
         };
         for (int i = 0; i < resIds.length; i++) {
             mFieldViews[i] = findViewById(resIds[i]);
+            mFieldViews[i].setTag("[RAW.idx:" + i + "]");
         }
         // 默认时，显示8位
         changeTo8FieldViews();
@@ -47,6 +51,7 @@ abstract class ButtonGroup {
         for (Button f : mFieldViews) {
             f.setText(null);
         }
+
         final char[] chars = text.toCharArray();
         if (chars.length >= 8) {
             changeTo8FieldViews();
@@ -54,7 +59,7 @@ abstract class ButtonGroup {
             changeTo7FieldViews();
         }
         // 显示到对应键位
-        final Button[] fields = getFieldViews();
+        final Button[] fields = getAvailableFieldViews();
         for (int i = 0; i < fields.length; i++) {
             final String txt;
             if (i < chars.length) {
@@ -66,10 +71,11 @@ abstract class ButtonGroup {
         }
     }
 
-    public Button[] getFieldViews() {
+    public Button[] getAvailableFieldViews() {
         if (mFieldsCurrtVersion == mFieldsCacheVersion) {
             return mFieldCaches;
         }
+        Log.d(TAG, "[## ReCache ###] Rebuild field views cache");
         final List<Button> output = new ArrayList<>(8);
         for (int i = 0; i < mFieldViews.length; i++) {
             if (i < 6) {
@@ -80,10 +86,9 @@ abstract class ButtonGroup {
                 }
             }
         }
-        final Button[] cache = output.toArray(new Button[output.size()]);
         mFieldsCacheVersion = mFieldsCurrtVersion;
-        mFieldCaches = cache;
-        return cache;
+        mFieldCaches = output.toArray(new Button[output.size()]);
+        return mFieldCaches;
     }
 
     public Button getFieldViewAt(int index) {
@@ -138,7 +143,7 @@ abstract class ButtonGroup {
     }
 
     public Button getFirstSelectedOrNull() {
-        for (Button field : getFieldViews()) {
+        for (Button field : getAvailableFieldViews()) {
             if (field.isSelected()) {
                 return field;
             }
@@ -147,7 +152,7 @@ abstract class ButtonGroup {
     }
 
     public Button getLastFilledOrNull() {
-        final Button[] fields = getFieldViews();
+        final Button[] fields = getAvailableFieldViews();
         for (int i = fields.length - 1; i >= 0; i--) {
             if (!TextUtils.isEmpty(fields[i].getText())) {
                 return fields[i];
@@ -157,7 +162,7 @@ abstract class ButtonGroup {
     }
 
     public Button getFirstEmpty() {
-        final Button[] fields = getFieldViews();
+        final Button[] fields = getAvailableFieldViews();
         Button out = fields[0];
         for (Button field : fields) {
             out = field;
@@ -166,11 +171,12 @@ abstract class ButtonGroup {
                 break;
             }
         }
+        Log.d(TAG, "[-- CheckEmpty --]: Btn.idx: " + out.getTag() + ", Btn.text: " + out.getText() + ", Btn.addr: " + out);
         return out;
     }
 
     public int getNextIndexOf(Button target) {
-        final Button[] fields = getFieldViews();
+        final Button[] fields = getAvailableFieldViews();
         for (int i = 0; i < fields.length; i++) {
             if (target == fields[i]) {
                 return Math.min(fields.length - 1, i + 1);
@@ -180,7 +186,7 @@ abstract class ButtonGroup {
     }
 
     public boolean isAllFilled() {
-        for (Button field : getFieldViews()) {
+        for (Button field : getAvailableFieldViews()) {
             if (TextUtils.isEmpty(field.getText())) {
                 return false;
             }
@@ -190,7 +196,7 @@ abstract class ButtonGroup {
 
     public String getText() {
         final StringBuilder sb = new StringBuilder();
-        for (Button field : getFieldViews()) {
+        for (Button field : getAvailableFieldViews()) {
             sb.append(field.getText());
         }
         return sb.toString();

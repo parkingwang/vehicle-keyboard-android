@@ -3,6 +3,7 @@ package com.parkingwang.vehiclekeyboard.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -53,7 +54,7 @@ public class InputView extends LinearLayout {
                         clearSelectedState(mButtonGroup.getFieldViewAt(clickMetas.selectedIndex));
                     }
                     Log.d(TAG, "当前点击序号: " + clickMetas.clickIndex);
-                    setFieldSelected(mButtonGroup.getFieldViewAt(clickMetas.clickIndex));
+                    setFieldViewSelected(mButtonGroup.getFieldViewAt(clickMetas.clickIndex));
                 }
                 // 触发选中回调
                 for (OnFieldViewSelectedListener listener : mOnFieldViewSelectedListeners) {
@@ -180,19 +181,25 @@ public class InputView extends LinearLayout {
     }
 
     /**
-     * 选中下一个输入框
+     * 选中下一个输入框。
+     * 如果当前输入框是空字符，则重新触发当前输入框的点击事件。
      */
     public void performNextFieldView() {
         final ClickMetas clickMetas = getClickedMeta(null);
         if (clickMetas.selectedIndex >= 0) {
-            performNextFieldViewBy(mButtonGroup.getFieldViewAt(clickMetas.selectedIndex));
+            final Button current = mButtonGroup.getFieldViewAt(clickMetas.selectedIndex);
+            if (!TextUtils.isEmpty(current.getText())) {
+                performNextFieldViewBy(current);
+            } else {
+                performFieldViewSetToSelected(current);
+            }
         }
     }
 
     /**
      * 重新触发当前输入框选中状态
      */
-    public void performCurrentFieldView() {
+    public void rePerformCurrentFieldView() {
         final ClickMetas clickMetas = getClickedMeta(null);
         if (clickMetas.selectedIndex >= 0) {
             performFieldViewSetToSelected(mButtonGroup.getFieldViewAt(clickMetas.selectedIndex));
@@ -214,7 +221,8 @@ public class InputView extends LinearLayout {
         if (changed) {
             final Button field = mButtonGroup.getFirstEmpty();
             if (field != null) {
-                setFieldSelected(field);
+                Log.d(TAG, "[@@ FieldChanged @@] FirstEmpty.tag: " + field.getTag());
+                setFieldViewSelected(field);
             }
         }
     }
@@ -234,16 +242,16 @@ public class InputView extends LinearLayout {
     }
 
     private void performFieldViewSetToSelected(Button target) {
-        Log.d(TAG, "[=== Perform ==] 按钮: " + target.getText());
+        Log.d(TAG, "[== FastPerform ==] Btn.text: " + target.getText());
         // target.performClick();
         // 自动触发的，不要使用Android内部处理，太慢了。
         mOnFieldViewClickListener.onClick(target);
-        setFieldSelected(target);
+        setFieldViewSelected(target);
     }
 
     private void performNextFieldViewBy(Button current) {
         final int nextIndex = mButtonGroup.getNextIndexOf(current);
-        Log.d(TAG, "[>> PerformNext >>] 将触发按钮，序号: " + nextIndex);
+        Log.d(TAG, "[>> NextPerform >>] Next.Btn.idx: " + nextIndex);
         performFieldViewSetToSelected(mButtonGroup.getFieldViewAt(nextIndex));
     }
 
@@ -251,8 +259,8 @@ public class InputView extends LinearLayout {
         target.setSelected(false);
     }
 
-    private void setFieldSelected(Button target) {
-        for (Button btn : mButtonGroup.getFieldViews()) {
+    private void setFieldViewSelected(Button target) {
+        for (Button btn : mButtonGroup.getAvailableFieldViews()) {
             btn.setSelected((btn == target));
         }
     }
@@ -261,7 +269,7 @@ public class InputView extends LinearLayout {
         short selected = -1;
         short current = 0;
         short length = 0;
-        final Button[] fields = mButtonGroup.getFieldViews();
+        final Button[] fields = mButtonGroup.getAvailableFieldViews();
         for (int i = 0; i < fields.length; i++) {
             final Button item = fields[i];
             if (item == clicked) {
