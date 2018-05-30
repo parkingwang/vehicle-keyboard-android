@@ -22,18 +22,20 @@ class LayoutRegistry {
 
     LayoutRegistry() {
         //// 民用键盘
+        // 军用车牌: QVKHBSLJNGCEZ
         mCache.put(keyAt(MORE_PREFIX), createRows(
-                "1234567890",
-                "QWERTYPBCV",
-                "ASDGHJKLNM",
+                "123456789",
+                "QWEYCVBN0",
+                "ASDFGHJKL",
                 "ZX民使" + VNumberChars.BACK + "-+"
         ));
 
+        // 第2位/末位可以选择的字符
         mCache.put(keyAt(MORE_POSTFIX), createRows(
-                "QWERTYUOP",
-                "ASDFGHJKL",
-                "ZXCVBNM使航",
-                "领挂试超" + VNumberChars.BACK + "-+"
+                "学警港澳使领航挂试超",
+                "1234567890",
+                "ABCDEFGHJK",
+                "WXYZ" + VNumberChars.BACK + "-+"
         ));
 
         //// 民用键盘
@@ -45,9 +47,9 @@ class LayoutRegistry {
         ));
         mCache.put(keyAt(1), createRows(
                 "1234567890",
-                "QWERTYUOP",
-                "ASDFGHJKL",
-                "ZXCVBNM-+"
+                "QWERTYUIOP",
+                "ASDFGHJKLM",
+                "ZXCVBN-+"
         ));
         final List<List<KeyEntry>> civil = createRows(
                 "1234567890",

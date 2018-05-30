@@ -23,11 +23,11 @@ class KeyRowLayout extends LinearLayout {
     /**
      * 单行最大键数达到这个数，则显示窄间隔
      */
-    private static final int NARROW_SPACE_KEY_COUNT = 11;
+    private static final int NARROW_SPACE_KEY_COUNT = 10;
 
     /**
      * 删除键与确定的宽度计算方法如下：
-     * 删除与确定的宽度毕竟为：3:5。删除与确定及间距所占宽度与单行10个键盘的情况下3个按键及其间间距的总和相等。
+     * 删除与确定的宽度比例为：3:5。删除与确定及间距所占宽度与单行10个键盘的情况下3个按键及其间间距的总和相等。
      */
     private static final float RATIO_FUN_DEL = 3.0f / 8;
     private static final float RATIO_FUN_CONFIRM = 5.0f / 8;

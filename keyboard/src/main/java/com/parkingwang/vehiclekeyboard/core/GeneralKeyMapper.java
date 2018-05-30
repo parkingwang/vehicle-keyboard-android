@@ -30,7 +30,8 @@ public class GeneralKeyMapper implements Mixer.Mapper {
 
             case MORE:
                 text = "更多";
-                enabled = true;
+                // 在第1位、第2位、以及第7位，可以选择更多。其它位置不可以。
+                enabled = env.selectIndex == 0 || env.selectIndex == 1 || env.selectIndex == 6;
                 break;
 
             case BACK:
