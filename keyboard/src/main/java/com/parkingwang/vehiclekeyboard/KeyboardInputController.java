@@ -200,13 +200,13 @@ public class KeyboardInputController {
 
     private void updateInputViewItemsByNumberType(NumberType type) {
         // 如果检测到的车牌号码为新能源、地方武警，需要显示第8位车牌
+        final boolean show;
         if (NumberType.NEW_ENERGY.equals(type) || NumberType.WJ2012.equals(type) || mLockedOnNewEnergyType) {
-            mInputView.set8thFieldViewVisibility(true, false);
+            show = true;
         } else {
-            // 在车辆不完整的情况下，最后一位显示时，要删除
-            mInputView.set8thFieldViewVisibility(false,
-                    !mInputView.isCompleted());
+            show = false;
         }
+        mInputView.set8thFieldViewVisibility(show, !mInputView.isCompleted());
     }
 
     private void tryLockNewEnergyType(boolean toLock) {

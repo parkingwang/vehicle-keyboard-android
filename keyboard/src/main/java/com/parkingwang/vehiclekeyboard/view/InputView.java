@@ -3,6 +3,7 @@ package com.parkingwang.vehiclekeyboard.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -33,23 +34,24 @@ public class InputView extends LinearLayout {
 
     private static final String KEY_INIT_NUMBER = "pwk.keyboard.key:init.number";
 
-    private Button mButtonKeyOf6;
-    private Button mButtonEndOf6;
+    public static final int IDX_L7_END = 7;
+    public static final int IDX_L7_REPLACE = 6;
+    public static final int IDX_L8_END = 8;
 
-    private final Button[] mFieldViews = new Button[8];
+    private final Button[] mFieldViews = new Button[9];
     private final HashMap<String, Object> mKeyMap = new HashMap<>();
 
     private final Set<OnFieldViewSelectedListener> mOnFieldViewSelectedListeners = new HashSet<>(4);
 
     /**
      * 输入框被点击时，有以下逻辑：
-     *
+     * <p>
      * 1. 检查当前输入框是否可以被选中。可选中条件是：
-     *  - 选中序号为0，任何时候都可以被选中；
-     *  - 序号大于0，最大可点击序号为当前车牌长度；
-     *
+     * - 选中序号为0，任何时候都可以被选中；
+     * - 序号大于0，最大可点击序号为当前车牌长度；
+     * <p>
      * 2. 清除另一个被选中状态，设置当前为选中状态；
-     *
+     * <p>
      * 3. 触发选中回调；
      */
     private final OnClickListener mOnFieldViewClickListener = new OnClickListener() {
@@ -92,16 +94,12 @@ public class InputView extends LinearLayout {
         final int[] resIds = new int[]{
                 R.id.number_0, R.id.number_1, R.id.number_2,
                 R.id.number_3, R.id.number_4, R.id.number_5,
-                R.id.number_6, R.id.number_7,
+                R.id.number_6,
+                R.id.number_6_of_end,
+                R.id.number_7_of_end
         };
 
-        mButtonKeyOf6 = findViewById(R.id.number_6);
-        mButtonEndOf6 = findViewById(R.id.number_6_as_end);
-        mButtonEndOf6.setOnClickListener(mOnFieldViewClickListener);
         final boolean textSizeDefined = textSize > 0;
-        if (textSizeDefined) {
-            mButtonEndOf6.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-        }
         for (int i = 0; i < mFieldViews.length; i++) {
             mFieldViews[i] = findViewById(resIds[i]);
             mFieldViews[i].setOnClickListener(mOnFieldViewClickListener);
@@ -141,14 +139,16 @@ public class InputView extends LinearLayout {
      * 从最后一位开始删除
      */
     public void removeLastCharOfNumber() {
-        findLastFilledTextFieldView()
-                .ifPresent(new Consumer<Button>() {
-                    @Override
-                    public void accept(Button current) {
-                        current.setText(null);
-                        performFieldViewSetToSelected(current);
-                    }
-                });
+        for (int i = mFieldViews.length - 1; i >= 0; i--) {
+            final Button field = mFieldViews[i];
+            if (!field.isShown()) {
+                field.setText(null);
+            } else if (!TextUtils.isEmpty(field.getText())) {
+                field.setText(null);
+                performFieldViewSetToSelected(field);
+                break;
+            }
+        }
     }
 
     /**
@@ -162,6 +162,7 @@ public class InputView extends LinearLayout {
     /**
      * 返回当前车牌号码是否被修改过。
      * 与通过 updateNumber 方法设置的车牌号码来对比。
+     *
      * @return 是否修改过
      */
     public boolean isNumberChanged() {
@@ -182,10 +183,6 @@ public class InputView extends LinearLayout {
         final boolean charsOf8 = chars.length >= 8;
         set8thFieldViewVisibility(charsOf8, !charsOf8);
         // 显示到对应键位
-        // reset first
-        mButtonEndOf6.setText(null);
-        mButtonKeyOf6.setText(null);
-        // setup text
         for (int i = 0; i < mFieldViews.length; i++) {
             final String text;
             if (i < chars.length) {
@@ -264,27 +261,26 @@ public class InputView extends LinearLayout {
 
     /**
      * 设置第8位输入框显示状态，并设置是否清空其文本
-     * @param toShow 是否显示
+     *
+     * @param setToShow8thField 是否显示
      * @param clearText 是否清空其文本内容
      */
-    public void set8thFieldViewVisibility(boolean toShow, boolean clearText) {
-        final Button button8th = mFieldViews[7];
-        final boolean isShown = button8th.isShown();
-        // 显示第8位
-        if (toShow) {
-            if (!isShown) {// 第8位未显示，则设置显示
+    public void set8thFieldViewVisibility(boolean setToShow8thField, boolean clearText) {
+        final Button button8th = mFieldViews[IDX_L8_END];
+        final boolean showing = button8th.isShown();
+        // 如果要显示第8位，则：
+        // - 替换位要隐藏；
+        // - 第8位显示
+        if (setToShow8thField) {
+            if (!showing) {
+                mFieldViews[IDX_L7_REPLACE].setVisibility(GONE);
                 button8th.setVisibility(VISIBLE);
             }
-            mButtonEndOf6.setVisibility(GONE);
-            mButtonKeyOf6.setVisibility(VISIBLE);
-            mFieldViews[6] = mButtonKeyOf6;
-        }else{
-            if (isShown) { // 隐藏第8位
+        } else {
+            if (showing) {
+                mFieldViews[IDX_L7_REPLACE].setVisibility(VISIBLE);
                 button8th.setVisibility(GONE);
             }
-            mButtonEndOf6.setVisibility(VISIBLE);
-            mButtonKeyOf6.setVisibility(GONE);
-            mFieldViews[6] = mButtonEndOf6;
         }
         if (clearText && !isButtonEmpty(button8th)) {
             button8th.setText(null);
@@ -297,10 +293,10 @@ public class InputView extends LinearLayout {
      * @return 是否选中
      */
     public boolean isLastFieldViewSelected() {
-        if (mFieldViews[7].isShown()) {
-            return mFieldViews[7].isSelected();
+        if (mFieldViews[IDX_L8_END].isShown()) {
+            return mFieldViews[IDX_L8_END].isSelected();
         } else {
-            return mFieldViews[6].isSelected();
+            return mFieldViews[IDX_L7_END].isSelected();
         }
     }
 

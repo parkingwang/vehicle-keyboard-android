@@ -1,9 +1,0 @@
-apply plugin: 'java-library'
-
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api 'com.annimon:stream:1.1.9'
-}
-
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
