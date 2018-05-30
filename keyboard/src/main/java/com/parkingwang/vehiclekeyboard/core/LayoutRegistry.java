@@ -104,7 +104,26 @@ class LayoutRegistry {
         mLayouts.put(mkKey(FULL, 7), full);
     }
 
-    public List<List<KeyEntry>> getAvailable(KeyboardType keyboardType, int selectIndex) {
+    /**
+     * 获取键盘布局
+     *
+     * @param env          环境变量
+     * @param keyboardType 指定键盘布局类型
+     * @param selectIndex  当前选中序号
+     * @return 键盘布局
+     */
+    public List<List<KeyEntry>> layout(Env env, KeyboardType keyboardType, int selectIndex) {
+        // 动态的键盘布局
+        // 1. 武警第3位，要显示民用车牌的第1位布局（省份）；
+        // 2. 其它按已注册缓存的来获取；
+        if (selectIndex == 2 && NumberType.WJ2012.equals(env.numberType)) {
+            return cached(KeyboardType.CIVIL_ONLY, 0);
+        } else {
+            return cached(keyboardType, selectIndex);
+        }
+    }
+
+    private List<List<KeyEntry>> cached(KeyboardType keyboardType, int selectIndex) {
         final List<List<KeyEntry>> found = mLayouts.get(mkKey(keyboardType, selectIndex));
         if (null != found) {
             return found;

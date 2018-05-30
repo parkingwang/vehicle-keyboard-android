@@ -10,34 +10,15 @@ import java.util.List;
  */
 public class Mixer {
 
-    public static class Env {
-        final String presetNumber;
-        final int selectIndex;
-        final NumberType numberType;
-        final int limitLength;
-        final List<KeyEntry> availableKeys;
-        final List<List<KeyEntry>> layout;
-
-        public Env(String presetNumber, int selectIndex, NumberType numberType,
-                   int limitLength, List<KeyEntry> availableKeys, List<List<KeyEntry>> layout) {
-            this.presetNumber = presetNumber;
-            this.selectIndex = selectIndex;
-            this.numberType = numberType;
-            this.limitLength = limitLength;
-            this.availableKeys = availableKeys;
-            this.layout = layout;
-        }
-    }
-
     public interface Mapper {
         KeyEntry map(Env env, KeyEntry key);
     }
 
     private final List<Mapper> mMappers = new ArrayList<>();
 
-    public List<List<KeyEntry>> mix(Env env) {
+    public List<List<KeyEntry>> mix(Env env, List<List<KeyEntry>> layout) {
         final List<List<KeyEntry>> output = new ArrayList<>();
-        for (List<KeyEntry> layoutRow : env.layout) {
+        for (List<KeyEntry> layoutRow : layout) {
             final List<KeyEntry> row = new ArrayList<>(layoutRow.size());
             for (KeyEntry item : layoutRow) {
                 KeyEntry key = item;

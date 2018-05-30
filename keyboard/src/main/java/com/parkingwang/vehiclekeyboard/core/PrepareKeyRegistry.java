@@ -153,7 +153,7 @@ class PrepareKeyRegistry {
      * @param selectedIndex 当前选择的位置
      * @return 全部可用键位
      */
-    public List<KeyEntry> getAvailable(NumberType type, int selectedIndex) {
+    public List<KeyEntry> available(NumberType type, int selectedIndex) {
         final List<KeyEntry> found = mKeys.get(mkKey(type, selectedIndex));
         if (null != found) {
             return found;

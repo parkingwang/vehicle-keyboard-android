@@ -10,7 +10,7 @@ import static com.parkingwang.vehiclekeyboard.core.VNumberChars.OK;
  */
 public class GeneralKeyMapper implements Mixer.Mapper {
     @Override
-    public KeyEntry map(Mixer.Env env, KeyEntry key) {
+    public KeyEntry map(Env env, KeyEntry key) {
         final boolean enabled;
 
         final String text;

@@ -52,14 +52,16 @@ public class Engine {
         final int maxLength = detectNumberType.maxLength();
 
         // 混合成可以输出使用的键位
-        final Mixer.Env env = new Mixer.Env(
+        final Env env = new Env(
                 presetNumber,
                 selectIndex,
                 detectNumberType,
                 maxLength,
-                mPrepareKeyRegistry.getAvailable(detectNumberType, selectIndex),
-                mLayoutRegistry.getAvailable(mKeyboardType, selectIndex));
-        final List<List<KeyEntry>> output = mMixer.mix(env);
+                mPrepareKeyRegistry.available(detectNumberType, selectIndex));
+
+        final List<List<KeyEntry>> layout = mLayoutRegistry.layout(env, mKeyboardType, selectIndex);
+        final List<List<KeyEntry>> output = mMixer.mix(env, layout);
+
         Log.d(TAG, "当前车牌类型：" + detectNumberType.name());
         Log.d(TAG, "当前可用键位：" + env.availableKeys);
 
