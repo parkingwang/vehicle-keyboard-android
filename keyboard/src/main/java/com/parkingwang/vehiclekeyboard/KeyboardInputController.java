@@ -95,10 +95,10 @@ public class KeyboardInputController {
             @Override
             public void onChanged(KeyboardEntry keyboard) {
                 // 如果键盘更新当前为新能源类型时，强制锁定为新能源类型
-                if (NumberType.NEW_ENERGY.equals(keyboard.detectedNumberType)) {
+                if (NumberType.NEW_ENERGY.equals(keyboard.currentNumberType)) {
                     tryLockNewEnergyType(true);
                 }
-                changeNumberType(keyboard.detectedNumberType);
+                changeNumberType(keyboard.currentNumberType);
             }
         });
         // 同步锁定按钮
@@ -372,11 +372,10 @@ public class KeyboardInputController {
                 if (mDebugEnabled) {
                     Log.w(TAG, "键盘已更新，" +
                             "预设号码号码：" + keyboard.presetNumber +
-                            "，预设号码类型：" + keyboard.presetNumberType +
-                            "，最终探测类型：" + keyboard.detectedNumberType
+                            "，最终探测类型：" + keyboard.currentNumberType
                     );
                 }
-                updateInputViewItemsByNumberType(keyboard.detectedNumberType);
+                updateInputViewItemsByNumberType(keyboard.currentNumberType);
             }
         };
     }

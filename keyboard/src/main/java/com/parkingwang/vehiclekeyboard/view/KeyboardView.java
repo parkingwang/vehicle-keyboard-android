@@ -20,9 +20,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.parkingwang.vehiclekeyboard.R;
-import com.parkingwang.vehiclekeyboard.core.Engine;
 import com.parkingwang.vehiclekeyboard.core.KeyEntry;
 import com.parkingwang.vehiclekeyboard.core.KeyType;
+import com.parkingwang.vehiclekeyboard.core.KeyboardEngine;
 import com.parkingwang.vehiclekeyboard.core.KeyboardEntry;
 import com.parkingwang.vehiclekeyboard.core.NumberType;
 import com.parkingwang.vehiclekeyboard.support.Texts;
@@ -47,7 +47,7 @@ public class KeyboardView extends LinearLayout {
     private MotionEvent mLastEvent;
 
     private final List<OnKeyboardChangedListener> mKeyboardChangedListeners = new CopyOnWriteArrayList<>();
-    private final Engine mKeyboardEngine = new Engine();
+    private final KeyboardEngine mKeyboardEngine = new KeyboardEngine();
     private final KeyViewCacheHelper mKeyCacheHelper = new KeyViewCacheHelper();
 
     private final OnClickListener mOnKeyPressedListener = new OnClickListener() {
@@ -136,7 +136,7 @@ public class KeyboardView extends LinearLayout {
         mCurrentNumber = number;
         mCurrentNumberType = fixedNumberType;
         // 不保存功能性序号
-        if (showIndex != Engine.INDEX_POSTFIX && showIndex != Engine.INDEX_PREFIX) {
+        if (showIndex != KeyboardEngine.INDEX_POSTFIX && showIndex != KeyboardEngine.INDEX_PREFIX) {
             mCurrentIndex = showIndex;
         }
         // 更新键盘布局
@@ -175,9 +175,9 @@ public class KeyboardView extends LinearLayout {
 
             case FUNC_MORE:
                 if (0 == mCurrentIndex) {
-                    update(mCurrentNumber, Engine.INDEX_PREFIX, mCurrentNumberType);
+                    update(mCurrentNumber, KeyboardEngine.INDEX_PREFIX, mCurrentNumberType);
                 } else {
-                    update(mCurrentNumber, Engine.INDEX_POSTFIX, mCurrentNumberType);
+                    update(mCurrentNumber, KeyboardEngine.INDEX_POSTFIX, mCurrentNumberType);
                 }
                 break;
 
