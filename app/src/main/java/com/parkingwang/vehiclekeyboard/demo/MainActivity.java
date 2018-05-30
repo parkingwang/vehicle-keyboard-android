@@ -11,7 +11,6 @@ import android.widget.Button;
 
 import com.parkingwang.vehiclekeyboard.KeyboardInputController;
 import com.parkingwang.vehiclekeyboard.PopupKeyboard;
-import com.parkingwang.vehiclekeyboard.core.KeyboardType;
 import com.parkingwang.vehiclekeyboard.view.InputView;
 
 import java.util.ArrayList;
@@ -47,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
         mPopupKeyboard = new PopupKeyboard(this);
         // 弹出键盘内部包含一个KeyboardView，在此绑定输入两者关联。
         mPopupKeyboard.attach(mInputView, this);
-        mPopupKeyboard.getKeyboardView()
-                .setKeyboardType(KeyboardType.CIVIL_SPEC);
 
         // KeyboardInputController提供一个默认实现的新能源车牌锁定按钮
         mPopupKeyboard.getController()
@@ -71,21 +68,6 @@ public class MainActivity extends AppCompatActivity {
         int id = view.getId();
         // 切换键盘类型
         switch (id) {
-            case R.id.full:
-                mPopupKeyboard.getKeyboardView().setKeyboardType(KeyboardType.FULL);
-                // 更新车牌号码
-                mPopupKeyboard.getController().updateNumber(mInputView.getNumber());
-                break;
-            case R.id.civil:
-                mPopupKeyboard.getKeyboardView().setKeyboardType(KeyboardType.CIVIL_ONLY);
-                // 更新车牌号码
-                mPopupKeyboard.getController().updateNumber(mInputView.getNumber());
-                break;
-            case R.id.civil_wj:
-                mPopupKeyboard.getKeyboardView().setKeyboardType(KeyboardType.CIVIL_SPEC);
-                // 更新车牌号码
-                mPopupKeyboard.getController().updateNumber(mInputView.getNumber());
-                break;
             case R.id.test_number:
                 final int idx = mRandom.nextInt(mTestNumber.size());
                 if (idx == 3) {
