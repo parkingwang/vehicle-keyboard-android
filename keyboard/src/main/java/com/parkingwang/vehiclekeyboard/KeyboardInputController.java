@@ -16,6 +16,8 @@ import com.parkingwang.vehiclekeyboard.view.OnKeyboardChangedListener;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import hugo.weaving.DebugLog;
+
 /**
  * @author 陈哈哈 (yoojiachen@gmail.com)
  * @author 陈永佳 (chenyongjia@parkingwang.com)
@@ -56,6 +58,7 @@ public class KeyboardInputController {
         // 绑定输入框被选中的触发事件：更新键盘
         mInputView.addOnFieldViewSelectedListener(new InputView.OnFieldViewSelectedListener() {
             @Override
+            @DebugLog
             public void onSelectedAt(int index) {
                 final String number = mInputView.getNumber();
                 if (mDebugEnabled) {

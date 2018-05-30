@@ -30,6 +30,8 @@ import com.parkingwang.vehiclekeyboard.support.Texts;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import hugo.weaving.DebugLog;
+
 /**
  * @author 黄浩杭 (huanghaohang@parkingwang.com)
  * @author 陈永佳 (chenyongjia@parkingwang.com)
@@ -132,6 +134,7 @@ public class KeyboardView extends LinearLayout {
      * @param showIndex       当前正在修改的车牌的坐标
      * @param fixedNumberType 车牌号类型
      */
+    @DebugLog
     public void update(@NonNull final String number, final int showIndex, final NumberType fixedNumberType) {
         mStashedNumber = number;
         mStashedNumberType = fixedNumberType;
@@ -258,6 +261,7 @@ public class KeyboardView extends LinearLayout {
         mENTextSize = TypedValue.applyDimension(unit, textSize, getResources().getDisplayMetrics());
     }
 
+    @DebugLog
     private void renderLayout(KeyboardEntry keyboard) {
         final List<List<KeyEntry>> keyRows = keyboard.keyRows;
         // 以第一行的键盘数量为基准
