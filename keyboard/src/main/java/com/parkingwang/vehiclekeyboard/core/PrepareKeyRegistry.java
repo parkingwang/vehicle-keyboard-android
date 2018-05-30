@@ -34,7 +34,7 @@ import static com.parkingwang.vehiclekeyboard.core.VNumberChars.QWERTY_no_O;
  */
 class PrepareKeyRegistry {
 
-    private Map<String, List<KeyEntry>> mKeys = new HashMap<>();
+    private final Map<String, List<KeyEntry>> mCache = new HashMap<>();
 
     PrepareKeyRegistry() {
         //// 民用车牌
@@ -42,108 +42,109 @@ class PrepareKeyRegistry {
         final List<KeyEntry> civilProvince = mkEntitiesOf(CIVIL_PROVINCES);
         final List<KeyEntry> lettersHasO = mkEntitiesOf(QWERTY_has_O);
         final List<KeyEntry> civilPost = append(lettersNumeric, mkEntitiesOf(CIVIL_POST));
-        mKeys.put(mkKey(CIVIL, 0), civilProvince);
-        mKeys.put(mkKey(CIVIL, 1), lettersHasO);
-        mKeys.put(mkKey(CIVIL, 2), lettersNumeric);
-        mKeys.put(mkKey(CIVIL, 3), lettersNumeric);
-        mKeys.put(mkKey(CIVIL, 4), lettersNumeric);
-        mKeys.put(mkKey(CIVIL, 5), lettersNumeric);
-        mKeys.put(mkKey(CIVIL, 6), civilPost);
+        mCache.put(mkKey(CIVIL, 0), civilProvince);
+        mCache.put(mkKey(CIVIL, 1), lettersHasO);
+        mCache.put(mkKey(CIVIL, 2), lettersNumeric);
+        mCache.put(mkKey(CIVIL, 3), lettersNumeric);
+        mCache.put(mkKey(CIVIL, 4), lettersNumeric);
+        mCache.put(mkKey(CIVIL, 5), lettersNumeric);
+        mCache.put(mkKey(CIVIL, 6), civilPost);
 
         //// 新能源车牌
         final List<KeyEntry> numericDF = mkEntitiesOf(NUMERIC + "DF");
-        mKeys.put(mkKey(NEW_ENERGY, 0), civilProvince);
-        mKeys.put(mkKey(NEW_ENERGY, 1), lettersHasO);
-        mKeys.put(mkKey(NEW_ENERGY, 2), numericDF);
-        mKeys.put(mkKey(NEW_ENERGY, 3), lettersNumeric);
-        mKeys.put(mkKey(NEW_ENERGY, 4), lettersNumeric);
-        mKeys.put(mkKey(NEW_ENERGY, 5), lettersNumeric);
-        mKeys.put(mkKey(NEW_ENERGY, 7), numericDF);
+        mCache.put(mkKey(NEW_ENERGY, 0), civilProvince);
+        mCache.put(mkKey(NEW_ENERGY, 1), lettersHasO);
+        mCache.put(mkKey(NEW_ENERGY, 2), numericDF);
+        mCache.put(mkKey(NEW_ENERGY, 3), lettersNumeric);
+        mCache.put(mkKey(NEW_ENERGY, 4), lettersNumeric);
+        mCache.put(mkKey(NEW_ENERGY, 5), lettersNumeric);
+        mCache.put(mkKey(NEW_ENERGY, 6), lettersNumeric);
+        mCache.put(mkKey(NEW_ENERGY, 7), numericDF);
 
         //// 港澳车牌
-        mKeys.put(mkKey(HK_MACAO, 0), civilProvince);
-        mKeys.put(mkKey(HK_MACAO, 1), mkEntitiesOf("Z"));
-        mKeys.put(mkKey(HK_MACAO, 2), lettersNumeric);
-        mKeys.put(mkKey(HK_MACAO, 3), lettersNumeric);
-        mKeys.put(mkKey(HK_MACAO, 4), lettersNumeric);
-        mKeys.put(mkKey(HK_MACAO, 5), lettersNumeric);
-        mKeys.put(mkKey(HK_MACAO, 6), mkEntitiesOf(CHARS_HK_MACAO));
+        mCache.put(mkKey(HK_MACAO, 0), civilProvince);
+        mCache.put(mkKey(HK_MACAO, 1), mkEntitiesOf("Z"));
+        mCache.put(mkKey(HK_MACAO, 2), lettersNumeric);
+        mCache.put(mkKey(HK_MACAO, 3), lettersNumeric);
+        mCache.put(mkKey(HK_MACAO, 4), lettersNumeric);
+        mCache.put(mkKey(HK_MACAO, 5), lettersNumeric);
+        mCache.put(mkKey(HK_MACAO, 6), mkEntitiesOf(CHARS_HK_MACAO));
 
         //// 武警2012式
-        mKeys.put(mkKey(WJ2012, 0), mkEntitiesOf("W"));
-        mKeys.put(mkKey(WJ2012, 1), mkEntitiesOf("J"));
-        mKeys.put(mkKey(WJ2012, 2), civilProvince);
-        mKeys.put(mkKey(WJ2012, 3), lettersNumeric);
-        mKeys.put(mkKey(WJ2012, 4), lettersNumeric);
-        mKeys.put(mkKey(WJ2012, 5), lettersNumeric);
-        mKeys.put(mkKey(WJ2012, 6), lettersNumeric);
-        mKeys.put(mkKey(WJ2012, 7), mkEntitiesOf(NUMERIC + "XBTSHJD"));
+        mCache.put(mkKey(WJ2012, 0), mkEntitiesOf("W"));
+        mCache.put(mkKey(WJ2012, 1), mkEntitiesOf("J"));
+        mCache.put(mkKey(WJ2012, 2), civilProvince);
+        mCache.put(mkKey(WJ2012, 3), lettersNumeric);
+        mCache.put(mkKey(WJ2012, 4), lettersNumeric);
+        mCache.put(mkKey(WJ2012, 5), lettersNumeric);
+        mCache.put(mkKey(WJ2012, 6), lettersNumeric);
+        mCache.put(mkKey(WJ2012, 7), mkEntitiesOf(NUMERIC + "XBTSHJD"));
 
         //// 2017式大使馆
         final List<KeyEntry> numeric = mkEntitiesOf(NUMERIC);
         final List<KeyEntry> numeric123 = mkEntitiesOf(NUMERIC_123);
-        mKeys.put(mkKey(SHI2017, 0), numeric123);
-        mKeys.put(mkKey(SHI2017, 1), numeric);
-        mKeys.put(mkKey(SHI2017, 2), numeric);
-        mKeys.put(mkKey(SHI2017, 3), lettersNumeric);
-        mKeys.put(mkKey(SHI2017, 4), lettersNumeric);
-        mKeys.put(mkKey(SHI2017, 5), lettersNumeric);
-        mKeys.put(mkKey(SHI2017, 6), mkEntitiesOf("使"));
+        mCache.put(mkKey(SHI2017, 0), numeric123);
+        mCache.put(mkKey(SHI2017, 1), numeric);
+        mCache.put(mkKey(SHI2017, 2), numeric);
+        mCache.put(mkKey(SHI2017, 3), lettersNumeric);
+        mCache.put(mkKey(SHI2017, 4), lettersNumeric);
+        mCache.put(mkKey(SHI2017, 5), lettersNumeric);
+        mCache.put(mkKey(SHI2017, 6), mkEntitiesOf("使"));
 
         //// 2012式大使馆
-        mKeys.put(mkKey(SHI2012, 0), mkEntitiesOf("使"));
-        mKeys.put(mkKey(SHI2012, 1), numeric123);
-        mKeys.put(mkKey(SHI2012, 2), numeric);
-        mKeys.put(mkKey(SHI2012, 3), numeric);
-        mKeys.put(mkKey(SHI2012, 4), lettersNumeric);
-        mKeys.put(mkKey(SHI2012, 5), lettersNumeric);
-        mKeys.put(mkKey(SHI2012, 6), lettersNumeric);
+        mCache.put(mkKey(SHI2012, 0), mkEntitiesOf("使"));
+        mCache.put(mkKey(SHI2012, 1), numeric123);
+        mCache.put(mkKey(SHI2012, 2), numeric);
+        mCache.put(mkKey(SHI2012, 3), numeric);
+        mCache.put(mkKey(SHI2012, 4), lettersNumeric);
+        mCache.put(mkKey(SHI2012, 5), lettersNumeric);
+        mCache.put(mkKey(SHI2012, 6), lettersNumeric);
 
         //// 2012式军牌
         final List<KeyEntry> pla2012_0 = mkEntitiesOf(PLA2012_IDX0);
-        mKeys.put(mkKey(PLA2012, 0), pla2012_0);
-        mKeys.put(mkKey(PLA2012, 1), lettersHasO);
-        mKeys.put(mkKey(PLA2012, 2), lettersNumeric);
-        mKeys.put(mkKey(PLA2012, 3), lettersNumeric);
-        mKeys.put(mkKey(PLA2012, 4), lettersNumeric);
-        mKeys.put(mkKey(PLA2012, 5), lettersNumeric);
-        mKeys.put(mkKey(PLA2012, 6), lettersNumeric);
+        mCache.put(mkKey(PLA2012, 0), pla2012_0);
+        mCache.put(mkKey(PLA2012, 1), lettersHasO);
+        mCache.put(mkKey(PLA2012, 2), lettersNumeric);
+        mCache.put(mkKey(PLA2012, 3), lettersNumeric);
+        mCache.put(mkKey(PLA2012, 4), lettersNumeric);
+        mCache.put(mkKey(PLA2012, 5), lettersNumeric);
+        mCache.put(mkKey(PLA2012, 6), lettersNumeric);
 
         //// 2012式领事馆
-        mKeys.put(mkKey(LING2018, 0), civilProvince);
-        mKeys.put(mkKey(LING2018, 1), lettersHasO);
-        mKeys.put(mkKey(LING2018, 2), lettersNumeric);
-        mKeys.put(mkKey(LING2018, 3), lettersNumeric);
-        mKeys.put(mkKey(LING2018, 4), lettersNumeric);
-        mKeys.put(mkKey(LING2018, 5), lettersNumeric);
-        mKeys.put(mkKey(LING2018, 6), mkEntitiesOf("领"));
+        mCache.put(mkKey(LING2018, 0), civilProvince);
+        mCache.put(mkKey(LING2018, 1), lettersHasO);
+        mCache.put(mkKey(LING2018, 2), lettersNumeric);
+        mCache.put(mkKey(LING2018, 3), lettersNumeric);
+        mCache.put(mkKey(LING2018, 4), lettersNumeric);
+        mCache.put(mkKey(LING2018, 5), lettersNumeric);
+        mCache.put(mkKey(LING2018, 6), mkEntitiesOf("领"));
 
         //// 2018式领事馆
-        mKeys.put(mkKey(LING2018, 0), civilProvince);
-        mKeys.put(mkKey(LING2018, 1), numeric123);
-        mKeys.put(mkKey(LING2018, 2), numeric);
-        mKeys.put(mkKey(LING2018, 3), numeric);
-        mKeys.put(mkKey(LING2018, 4), lettersNumeric);
-        mKeys.put(mkKey(LING2018, 5), lettersNumeric);
-        mKeys.put(mkKey(LING2018, 6), mkEntitiesOf("领"));
+        mCache.put(mkKey(LING2018, 0), civilProvince);
+        mCache.put(mkKey(LING2018, 1), numeric123);
+        mCache.put(mkKey(LING2018, 2), numeric);
+        mCache.put(mkKey(LING2018, 3), numeric);
+        mCache.put(mkKey(LING2018, 4), lettersNumeric);
+        mCache.put(mkKey(LING2018, 5), lettersNumeric);
+        mCache.put(mkKey(LING2018, 6), mkEntitiesOf("领"));
 
         //// 民航
-        mKeys.put(mkKey(AVIATION, 0), mkEntitiesOf("民"));
-        mKeys.put(mkKey(AVIATION, 1), mkEntitiesOf("航"));
-        mKeys.put(mkKey(AVIATION, 2), lettersNumeric);
-        mKeys.put(mkKey(AVIATION, 3), lettersNumeric);
-        mKeys.put(mkKey(AVIATION, 4), lettersNumeric);
-        mKeys.put(mkKey(AVIATION, 5), lettersNumeric);
-        mKeys.put(mkKey(AVIATION, 6), lettersNumeric);
+        mCache.put(mkKey(AVIATION, 0), mkEntitiesOf("民"));
+        mCache.put(mkKey(AVIATION, 1), mkEntitiesOf("航"));
+        mCache.put(mkKey(AVIATION, 2), lettersNumeric);
+        mCache.put(mkKey(AVIATION, 3), lettersNumeric);
+        mCache.put(mkKey(AVIATION, 4), lettersNumeric);
+        mCache.put(mkKey(AVIATION, 5), lettersNumeric);
+        mCache.put(mkKey(AVIATION, 6), lettersNumeric);
 
         //// 未知类型
-        mKeys.put(mkKey(AUTO_DETECT, 0), append(civilProvince, pla2012_0, mkEntitiesOf("民使W123")));
-        mKeys.put(mkKey(AUTO_DETECT, 1), append(lettersHasO, mkEntitiesOf("航J")));
-        mKeys.put(mkKey(AUTO_DETECT, 2), lettersNumeric);
-        mKeys.put(mkKey(AUTO_DETECT, 3), lettersNumeric);
-        mKeys.put(mkKey(AUTO_DETECT, 4), lettersNumeric);
-        mKeys.put(mkKey(AUTO_DETECT, 5), lettersNumeric);
-        mKeys.put(mkKey(AUTO_DETECT, 6), civilPost);
+        mCache.put(mkKey(AUTO_DETECT, 0), append(civilProvince, pla2012_0, mkEntitiesOf("民使W123")));
+        mCache.put(mkKey(AUTO_DETECT, 1), append(lettersHasO, mkEntitiesOf("航J")));
+        mCache.put(mkKey(AUTO_DETECT, 2), lettersNumeric);
+        mCache.put(mkKey(AUTO_DETECT, 3), lettersNumeric);
+        mCache.put(mkKey(AUTO_DETECT, 4), lettersNumeric);
+        mCache.put(mkKey(AUTO_DETECT, 5), lettersNumeric);
+        mCache.put(mkKey(AUTO_DETECT, 6), civilPost);
     }
 
     /**
@@ -154,7 +155,7 @@ class PrepareKeyRegistry {
      * @return 全部可用键位
      */
     public List<KeyEntry> available(NumberType type, int selectedIndex) {
-        final List<KeyEntry> found = mKeys.get(mkKey(type, selectedIndex));
+        final List<KeyEntry> found = mCache.get(mkKey(type, selectedIndex));
         if (null != found) {
             return found;
         } else {
