@@ -6,8 +6,28 @@ package com.parkingwang.vehiclekeyboard.core;
  * @author 陈哈哈 yoojiachen@gmail.com
  */
 public enum KeyType {
+    /**
+     * 文本类型
+     */
     GENERAL,
-    DELETE,
-    OK,
-    MORE,
+
+    /**
+     * 功能键：删除
+     */
+    FUNC_DELETE,
+
+    /**
+     * 功能键：确定
+     */
+    FUNC_OK,
+
+    /**
+     * 功能键：更多
+     */
+    FUNC_MORE,
+
+    /**
+     * 功能键：返回
+     */
+    FUNC_BACK,
 }

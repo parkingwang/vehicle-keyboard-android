@@ -19,7 +19,8 @@ class VNumberChars {
     static final char WJ_W = 'W';
     static final String DEL = "-";
     static final String OK = "+";
-    static final String MORE = "=";
+    static final String MORE = ">";
+    static final String BACK = "<";
 
     private VNumberChars() {
 

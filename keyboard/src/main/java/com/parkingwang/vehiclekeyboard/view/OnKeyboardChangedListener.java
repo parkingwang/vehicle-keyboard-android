@@ -11,7 +11,7 @@ import com.parkingwang.vehiclekeyboard.core.KeyboardEntry;
  * @author 黄浩杭 (huanghaohang@parkingwang.com)
  * @since 2017-09-26 0.1
  */
-public interface KeyboardCallback {
+public interface OnKeyboardChangedListener {
 
     /**
      * 车牌键按下的回调事件。
@@ -33,11 +33,11 @@ public interface KeyboardCallback {
      * 车牌键盘更新后的回调事件
      * @param keyboard 键盘信息
      */
-    void onUpdateKeyboard(KeyboardEntry keyboard);
+    void onChanged(KeyboardEntry keyboard);
 
     //////
 
-    class Simple implements KeyboardCallback {
+    class Simple implements OnKeyboardChangedListener {
 
         @Override
         public void onTextKey(String text) {
@@ -55,7 +55,7 @@ public interface KeyboardCallback {
         }
 
         @Override
-        public void onUpdateKeyboard(KeyboardEntry keyboard) {
+        public void onChanged(KeyboardEntry keyboard) {
 
         }
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.parkingwang.vehiclekeyboard.core.VNumberChars.BACK;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.DEL;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.MORE;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.OK;
@@ -37,13 +38,16 @@ class Utils {
         final KeyType keyType;
         switch (text) {
             case DEL:
-                keyType = KeyType.DELETE;
+                keyType = KeyType.FUNC_DELETE;
                 break;
             case OK:
-                keyType = KeyType.OK;
+                keyType = KeyType.FUNC_OK;
                 break;
             case MORE:
-                keyType = KeyType.MORE;
+                keyType = KeyType.FUNC_MORE;
+                break;
+            case BACK:
+                keyType = KeyType.FUNC_BACK;
                 break;
             default:
                 keyType = KeyType.GENERAL;

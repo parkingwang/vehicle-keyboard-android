@@ -10,8 +10,8 @@ import com.parkingwang.vehiclekeyboard.core.NumberType;
 import com.parkingwang.vehiclekeyboard.support.Objects;
 import com.parkingwang.vehiclekeyboard.support.Texts;
 import com.parkingwang.vehiclekeyboard.view.InputView;
-import com.parkingwang.vehiclekeyboard.view.KeyboardCallback;
 import com.parkingwang.vehiclekeyboard.view.KeyboardView;
+import com.parkingwang.vehiclekeyboard.view.OnKeyboardChangedListener;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -66,10 +66,11 @@ public class KeyboardInputController {
                 mKeyboardView.update(number, index, mCurrentNumberType);
             }
         });
+
         // 绑定键盘按键点击事件：更新输入框字符操作，输入框长度变化
         mKeyboardView.addKeyboardCallback(syncKeyboardInputState());
         // 检测键盘更新，尝试自动提交只有一位文本按键的操作
-        mKeyboardView.addKeyboardCallback(triggerAutoCommit());
+//        mKeyboardView.addKeyboardCallback(triggerAutoCommit());
         // 触发键盘更新回调
         mKeyboardView.addKeyboardCallback(triggerInputChangedCallback());
     }
@@ -90,9 +91,9 @@ public class KeyboardInputController {
             }
         });
         // 新能源车牌绑定状态，同步键盘更新的新能源类型
-        mKeyboardView.addKeyboardCallback(new KeyboardCallback.Simple() {
+        mKeyboardView.addKeyboardCallback(new OnKeyboardChangedListener.Simple() {
             @Override
-            public void onUpdateKeyboard(KeyboardEntry keyboard) {
+            public void onChanged(KeyboardEntry keyboard) {
                 // 如果键盘更新当前为新能源类型时，强制锁定为新能源类型
                 if (NumberType.NEW_ENERGY.equals(keyboard.detectedNumberType)) {
                     tryLockNewEnergyType(true);
@@ -276,8 +277,8 @@ public class KeyboardInputController {
     }
 
     // 输入变更回调
-    private KeyboardCallback triggerInputChangedCallback() {
-        return new KeyboardCallback.Simple() {
+    private OnKeyboardChangedListener triggerInputChangedCallback() {
+        return new OnKeyboardChangedListener.Simple() {
             @Override
             public void onTextKey(String text) {
                 notifyChanged();
@@ -315,8 +316,8 @@ public class KeyboardInputController {
     }
 
     // 单个键位自动提交
-    private KeyboardCallback triggerAutoCommit() {
-        return new KeyboardCallback.Simple() {
+    private OnKeyboardChangedListener triggerAutoCommit() {
+        return new OnKeyboardChangedListener.Simple() {
 
             private boolean mIsDeleteAction = false;
 
@@ -331,7 +332,7 @@ public class KeyboardInputController {
             }
 
             @Override
-            public void onUpdateKeyboard(KeyboardEntry keyboard) {
+            public void onChanged(KeyboardEntry keyboard) {
                 // 如果可点击键位只有一个，并且前一个操作不是删除键，则自动提交
 //                if ((1 == keyboard.index || 6 == keyboard.index) && !mIsDeleteAction) {
 //                    final List<KeyEntry> keys = Stream.of(keyboard.keyRows)
@@ -354,8 +355,8 @@ public class KeyboardInputController {
         };
     }
 
-    private KeyboardCallback syncKeyboardInputState() {
-        return new KeyboardCallback.Simple() {
+    private OnKeyboardChangedListener syncKeyboardInputState() {
+        return new OnKeyboardChangedListener.Simple() {
             @Override
             public void onTextKey(String text) {
                 mInputView.updateSelectedCharAndSelectNext(text);
@@ -367,7 +368,7 @@ public class KeyboardInputController {
             }
 
             @Override
-            public void onUpdateKeyboard(KeyboardEntry keyboard) {
+            public void onChanged(KeyboardEntry keyboard) {
                 if (mDebugEnabled) {
                     Log.w(TAG, "键盘已更新，" +
                             "预设号码号码：" + keyboard.presetNumber +

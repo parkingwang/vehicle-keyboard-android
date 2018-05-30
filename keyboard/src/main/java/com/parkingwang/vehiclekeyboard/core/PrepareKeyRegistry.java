@@ -49,6 +49,7 @@ class PrepareKeyRegistry {
         mCache.put(mkKey(CIVIL, 4), lettersNumeric);
         mCache.put(mkKey(CIVIL, 5), lettersNumeric);
         mCache.put(mkKey(CIVIL, 6), civilPost);
+        mCache.put(mkKey(CIVIL, SpecIndex.MORE_POSTFIX), civilPost);
 
         //// 新能源车牌
         final List<KeyEntry> numericDF = mkEntitiesOf(NUMERIC + "DF");
@@ -62,13 +63,15 @@ class PrepareKeyRegistry {
         mCache.put(mkKey(NEW_ENERGY, 7), numericDF);
 
         //// 港澳车牌
+        List<KeyEntry> hkMacao = mkEntitiesOf(CHARS_HK_MACAO);
         mCache.put(mkKey(HK_MACAO, 0), civilProvince);
         mCache.put(mkKey(HK_MACAO, 1), mkEntitiesOf("Z"));
         mCache.put(mkKey(HK_MACAO, 2), lettersNumeric);
         mCache.put(mkKey(HK_MACAO, 3), lettersNumeric);
         mCache.put(mkKey(HK_MACAO, 4), lettersNumeric);
         mCache.put(mkKey(HK_MACAO, 5), lettersNumeric);
-        mCache.put(mkKey(HK_MACAO, 6), mkEntitiesOf(CHARS_HK_MACAO));
+        mCache.put(mkKey(HK_MACAO, 6), hkMacao);
+        mCache.put(mkKey(HK_MACAO, SpecIndex.MORE_POSTFIX), hkMacao);
 
         //// 武警2012式
         mCache.put(mkKey(WJ2012, 0), mkEntitiesOf("W"));
@@ -83,16 +86,20 @@ class PrepareKeyRegistry {
         //// 2017式大使馆
         final List<KeyEntry> numeric = mkEntitiesOf(NUMERIC);
         final List<KeyEntry> numeric123 = mkEntitiesOf(NUMERIC_123);
+        final List<KeyEntry> shi = mkEntitiesOf("使");
+        mCache.put(mkKey(SHI2017, SpecIndex.MORE_PREFIX), shi);
         mCache.put(mkKey(SHI2017, 0), numeric123);
         mCache.put(mkKey(SHI2017, 1), numeric);
         mCache.put(mkKey(SHI2017, 2), numeric);
         mCache.put(mkKey(SHI2017, 3), lettersNumeric);
         mCache.put(mkKey(SHI2017, 4), lettersNumeric);
         mCache.put(mkKey(SHI2017, 5), lettersNumeric);
-        mCache.put(mkKey(SHI2017, 6), mkEntitiesOf("使"));
+        mCache.put(mkKey(SHI2017, 6), shi);
+        mCache.put(mkKey(SHI2017, SpecIndex.MORE_POSTFIX), shi);
 
         //// 2012式大使馆
-        mCache.put(mkKey(SHI2012, 0), mkEntitiesOf("使"));
+        mCache.put(mkKey(SHI2012, SpecIndex.MORE_PREFIX), shi);
+        mCache.put(mkKey(SHI2012, 0), shi);
         mCache.put(mkKey(SHI2012, 1), numeric123);
         mCache.put(mkKey(SHI2012, 2), numeric);
         mCache.put(mkKey(SHI2012, 3), numeric);
@@ -102,7 +109,7 @@ class PrepareKeyRegistry {
 
         //// 2012式军牌
         final List<KeyEntry> pla2012_0 = mkEntitiesOf(PLA2012_IDX0);
-        mCache.put(mkKey(PLA2012, 0), pla2012_0);
+        mCache.put(mkKey(PLA2012, SpecIndex.MORE_PREFIX), pla2012_0);
         mCache.put(mkKey(PLA2012, 1), lettersHasO);
         mCache.put(mkKey(PLA2012, 2), lettersNumeric);
         mCache.put(mkKey(PLA2012, 3), lettersNumeric);
@@ -111,13 +118,14 @@ class PrepareKeyRegistry {
         mCache.put(mkKey(PLA2012, 6), lettersNumeric);
 
         //// 2012式领事馆
+        final List<KeyEntry> ling = mkEntitiesOf("领");
         mCache.put(mkKey(LING2018, 0), civilProvince);
         mCache.put(mkKey(LING2018, 1), lettersHasO);
         mCache.put(mkKey(LING2018, 2), lettersNumeric);
         mCache.put(mkKey(LING2018, 3), lettersNumeric);
         mCache.put(mkKey(LING2018, 4), lettersNumeric);
         mCache.put(mkKey(LING2018, 5), lettersNumeric);
-        mCache.put(mkKey(LING2018, 6), mkEntitiesOf("领"));
+        mCache.put(mkKey(LING2018, SpecIndex.MORE_POSTFIX), ling);
 
         //// 2018式领事馆
         mCache.put(mkKey(LING2018, 0), civilProvince);
@@ -126,7 +134,7 @@ class PrepareKeyRegistry {
         mCache.put(mkKey(LING2018, 3), numeric);
         mCache.put(mkKey(LING2018, 4), lettersNumeric);
         mCache.put(mkKey(LING2018, 5), lettersNumeric);
-        mCache.put(mkKey(LING2018, 6), mkEntitiesOf("领"));
+        mCache.put(mkKey(LING2018, 6), ling);
 
         //// 民航
         mCache.put(mkKey(AVIATION, 0), mkEntitiesOf("民"));
@@ -138,7 +146,9 @@ class PrepareKeyRegistry {
         mCache.put(mkKey(AVIATION, 6), lettersNumeric);
 
         //// 未知类型
-        mCache.put(mkKey(AUTO_DETECT, 0), append(civilProvince, pla2012_0, mkEntitiesOf("民使W123")));
+        final List<KeyEntry> auto = append(civilProvince, lettersNumeric, mkEntitiesOf("民使"));
+        mCache.put(mkKey(AUTO_DETECT, SpecIndex.MORE_PREFIX), auto);
+        mCache.put(mkKey(AUTO_DETECT, 0), auto);
         mCache.put(mkKey(AUTO_DETECT, 1), append(lettersHasO, mkEntitiesOf("航J")));
         mCache.put(mkKey(AUTO_DETECT, 2), lettersNumeric);
         mCache.put(mkKey(AUTO_DETECT, 3), lettersNumeric);

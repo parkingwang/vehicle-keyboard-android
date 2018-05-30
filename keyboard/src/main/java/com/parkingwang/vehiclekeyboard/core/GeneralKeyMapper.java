@@ -1,5 +1,6 @@
 package com.parkingwang.vehiclekeyboard.core;
 
+import static com.parkingwang.vehiclekeyboard.core.VNumberChars.BACK;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.DEL;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.MORE;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.OK;
@@ -29,6 +30,11 @@ public class GeneralKeyMapper implements Mixer.Mapper {
 
             case MORE:
                 text = "更多";
+                enabled = true;
+                break;
+
+            case BACK:
+                text = "返回";
                 enabled = true;
                 break;
 

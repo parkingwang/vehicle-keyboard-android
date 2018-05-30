@@ -15,10 +15,6 @@ public class KeyboardEntry {
      */
     public final String presetNumber;
     /**
-     * 当前键盘所处的键盘类型
-     */
-    public final KeyboardType keyboardType;
-    /**
      * 当前预设的车牌号码类型
      */
     public final NumberType presetNumberType;
@@ -29,7 +25,7 @@ public class KeyboardEntry {
     /**
      * 当前车牌号码的最大长度
      */
-    public final int numberLimitLength;
+    public final int numberMaxLength;
     /**
      * 键盘里的所有键位
      */
@@ -40,14 +36,13 @@ public class KeyboardEntry {
      */
     public final NumberType detectedNumberType;
 
-    public KeyboardEntry(int index, String presetNumber, KeyboardType keyboardType, NumberType presetNumberType,
-                         int numberLength, int numberLimitLength, List<List<KeyEntry>> keyRows, NumberType detectedNumberType) {
+    public KeyboardEntry(int index, String presetNumber, NumberType presetNumberType,
+                         int numberLength, int numberMaxLength, List<List<KeyEntry>> keyRows, NumberType detectedNumberType) {
         this.index = index;
         this.presetNumber = presetNumber;
-        this.keyboardType = keyboardType;
         this.presetNumberType = presetNumberType;
         this.numberLength = numberLength;
-        this.numberLimitLength = numberLimitLength;
+        this.numberMaxLength = numberMaxLength;
         this.keyRows = keyRows;
         this.detectedNumberType = detectedNumberType;
     }
@@ -57,10 +52,9 @@ public class KeyboardEntry {
         return "KeyboardEntry{" +
                 "index=" + index +
                 ", presetNumber='" + presetNumber + '\'' +
-                ", keyboardType=" + keyboardType +
                 ", presetNumberType=" + presetNumberType +
                 ", numberLength=" + numberLength +
-                ", numberLimitLength=" + numberLimitLength +
+                ", numberMaxLength=" + numberMaxLength +
                 ", keyRows=" + keyRows +
                 ", detectedNumberType=" + detectedNumberType +
                 '}';

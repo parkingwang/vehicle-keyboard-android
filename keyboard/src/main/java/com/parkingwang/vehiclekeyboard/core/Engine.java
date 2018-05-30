@@ -9,20 +9,17 @@ import java.util.List;
  */
 public class Engine {
 
+    public static final int INDEX_PREFIX = SpecIndex.MORE_PREFIX;
+    public static final int INDEX_POSTFIX = SpecIndex.MORE_POSTFIX;
+
     private static final String TAG = "KeyboardEngine";
 
     private final PrepareKeyRegistry mPrepareKeyRegistry = new PrepareKeyRegistry();
     private final LayoutRegistry mLayoutRegistry = new LayoutRegistry();
     private final Mixer mMixer = new Mixer();
 
-    private KeyboardType mKeyboardType = KeyboardType.CIVIL_ONLY;
-
     public Engine() {
         mMixer.addMapper(new GeneralKeyMapper());
-    }
-
-    public void SetKeyboardType(KeyboardType keyboardType) {
-        mKeyboardType = keyboardType;
     }
 
     /**
@@ -34,12 +31,6 @@ public class Engine {
      * @return 键盘布局
      */
     public KeyboardEntry update(String presetNumber, int selectIndex, NumberType fixedNumberType) {
-        // 修正参数
-        presetNumber = null == presetNumber ? "" : presetNumber.toUpperCase();
-        selectIndex = Math.max(0, Math.min(selectIndex, 8));
-
-        Log.d(TAG, String.format("Update:: presetNumber= %s, selectIndex= %d", presetNumber, selectIndex));
-
         final NumberType presetNumberType = NumberType.detect(presetNumber);
         final NumberType detectNumberType;
         if (NumberType.AUTO_DETECT.equals(fixedNumberType)) {
@@ -59,13 +50,13 @@ public class Engine {
                 maxLength,
                 mPrepareKeyRegistry.available(detectNumberType, selectIndex));
 
-        final List<List<KeyEntry>> layout = mLayoutRegistry.layout(env, mKeyboardType, selectIndex);
+        final List<List<KeyEntry>> layout = mLayoutRegistry.layout(env, selectIndex);
         final List<List<KeyEntry>> output = mMixer.mix(env, layout);
 
         Log.d(TAG, "当前车牌类型：" + detectNumberType.name());
         Log.d(TAG, "当前可用键位：" + env.availableKeys);
 
-        return new KeyboardEntry(selectIndex, presetNumber, mKeyboardType,
+        return new KeyboardEntry(selectIndex, presetNumber,
                 presetNumberType, presetNumber.length(), maxLength, output, detectNumberType);
     }
 

@@ -2,6 +2,9 @@ package com.parkingwang.vehiclekeyboard.core;
 
 import java.util.List;
 
+/**
+ * @author 陈哈哈 yoojiachen@gmail.com
+ */
 public class Env {
     final String presetNumber;
     final int selectIndex;

@@ -6,7 +6,6 @@ package com.parkingwang.vehiclekeyboard.view;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -14,19 +13,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.annimon.stream.Stream;
-import com.annimon.stream.function.Consumer;
 import com.parkingwang.vehiclekeyboard.R;
 import com.parkingwang.vehiclekeyboard.core.Engine;
 import com.parkingwang.vehiclekeyboard.core.KeyEntry;
 import com.parkingwang.vehiclekeyboard.core.KeyType;
 import com.parkingwang.vehiclekeyboard.core.KeyboardEntry;
-import com.parkingwang.vehiclekeyboard.core.KeyboardType;
 import com.parkingwang.vehiclekeyboard.core.NumberType;
 import com.parkingwang.vehiclekeyboard.support.Texts;
 
@@ -35,53 +32,39 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author 黄浩杭 (huanghaohang@parkingwang.com)
- * @since 2017-09-26 0.1
+ * @author 陈永佳 (chenyongjia@parkingwang.com)
  */
 public class KeyboardView extends LinearLayout {
-
-//    private static ExecutorService RUNNER_THREAD = Executors.newSingleThreadExecutor();
-
-    private final Engine mEngine = new Engine();
+    private static final String TAG = "KeyboardView";
 
     private final Paint mDividerPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
 
     private int mRowSpace;
-
-    private final List<KeyboardCallback> mKeyboardCallbacks = new CopyOnWriteArrayList<>();
-
     private int mDefaultKeyHeight;
-
     private boolean mShowBubble = true;
-
     private float mCNTextSize;
     private float mENTextSize;
-
     private MotionEvent mLastEvent;
 
-    private final OnClickListener mKeyViewListener = new OnClickListener() {
+    private final List<OnKeyboardChangedListener> mKeyboardChangedListeners = new CopyOnWriteArrayList<>();
+    private final Engine mKeyboardEngine = new Engine();
+    private final KeyViewCacheHelper mKeyCacheHelper = new KeyViewCacheHelper();
+
+    private final OnClickListener mOnKeyPressedListener = new OnClickListener() {
+
         @Override
         public void onClick(View v) {
             if (!(v instanceof KeyView)) {
                 return;
             }
-            KeyView keyView = (KeyView) v;
-            final KeyEntry key = keyView.getBoundKey();
-            Stream.of(mKeyboardCallbacks).forEach(new Consumer<KeyboardCallback>() {
-                @Override
-                public void accept(KeyboardCallback callback) {
-                    if (key.keyType == KeyType.GENERAL) {
-                        callback.onTextKey(key.text);
-                    } else if (key.keyType == KeyType.DELETE) {
-                        callback.onDeleteKey();
-                    } else if (key.keyType == KeyType.OK) {
-                        callback.onConfirmKey();
-                    }
-                }
-            });
+            final KeyEntry key = ((KeyView) v).getBoundKey();
+            onKeyPressed(key);
         }
     };
 
-    private final KeyViewCacheHelper mKeyCacheHelper = new KeyViewCacheHelper();
+    private String mCurrentNumber;
+    private int mCurrentIndex;
+    private NumberType mCurrentNumberType;
 
     public KeyboardView(Context context) {
         this(context, null);
@@ -89,11 +72,7 @@ public class KeyboardView extends LinearLayout {
 
     public KeyboardView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.KeyboardView);
-        int type = ta.getInt(R.styleable.KeyboardView_pwkKeyboardType, 0);
-        ta.recycle();
-
-        Resources resources = getResources();
+        final Resources resources = getResources();
         mDefaultKeyHeight = resources.getDimensionPixelSize(R.dimen.pwk_keyboard_key_height);
 
         setOrientation(LinearLayout.VERTICAL);
@@ -154,71 +133,60 @@ public class KeyboardView extends LinearLayout {
      * @param fixedNumberType 车牌号类型
      */
     public void update(@NonNull final String number, final int showIndex, final NumberType fixedNumberType) {
-        KeyboardEntry layout = mEngine.update(number, showIndex, fixedNumberType);
-        updateKeyboardLayout(layout);
-        triggerCallback(layout);
-    }
-
-    private void triggerCallback(KeyboardEntry keyboard) {
+        mCurrentNumber = number;
+        mCurrentNumberType = fixedNumberType;
+        // 不保存功能性序号
+        if (showIndex != Engine.INDEX_POSTFIX && showIndex != Engine.INDEX_PREFIX) {
+            mCurrentIndex = showIndex;
+        }
+        // 更新键盘布局
+        final KeyboardEntry keyboard = mKeyboardEngine.update(number, showIndex, fixedNumberType);
+        renderLayout(keyboard);
+        // 触发键盘变更回调
         try {
-            for (KeyboardCallback callback : mKeyboardCallbacks) {
-                callback.onUpdateKeyboard(keyboard);
+            for (OnKeyboardChangedListener listener : mKeyboardChangedListeners) {
+                listener.onChanged(keyboard);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "On keyboard changed", e);
         }
     }
 
-    private void updateKeyboardLayout(KeyboardEntry keyboard) {
-        final List<List<KeyEntry>> keyRows = keyboard.keyRows;
-        // 以第一行的键盘数量为基准
-        final int maxColumn = keyRows.get(0).size();
-
-        final int rowSize = keyRows.size();
-        mKeyCacheHelper.recyclerKeyRows(this, rowSize);
-
-        for (int rowIndex = 0; rowIndex < rowSize; rowIndex++) {
-            List<KeyEntry> keyEntryRow = keyRows.get(rowIndex);
-            KeyRowLayout rowLayout = (KeyRowLayout) getChildAt(rowIndex);
-            rowLayout.setMaxColumn(maxColumn);
-
-            final int columnSize = keyEntryRow.size();
-            int funKeyCount = 0;
-            for (KeyEntry keyEntry : keyEntryRow) {
-                if (keyEntry.isFunKey) {
-                    funKeyCount++;
+    private void onKeyPressed(KeyEntry key) {
+        switch (key.keyType) {
+            case FUNC_OK:
+                for (OnKeyboardChangedListener l : mKeyboardChangedListeners) {
+                    l.onConfirmKey();
                 }
-            }
-            rowLayout.setFunKeyCount(funKeyCount);
+                break;
 
-            mKeyCacheHelper.recyclerKeyViewsInRow(rowLayout, columnSize, mKeyViewListener);
-            for (int i = 0, size = keyEntryRow.size(); i < size; i++) {
-                KeyEntry key = keyEntryRow.get(i);
-                KeyView keyView = (KeyView) rowLayout.getChildAt(i);
-                keyView.bindKey(key);
-                if (key.keyType == KeyType.DELETE) {
-                    keyView.setText("");
+            case FUNC_DELETE:
+                for (OnKeyboardChangedListener l : mKeyboardChangedListeners) {
+                    l.onDeleteKey();
+                }
+                break;
+
+            default:
+            case GENERAL:
+                for (OnKeyboardChangedListener l : mKeyboardChangedListeners) {
+                    l.onTextKey(key.text);
+                }
+                break;
+
+            case FUNC_MORE:
+                if (0 == mCurrentIndex) {
+                    update(mCurrentNumber, Engine.INDEX_PREFIX, mCurrentNumberType);
                 } else {
-                    keyView.setText(key.text);
+                    update(mCurrentNumber, Engine.INDEX_POSTFIX, mCurrentNumberType);
                 }
-                if (Texts.isEnglishLetterOrDigit(key.text)) {
-                    keyView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mENTextSize);
-                } else {
-                    keyView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mCNTextSize);
-                }
-                keyView.setShowBubble(mShowBubble);
-                keyView.setEnabled(key.enabled);
-            }
+                break;
+
+            case FUNC_BACK:
+                update(mCurrentNumber, mCurrentIndex, mCurrentNumberType);
+                break;
+
+
         }
-    }
-
-    /**
-     * 设置当前键盘类型
-     *
-     * @param keyboardType 要设置的键盘类型
-     */
-    public void setKeyboardType(@NonNull KeyboardType keyboardType) {
-        mEngine.SetKeyboardType(keyboardType);
     }
 
     /**
@@ -226,8 +194,8 @@ public class KeyboardView extends LinearLayout {
      *
      * @param callback 回调接口
      */
-    public void addKeyboardCallback(@NonNull KeyboardCallback callback) {
-        mKeyboardCallbacks.add(callback);
+    public void addKeyboardCallback(@NonNull OnKeyboardChangedListener callback) {
+        mKeyboardChangedListeners.add(callback);
     }
 
     /**
@@ -235,8 +203,12 @@ public class KeyboardView extends LinearLayout {
      *
      * @param callback 回调接口
      */
-    public void removeKeyboardCallback(@NonNull KeyboardCallback callback) {
-        mKeyboardCallbacks.remove(callback);
+    public void removeKeyboardCallback(@NonNull OnKeyboardChangedListener callback) {
+        mKeyboardChangedListeners.remove(callback);
+    }
+
+    public void setShowBubble(boolean showBubble) {
+        mShowBubble = showBubble;
     }
 
     /**
@@ -279,38 +251,47 @@ public class KeyboardView extends LinearLayout {
         mENTextSize = TypedValue.applyDimension(unit, textSize, getResources().getDisplayMetrics());
     }
 
-    public void setShowBubble(boolean showBubble) {
-        mShowBubble = showBubble;
-    }
+    private void renderLayout(KeyboardEntry keyboard) {
+        final List<List<KeyEntry>> keyRows = keyboard.keyRows;
+        // 以第一行的键盘数量为基准
+        final int maxColumn = keyRows.get(0).size();
 
-    public void start() {
-//        RUNNER_THREAD.submit(new Runnable() {
-//            @Override
-//            public void run() {
-//                mEngine.start();
-//            }
-//        });
-    }
+        final int rowSize = keyRows.size();
+        mKeyCacheHelper.recyclerKeyRows(this, rowSize);
 
-    public void stop() {
-//        RUNNER_THREAD.submit(new Runnable() {
-//            @Override
-//            public void run() {
-//                mEngine.stop();
-//            }
-//        });
-    }
+        for (int rowIndex = 0; rowIndex < rowSize; rowIndex++) {
+            List<KeyEntry> keyEntryRow = keyRows.get(rowIndex);
+            KeyRowLayout rowLayout = (KeyRowLayout) getChildAt(rowIndex);
+            rowLayout.setMaxColumn(maxColumn);
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        start();
-    }
+            final int columnSize = keyEntryRow.size();
+            int funKeyCount = 0;
+            for (KeyEntry keyEntry : keyEntryRow) {
+                if (keyEntry.isFunKey) {
+                    funKeyCount++;
+                }
+            }
+            rowLayout.setFunKeyCount(funKeyCount);
 
-    @Override
-    protected void onDetachedFromWindow() {
-        stop();
-        super.onDetachedFromWindow();
+            mKeyCacheHelper.recyclerKeyViewsInRow(rowLayout, columnSize, mOnKeyPressedListener);
+            for (int i = 0, size = keyEntryRow.size(); i < size; i++) {
+                KeyEntry key = keyEntryRow.get(i);
+                KeyView keyView = (KeyView) rowLayout.getChildAt(i);
+                keyView.bindKey(key);
+                if (key.keyType == KeyType.FUNC_DELETE) {
+                    keyView.setText("");
+                } else {
+                    keyView.setText(key.text);
+                }
+                if (Texts.isEnglishLetterOrDigit(key.text)) {
+                    keyView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mENTextSize);
+                } else {
+                    keyView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mCNTextSize);
+                }
+                keyView.setShowBubble(mShowBubble);
+                keyView.setEnabled(key.enabled);
+            }
+        }
     }
 
     @Override

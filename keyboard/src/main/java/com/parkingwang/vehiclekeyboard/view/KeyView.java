@@ -50,7 +50,7 @@ class KeyView extends TextView {
     public void bindKey(KeyEntry bindKey) {
         mBoundKey = bindKey;
         mDrawPressedText = false;
-        if (bindKey.keyType == KeyType.OK) {
+        if (bindKey.keyType == KeyType.FUNC_OK) {
             final Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.pwk_keyboard_key_general_bg);
             final ColorStateList tintColor = ContextCompat.getColorStateList(getContext(), R.color.pwk_keyboard_key_ok_tint_color);
             final Drawable tintDrawable = DrawableTint.tint(drawable, tintColor);
@@ -82,7 +82,7 @@ class KeyView extends TextView {
             return;
         }
 
-        if (keyEntry.keyType == KeyType.DELETE) {
+        if (keyEntry.keyType == KeyType.FUNC_DELETE) {
             drawDeleteKey(canvas);
         } else if (keyEntry.keyType == KeyType.GENERAL && mDrawPressedText) {
             canvas.save();

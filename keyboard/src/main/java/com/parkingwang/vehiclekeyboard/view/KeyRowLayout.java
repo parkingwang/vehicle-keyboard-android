@@ -92,7 +92,7 @@ class KeyRowLayout extends LinearLayout {
             if (keyEntry.keyType == KeyType.GENERAL) {
                 params.width = (int) generalKeyWidth;
             } else {
-                if (keyEntry.keyType == KeyType.DELETE) {
+                if (keyEntry.keyType == KeyType.FUNC_DELETE) {
                     if (mFunKeyCount == 2) {
                         // 确定和删除都存在的情况下按设计的删除按键的大小
                         params.width = deleteKeyWidth;

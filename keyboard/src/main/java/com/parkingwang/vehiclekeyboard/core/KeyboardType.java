@@ -12,7 +12,7 @@ public enum KeyboardType {
     /**
      * 纯民用键盘
      */
-    CIVIL_ONLY,
+    LAYOUT,
 
     /**
      * 民用+武警
