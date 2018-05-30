@@ -54,9 +54,9 @@ public class KeyboardInputController {
         mKeyboardView = keyboardView;
         mInputView = inputView;
         // 绑定输入框被选中的触发事件：更新键盘
-        mInputView.addOnItemSelectedListener(new InputView.OnItemSelectedListener() {
+        mInputView.addOnFieldViewSelectedListener(new InputView.OnFieldViewSelectedListener() {
             @Override
-            public void onSelected(int index) {
+            public void onSelectedAt(int index) {
                 final String number = mInputView.getNumber();
                 if (mDebugEnabled) {
                     Log.w(TAG, "点击输入框更新键盘, 号码：" + number + "，序号：" + index);
@@ -73,7 +73,7 @@ public class KeyboardInputController {
         // 绑定键盘按键点击事件：更新输入框字符操作，输入框长度变化
         mKeyboardView.addKeyboardChangedListener(syncKeyboardInputState());
         // 检测键盘更新，尝试自动提交只有一位文本按键的操作
-        mKeyboardView.addKeyboardChangedListener(new AutoCommit(mInputView));
+//        mKeyboardView.addKeyboardChangedListener(new AutoCommit(mInputView));
         // 触发键盘更新回调
         mKeyboardView.addKeyboardChangedListener(triggerInputChangedCallback());
     }
@@ -147,7 +147,7 @@ public class KeyboardInputController {
         final String newNumber = number == null ? "" : number;
         mLockedOnNewEnergyType = lockedOnNewEnergyType;
         mInputView.updateNumber(newNumber);
-        mInputView.performLastItem();
+        mInputView.performLastFieldView();
     }
 
     ////
@@ -201,10 +201,10 @@ public class KeyboardInputController {
     private void updateInputViewItemsByNumberType(NumberType type) {
         // 如果检测到的车牌号码为新能源、地方武警，需要显示第8位车牌
         if (NumberType.NEW_ENERGY.equals(type) || NumberType.WJ2012.equals(type) || mLockedOnNewEnergyType) {
-            mInputView.set8thItemVisibility(true, false);
+            mInputView.set8thFieldViewVisibility(true, false);
         } else {
             // 在车辆不完整的情况下，最后一位显示时，要删除
-            mInputView.set8thItemVisibility(false,
+            mInputView.set8thFieldViewVisibility(false,
                     !mInputView.isCompleted());
         }
     }
@@ -226,12 +226,12 @@ public class KeyboardInputController {
     private void triggerUnlockEnergy(boolean completed) {
         mLockedOnNewEnergyType = false;
         mMessageHandler.onMessageTip(R.string.pwk_now_is_normal);
-        final boolean lastItemSelected = mInputView.isLastItemSelected();
+        final boolean lastItemSelected = mInputView.isLastFieldViewSelected();
         updateInputViewItemsByNumberType(NumberType.AUTO_DETECT);
         if (completed || lastItemSelected) {
-            mInputView.performLastItem();
+            mInputView.performLastFieldView();
         } else {
-            mInputView.performCurrentItem();
+            mInputView.performCurrentFieldView();
         }
     }
 
@@ -242,9 +242,9 @@ public class KeyboardInputController {
             mMessageHandler.onMessageTip(R.string.pwk_now_is_energy);
             updateInputViewItemsByNumberType(NumberType.NEW_ENERGY);
             if (completed) {
-                mInputView.performNextItem();
+                mInputView.performNextFieldView();
             } else {
-                mInputView.performCurrentItem();
+                mInputView.performCurrentFieldView();
             }
         } else {
             mMessageHandler.onMessageError(R.string.pwk_change_to_energy_disallow);

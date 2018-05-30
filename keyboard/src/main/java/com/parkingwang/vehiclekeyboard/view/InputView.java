@@ -36,11 +36,10 @@ public class InputView extends LinearLayout {
     private Button mButtonKeyOf6;
     private Button mButtonEndOf6;
 
-    private final Button[] mButtonItems = new Button[8];
+    private final Button[] mFieldViews = new Button[8];
     private final HashMap<String, Object> mKeyMap = new HashMap<>();
 
-    private final Set<OnItemSelectedListener> mOnItemSelectedListeners =
-            new HashSet<>(4);
+    private final Set<OnFieldViewSelectedListener> mOnFieldViewSelectedListeners = new HashSet<>(4);
 
     /**
      * 输入框被点击时，有以下逻辑：
@@ -53,21 +52,21 @@ public class InputView extends LinearLayout {
      *
      * 3. 触发选中回调；
      */
-    private final OnClickListener mOnButtonItemClickListener = new OnClickListener() {
+    private final OnClickListener mOnFieldViewClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            final Meta meta = getClickedMeta((Button) v);
-            if (meta.clickIndex <= meta.numberLength) {
+            final ClickMetas clickMetas = getClickedMeta((Button) v);
+            if (clickMetas.clickIndex <= clickMetas.numberLength) {
                 // 更新选中状态
-                if (meta.clickIndex != meta.selectedIndex) {
-                    if (meta.selectedIndex >= 0) {
-                        clearSelectedState(mButtonItems[meta.selectedIndex]);
+                if (clickMetas.clickIndex != clickMetas.selectedIndex) {
+                    if (clickMetas.selectedIndex >= 0) {
+                        clearSelectedState(mFieldViews[clickMetas.selectedIndex]);
                     }
-                    setSelectedState(mButtonItems[meta.clickIndex]);
+                    setFieldSelected(mFieldViews[clickMetas.clickIndex]);
                 }
                 // 触发选中回调
-                for (OnItemSelectedListener listener : mOnItemSelectedListeners) {
-                    listener.onSelected(meta.clickIndex);
+                for (OnFieldViewSelectedListener listener : mOnFieldViewSelectedListeners) {
+                    listener.onSelectedAt(clickMetas.clickIndex);
                 }
             }
         }
@@ -96,22 +95,22 @@ public class InputView extends LinearLayout {
                 R.id.number_6, R.id.number_7,
         };
 
-        mButtonKeyOf6 = (Button) findViewById(R.id.number_6);
-        mButtonEndOf6 = (Button) findViewById(R.id.number_6_as_end);
-        mButtonEndOf6.setOnClickListener(mOnButtonItemClickListener);
+        mButtonKeyOf6 = findViewById(R.id.number_6);
+        mButtonEndOf6 = findViewById(R.id.number_6_as_end);
+        mButtonEndOf6.setOnClickListener(mOnFieldViewClickListener);
         final boolean textSizeDefined = textSize > 0;
         if (textSizeDefined) {
             mButtonEndOf6.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         }
-        for (int i = 0; i < mButtonItems.length; i++) {
-            mButtonItems[i] = (Button) findViewById(resIds[i]);
-            mButtonItems[i].setOnClickListener(mOnButtonItemClickListener);
+        for (int i = 0; i < mFieldViews.length; i++) {
+            mFieldViews[i] = findViewById(resIds[i]);
+            mFieldViews[i].setOnClickListener(mOnFieldViewClickListener);
             if (textSizeDefined) {
-                mButtonItems[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+                mFieldViews[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
             }
         }
         // 最后一位默认隐藏
-        set8thItemVisibility(false, true);
+        set8thFieldViewVisibility(false, true);
     }
 
     /**
@@ -120,7 +119,7 @@ public class InputView extends LinearLayout {
      * @param text 文本字符
      */
     public void updateSelectedCharAndSelectNext(final String text) {
-        streamOfShownItems()
+        withFields()
                 .filter(new Predicate<Button>() {
                     @Override
                     public boolean test(Button view) {
@@ -133,7 +132,7 @@ public class InputView extends LinearLayout {
                     public void accept(Button button) {
                         button.setText(text);
                         // 跳转到下一位
-                        performNextItemBy(button);
+                        performNextFieldViewBy(button);
                     }
                 });
     }
@@ -142,12 +141,12 @@ public class InputView extends LinearLayout {
      * 从最后一位开始删除
      */
     public void removeLastCharOfNumber() {
-        findLastFilledTextItem()
+        findLastFilledTextFieldView()
                 .ifPresent(new Consumer<Button>() {
                     @Override
-                    public void accept(Button cell) {
-                        cell.setText(null);
-                        cell.performClick();
+                    public void accept(Button current) {
+                        current.setText(null);
+                        performFieldViewSetToSelected(current);
                     }
                 });
     }
@@ -157,8 +156,7 @@ public class InputView extends LinearLayout {
      */
     public boolean isCompleted() {
         // 所有显示的输入框都被填充了车牌号码，即输入完成状态
-        return streamOfShownItems()
-                .allMatch(notEmpty());
+        return withFields().allMatch(checkIfNotEmpty());
     }
 
     /**
@@ -167,7 +165,7 @@ public class InputView extends LinearLayout {
      * @return 是否修改过
      */
     public boolean isNumberChanged() {
-        String current = getNumber();
+        final String current = getNumber();
         return !current.equals(String.valueOf(mKeyMap.get(KEY_INIT_NUMBER)));
     }
 
@@ -182,20 +180,20 @@ public class InputView extends LinearLayout {
         final char[] chars = number.toCharArray();
         // check 8th input item show
         final boolean charsOf8 = chars.length >= 8;
-        set8thItemVisibility(charsOf8, !charsOf8);
+        set8thFieldViewVisibility(charsOf8, !charsOf8);
         // 显示到对应键位
         // reset first
         mButtonEndOf6.setText(null);
         mButtonKeyOf6.setText(null);
         // setup text
-        for (int i = 0; i < mButtonItems.length; i++) {
+        for (int i = 0; i < mFieldViews.length; i++) {
             final String text;
             if (i < chars.length) {
                 text = String.valueOf(chars[i]);
             } else {
                 text = null;
             }
-            mButtonItems[i].setText(text);
+            mFieldViews[i].setText(text);
         }
     }
 
@@ -205,7 +203,7 @@ public class InputView extends LinearLayout {
      * @return 车牌号码
      */
     public String getNumber() {
-        return streamOfShownItems()
+        return withFields()
                 .map(new Function<Button, String>() {
                     @Override
                     public String apply(Button textView) {
@@ -222,24 +220,24 @@ public class InputView extends LinearLayout {
     /**
      * 选中第一个输入框
      */
-    public void performFirstItem() {
-        performItemSelected(mButtonItems[0]);
+    public void performFirstFieldView() {
+        performFieldViewSetToSelected(mFieldViews[0]);
     }
 
     /**
      * 选中最后一个可等待输入的输入框。
      * 如果全部为空，则选中第1个输入框。
      */
-    public void performLastItem() {
-        findLastFilledTextItem().ifPresentOrElse(new Consumer<Button>() {
+    public void performLastFieldView() {
+        findLastFilledTextFieldView().ifPresentOrElse(new Consumer<Button>() {
             @Override
             public void accept(Button button) {
-                performNextItemBy(button);
+                performNextFieldViewBy(button);
             }
         }, new Runnable() {
             @Override
             public void run() {
-                performItemSelected(mButtonItems[0]);
+                performFieldViewSetToSelected(mFieldViews[0]);
             }
         });
     }
@@ -247,20 +245,20 @@ public class InputView extends LinearLayout {
     /**
      * 选中下一个输入框
      */
-    public void performNextItem() {
-        final Meta meta = getClickedMeta(null);
-        if (meta.selectedIndex >= 0) {
-            performNextItemBy(mButtonItems[meta.selectedIndex]);
+    public void performNextFieldView() {
+        final ClickMetas clickMetas = getClickedMeta(null);
+        if (clickMetas.selectedIndex >= 0) {
+            performNextFieldViewBy(mFieldViews[clickMetas.selectedIndex]);
         }
     }
 
     /**
      * 重新触发当前输入框选中状态
      */
-    public void performCurrentItem() {
-        final Meta meta = getClickedMeta(null);
-        if (meta.selectedIndex >= 0) {
-            performItemSelected(mButtonItems[meta.selectedIndex]);
+    public void performCurrentFieldView() {
+        final ClickMetas clickMetas = getClickedMeta(null);
+        if (clickMetas.selectedIndex >= 0) {
+            performFieldViewSetToSelected(mFieldViews[clickMetas.selectedIndex]);
         }
     }
 
@@ -269,8 +267,8 @@ public class InputView extends LinearLayout {
      * @param toShow 是否显示
      * @param clearText 是否清空其文本内容
      */
-    public void set8thItemVisibility(boolean toShow, boolean clearText) {
-        final Button button8th = mButtonItems[7];
+    public void set8thFieldViewVisibility(boolean toShow, boolean clearText) {
+        final Button button8th = mFieldViews[7];
         final boolean isShown = button8th.isShown();
         // 显示第8位
         if (toShow) {
@@ -279,14 +277,14 @@ public class InputView extends LinearLayout {
             }
             mButtonEndOf6.setVisibility(GONE);
             mButtonKeyOf6.setVisibility(VISIBLE);
-            mButtonItems[6] = mButtonKeyOf6;
+            mFieldViews[6] = mButtonKeyOf6;
         }else{
             if (isShown) { // 隐藏第8位
                 button8th.setVisibility(GONE);
             }
             mButtonEndOf6.setVisibility(VISIBLE);
             mButtonKeyOf6.setVisibility(GONE);
-            mButtonItems[6] = mButtonEndOf6;
+            mFieldViews[6] = mButtonEndOf6;
         }
         if (clearText && !isButtonEmpty(button8th)) {
             button8th.setText(null);
@@ -298,57 +296,58 @@ public class InputView extends LinearLayout {
      *
      * @return 是否选中
      */
-    public boolean isLastItemSelected() {
-        if (mButtonItems[7].isShown()) {
-            return mButtonItems[7].isSelected();
+    public boolean isLastFieldViewSelected() {
+        if (mFieldViews[7].isShown()) {
+            return mFieldViews[7].isSelected();
         } else {
-            return mButtonItems[6].isSelected();
+            return mFieldViews[6].isSelected();
         }
     }
 
-    public InputView addOnItemSelectedListener(OnItemSelectedListener listener) {
-        mOnItemSelectedListeners.add(listener);
+    public InputView addOnFieldViewSelectedListener(OnFieldViewSelectedListener listener) {
+        mOnFieldViewSelectedListeners.add(listener);
         return this;
     }
 
-    private void performItemSelected(Button button) {
-        button.performClick();
-        setSelectedState(button);
+    private void performFieldViewSetToSelected(Button target) {
+        // target.performClick();
+        // 自动触发的，不要使用Android内部处理，太慢了。
+        mOnFieldViewClickListener.onClick(target);
+        setFieldSelected(target);
     }
 
-    private void performNextItemBy(Button cell) {
-        final List<Button> buttons = streamOfShownItems()
-                .collect(Collectors.<Button>toList());
-        final int nextIndex = buttons.lastIndexOf(cell) + 1;
+    private void performNextFieldViewBy(Button current) {
+        final List<Button> buttons = withFields().collect(Collectors.<Button>toList());
+        final int nextIndex = buttons.lastIndexOf(current) + 1;
         final int clickIndex = Math.min(nextIndex, buttons.size() - 1);
-        performItemSelected(buttons.get(clickIndex));
+        performFieldViewSetToSelected(buttons.get(clickIndex));
     }
 
-    private Optional<Button> findLastFilledTextItem() {
-        final List<Button> reverse = new ArrayList<>(Arrays.asList(mButtonItems));
+    private Optional<Button> findLastFilledTextFieldView() {
+        final List<Button> reverse = new ArrayList<>(Arrays.asList(mFieldViews));
         Collections.reverse(reverse);
         return Stream.of(reverse)
-                .filter(shown())
-                .filter(notEmpty())
+                .filter(checkIfShown())
+                .filter(checkIfNotEmpty())
                 .findFirst();
     }
 
-    private void clearSelectedState(Button item) {
-        item.setSelected(false);
+    private void clearSelectedState(Button target) {
+        target.setSelected(false);
     }
 
-    private void setSelectedState(Button cell) {
-        for (Button btn : mButtonItems) {
-            btn.setSelected((btn == cell));
+    private void setFieldSelected(Button target) {
+        for (Button btn : mFieldViews) {
+            btn.setSelected((btn == target));
         }
     }
 
-    private Stream<Button> streamOfShownItems() {
-        return Stream.of(mButtonItems)
-                .filter(shown());
+    private Stream<Button> withFields() {
+        return Stream.of(mFieldViews)
+                .filter(checkIfShown());
     }
 
-    private Predicate<Button> shown() {
+    private Predicate<Button> checkIfShown() {
         return new Predicate<Button>() {
             @Override
             public boolean test(Button value) {
@@ -357,7 +356,7 @@ public class InputView extends LinearLayout {
         };
     }
 
-    private Predicate<Button> notEmpty() {
+    private Predicate<Button> checkIfNotEmpty() {
         return new Predicate<Button>() {
             @Override
             public boolean test(Button button) {
@@ -366,12 +365,12 @@ public class InputView extends LinearLayout {
         };
     }
 
-    private Meta getClickedMeta(Button clicked) {
+    private ClickMetas getClickedMeta(Button clicked) {
         short selected = -1;
         short current = 0;
         short length = 0;
-        for (int i = 0; i < mButtonItems.length; i++) {
-            final Button item = mButtonItems[i];
+        for (int i = 0; i < mFieldViews.length; i++) {
+            final Button item = mFieldViews[i];
             if (item == clicked) {
                 current = (short) i;
             }
@@ -382,7 +381,7 @@ public class InputView extends LinearLayout {
                 length += 1;
             }
         }
-        return new Meta(selected, current, length);
+        return new ClickMetas(selected, current, length);
     }
 
     private static boolean isButtonEmpty(Button button) {
@@ -391,13 +390,13 @@ public class InputView extends LinearLayout {
 
     //////
 
-    private static class Meta {
+    private static class ClickMetas {
 
         final short selectedIndex;
         final short clickIndex;
         final short numberLength;
 
-        private Meta(short selectedIndex, short clickIndex, short numberLength) {
+        private ClickMetas(short selectedIndex, short clickIndex, short numberLength) {
             this.selectedIndex = selectedIndex;
             this.clickIndex = clickIndex;
             this.numberLength = numberLength;
@@ -406,9 +405,9 @@ public class InputView extends LinearLayout {
 
     //////////
 
-    public interface OnItemSelectedListener {
+    public interface OnFieldViewSelectedListener {
 
-        void onSelected(int index);
+        void onSelectedAt(int index);
     }
 
 }

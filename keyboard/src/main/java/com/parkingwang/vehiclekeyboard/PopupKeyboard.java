@@ -34,9 +34,9 @@ public class PopupKeyboard {
                     .with(mKeyboardView, inputView);
             mController.useDefaultMessageHandler();
 
-            inputView.addOnItemSelectedListener(new InputView.OnItemSelectedListener() {
+            inputView.addOnFieldViewSelectedListener(new InputView.OnFieldViewSelectedListener() {
                 @Override
-                public void onSelected(int index) {
+                public void onSelectedAt(int index) {
                     show(activity);
                 }
             });

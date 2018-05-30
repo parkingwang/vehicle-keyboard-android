@@ -49,7 +49,7 @@ class AutoCommit extends OnKeyboardChangedListener.Simple {
         // 如果存在唯一文本键位，则自动提交
         final KeyEntry key = singleKey(keyboard);
         if (key != null) {
-            mIsDeleteAction = true;
+            mIsDeleteAction = false;
             mInputView.updateSelectedCharAndSelectNext(key.text);
         }
     }
