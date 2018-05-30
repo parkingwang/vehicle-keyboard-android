@@ -147,7 +147,7 @@ public class KeyboardInputController {
         final String newNumber = number == null ? "" : number;
         mLockedOnNewEnergyType = lockedOnNewEnergyType;
         mInputView.updateNumber(newNumber);
-        mInputView.performLastFieldView();
+        mInputView.performLastPendingFieldView();
     }
 
     ////
@@ -206,7 +206,7 @@ public class KeyboardInputController {
         } else {
             show = false;
         }
-        mInputView.set8thFieldViewVisibility(show, !mInputView.isCompleted());
+        mInputView.set8thVisibility(show);
     }
 
     private void tryLockNewEnergyType(boolean toLock) {
@@ -229,7 +229,7 @@ public class KeyboardInputController {
         final boolean lastItemSelected = mInputView.isLastFieldViewSelected();
         updateInputViewItemsByNumberType(NumberType.AUTO_DETECT);
         if (completed || lastItemSelected) {
-            mInputView.performLastFieldView();
+            mInputView.performLastPendingFieldView();
         } else {
             mInputView.performCurrentFieldView();
         }
