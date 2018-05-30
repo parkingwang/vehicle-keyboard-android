@@ -1,7 +1,5 @@
 package com.parkingwang.vehiclekeyboard.core;
 
-import android.util.Log;
-
 import java.util.List;
 
 /**
@@ -51,9 +49,6 @@ public class KeyboardEngine {
 
         final List<List<KeyEntry>> layout = mLayoutRegistry.layout(env, selectCharIndex);
         final List<List<KeyEntry>> output = mMixer.mix(env, layout);
-
-        Log.d(TAG, "当前车牌类型：" + detectNumberType.name());
-        Log.d(TAG, "当前可用键位：" + env.availableKeys);
 
         return new KeyboardEntry(selectCharIndex, presetNumber, maxLength, output, detectNumberType);
     }
