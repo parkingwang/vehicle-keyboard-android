@@ -7,21 +7,13 @@ import java.util.List;
  */
 public class KeyboardEntry {
     /**
-     * 当前光标所处的位置
+     * 当前输入车牌号码的位置
      */
-    public final int index;
+    public final int selectedPosition;
     /**
      * 当前预设的车牌号码
      */
     public final String presetNumber;
-    /**
-     * 当前预设的车牌号码类型
-     */
-    public final NumberType presetNumberType;
-    /**
-     * 当前预设的车牌号码长度
-     */
-    public final int numberLength;
     /**
      * 当前车牌号码的最大长度
      */
@@ -32,31 +24,26 @@ public class KeyboardEntry {
     public final List<List<KeyEntry>> keyRows;
 
     /**
-     * 当前车牌号码的检测类型
+     * 当前输入的车牌号码所属的车牌类型
      */
-    public final NumberType detectedNumberType;
+    public final NumberType currentNumberType;
 
-    public KeyboardEntry(int index, String presetNumber, NumberType presetNumberType,
-                         int numberLength, int numberMaxLength, List<List<KeyEntry>> keyRows, NumberType detectedNumberType) {
-        this.index = index;
+    public KeyboardEntry(int selectedPosition, String presetNumber, int numberMaxLength, List<List<KeyEntry>> keyRows, NumberType currentNumberType) {
+        this.selectedPosition = selectedPosition;
         this.presetNumber = presetNumber;
-        this.presetNumberType = presetNumberType;
-        this.numberLength = numberLength;
         this.numberMaxLength = numberMaxLength;
         this.keyRows = keyRows;
-        this.detectedNumberType = detectedNumberType;
+        this.currentNumberType = currentNumberType;
     }
 
     @Override
     public String toString() {
         return "KeyboardEntry{" +
-                "index=" + index +
+                "index=" + selectedPosition +
                 ", presetNumber='" + presetNumber + '\'' +
-                ", presetNumberType=" + presetNumberType +
-                ", numberLength=" + numberLength +
                 ", numberMaxLength=" + numberMaxLength +
                 ", keyRows=" + keyRows +
-                ", detectedNumberType=" + detectedNumberType +
+                ", detectedNumberType=" + currentNumberType +
                 '}';
     }
 }
