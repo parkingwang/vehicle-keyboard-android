@@ -62,9 +62,10 @@ public class KeyboardView extends LinearLayout {
         }
     };
 
-    private String mCurrentNumber;
-    private int mCurrentIndex;
-    private NumberType mCurrentNumberType;
+    // 缓存当前状态，用于切换“更多”与“返回”的状态
+    private String mStashedNumber;
+    private int mStashedIndex;
+    private NumberType mStashedNumberType;
 
     public KeyboardView(Context context) {
         this(context, null);
@@ -102,7 +103,6 @@ public class KeyboardView extends LinearLayout {
                 // 避免键盘面板的点击事件往下层传
             }
         });
-        update("");
     }
 
     /**
@@ -111,7 +111,7 @@ public class KeyboardView extends LinearLayout {
      * @param number 当前已输入的车牌
      */
     public final void update(@NonNull String number) {
-        this.update(number, number.length());
+        this.update(number, number.length(), NumberType.AUTO_DETECT);
     }
 
     /**
@@ -133,11 +133,11 @@ public class KeyboardView extends LinearLayout {
      * @param fixedNumberType 车牌号类型
      */
     public void update(@NonNull final String number, final int showIndex, final NumberType fixedNumberType) {
-        mCurrentNumber = number;
-        mCurrentNumberType = fixedNumberType;
+        mStashedNumber = number;
+        mStashedNumberType = fixedNumberType;
         // 不保存功能性序号
         if (showIndex != KeyboardEngine.INDEX_POSTFIX && showIndex != KeyboardEngine.INDEX_PREFIX) {
-            mCurrentIndex = showIndex;
+            mStashedIndex = showIndex;
         }
         // 更新键盘布局
         final KeyboardEntry keyboard = mKeyboardEngine.update(number, showIndex, fixedNumberType);
@@ -151,6 +151,8 @@ public class KeyboardView extends LinearLayout {
             Log.e(TAG, "On keyboard changed", e);
         }
     }
+
+    ////
 
     private void onKeyPressed(KeyEntry key) {
         switch (key.keyType) {
@@ -174,15 +176,15 @@ public class KeyboardView extends LinearLayout {
                 break;
 
             case FUNC_MORE:
-                if (0 == mCurrentIndex) {
-                    update(mCurrentNumber, KeyboardEngine.INDEX_PREFIX, mCurrentNumberType);
+                if (0 == mStashedIndex) {
+                    update(mStashedNumber, KeyboardEngine.INDEX_PREFIX, mStashedNumberType);
                 } else {
-                    update(mCurrentNumber, KeyboardEngine.INDEX_POSTFIX, mCurrentNumberType);
+                    update(mStashedNumber, KeyboardEngine.INDEX_POSTFIX, mStashedNumberType);
                 }
                 break;
 
             case FUNC_BACK:
-                update(mCurrentNumber, mCurrentIndex, mCurrentNumberType);
+                update(mStashedNumber, mStashedIndex, mStashedNumberType);
                 break;
 
 
@@ -194,7 +196,7 @@ public class KeyboardView extends LinearLayout {
      *
      * @param callback 回调接口
      */
-    public void addKeyboardCallback(@NonNull OnKeyboardChangedListener callback) {
+    public void addKeyboardChangedListener(@NonNull OnKeyboardChangedListener callback) {
         mKeyboardChangedListeners.add(callback);
     }
 
@@ -203,10 +205,15 @@ public class KeyboardView extends LinearLayout {
      *
      * @param callback 回调接口
      */
-    public void removeKeyboardCallback(@NonNull OnKeyboardChangedListener callback) {
+    public void removeKeyboardChangedListener(@NonNull OnKeyboardChangedListener callback) {
         mKeyboardChangedListeners.remove(callback);
     }
 
+    /**
+     * 设置是否显示浮动提示View
+     *
+     * @param showBubble 是否显示
+     */
     public void setShowBubble(boolean showBubble) {
         mShowBubble = showBubble;
     }
