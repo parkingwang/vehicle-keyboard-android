@@ -18,8 +18,8 @@ abstract class ButtonGroup {
     private final Button[] mFieldViews = new Button[9];
 
     private Button[] mFieldCaches;
-    private int mCacheVersion = -1;
-    private int mStateVersion = 0;
+    private int mFieldsCacheVersion = -1;
+    private int mFieldsCurrtVersion = 0;
 
     public ButtonGroup() {
         final int[] resIds = new int[]{
@@ -37,7 +37,7 @@ abstract class ButtonGroup {
             mFieldViews[i] = findViewById(resIds[i]);
         }
         // 默认时，显示8位
-        show8FieldViews();
+        changeTo8FieldViews();
     }
 
     protected abstract Button findViewById(int id);
@@ -49,9 +49,9 @@ abstract class ButtonGroup {
         }
         final char[] chars = text.toCharArray();
         if (chars.length >= 8) {
-            show8FieldViews();
+            changeTo8FieldViews();
         } else {
-            show7FieldViews();
+            changeTo7FieldViews();
         }
         // 显示到对应键位
         final Button[] fields = getFieldViews();
@@ -67,7 +67,7 @@ abstract class ButtonGroup {
     }
 
     public Button[] getFieldViews() {
-        if (mStateVersion == mCacheVersion) {
+        if (mFieldsCurrtVersion == mFieldsCacheVersion) {
             return mFieldCaches;
         }
         final List<Button> output = new ArrayList<>(8);
@@ -81,7 +81,7 @@ abstract class ButtonGroup {
             }
         }
         final Button[] cache = output.toArray(new Button[output.size()]);
-        mCacheVersion = mStateVersion;
+        mFieldsCacheVersion = mFieldsCurrtVersion;
         mFieldCaches = cache;
         return cache;
     }
@@ -102,18 +102,31 @@ abstract class ButtonGroup {
         }
     }
 
-    public void show7FieldViews() {
-        mStateVersion++;
+    public boolean changeTo7FieldViews() {
+        if (mFieldViews[7].isShown()) {
+            return false;
+        }
+        mFieldsCurrtVersion++;
         mFieldViews[6].setVisibility(View.GONE);
         mFieldViews[7].setVisibility(View.VISIBLE);
         mFieldViews[8].setVisibility(View.GONE);
+        // cleanup gone
+        mFieldViews[6].setText(null);
+        mFieldViews[8].setText(null);
+        return true;
     }
 
-    public void show8FieldViews() {
-        mStateVersion++;
+    public boolean changeTo8FieldViews() {
+        if (mFieldViews[8].isShown()) {
+            return false;
+        }
+        mFieldsCurrtVersion++;
         mFieldViews[6].setVisibility(View.VISIBLE);
         mFieldViews[7].setVisibility(View.GONE);
         mFieldViews[8].setVisibility(View.VISIBLE);
+        // cleanup gone
+        mFieldViews[7].setText(null);
+        return true;
     }
 
     public Button getLastFieldView() {

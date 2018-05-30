@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -18,6 +19,8 @@ import java.util.Set;
  * @author 陈哈哈 (yoojiachen@gmail.com)
  */
 public class InputView extends LinearLayout {
+
+    private static final String TAG = InputView.class.getName();
 
     private static final String KEY_INIT_NUMBER = "pwk.keyboard.key:init.number";
 
@@ -41,6 +44,7 @@ public class InputView extends LinearLayout {
     private final OnClickListener mOnFieldViewClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
+            Log.d(TAG, "Click Handler: ----");
             final ClickMetas clickMetas = getClickedMeta((Button) v);
             if (clickMetas.clickIndex <= clickMetas.numberLength) {
                 // 更新选中状态
@@ -48,6 +52,7 @@ public class InputView extends LinearLayout {
                     if (clickMetas.selectedIndex >= 0) {
                         clearSelectedState(mButtonGroup.getFieldViewAt(clickMetas.selectedIndex));
                     }
+                    Log.d(TAG, "当前点击序号: " + clickMetas.clickIndex);
                     setFieldSelected(mButtonGroup.getFieldViewAt(clickMetas.clickIndex));
                 }
                 // 触发选中回调
@@ -88,7 +93,7 @@ public class InputView extends LinearLayout {
         ta.recycle();
         mButtonGroup.setAllFieldViewsTextSize(textSize);
         mButtonGroup.setAllFieldViewsOnClickListener(mOnFieldViewClickListener);
-        mButtonGroup.show7FieldViews();
+        mButtonGroup.changeTo7FieldViews();
     }
 
     /**
@@ -200,14 +205,17 @@ public class InputView extends LinearLayout {
      * @param setToShow8thField 是否显示
      */
     public void set8thVisibility(boolean setToShow8thField) {
+        final boolean changed;
         if (setToShow8thField) {
-            mButtonGroup.show8FieldViews();
+            changed = mButtonGroup.changeTo8FieldViews();
         } else {
-            mButtonGroup.show7FieldViews();
+            changed = mButtonGroup.changeTo7FieldViews();
         }
-        final Button field = mButtonGroup.getFirstEmpty();
-        if (field != null) {
-            setFieldSelected(field);
+        if (changed) {
+            final Button field = mButtonGroup.getFirstEmpty();
+            if (field != null) {
+                setFieldSelected(field);
+            }
         }
     }
 
@@ -226,6 +234,7 @@ public class InputView extends LinearLayout {
     }
 
     private void performFieldViewSetToSelected(Button target) {
+        Log.d(TAG, "[=== Perform ==] 按钮: " + target.getText());
         // target.performClick();
         // 自动触发的，不要使用Android内部处理，太慢了。
         mOnFieldViewClickListener.onClick(target);
@@ -234,6 +243,7 @@ public class InputView extends LinearLayout {
 
     private void performNextFieldViewBy(Button current) {
         final int nextIndex = mButtonGroup.getNextIndexOf(current);
+        Log.d(TAG, "[>> PerformNext >>] 将触发按钮，序号: " + nextIndex);
         performFieldViewSetToSelected(mButtonGroup.getFieldViewAt(nextIndex));
     }
 
