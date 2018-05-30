@@ -130,6 +130,7 @@ abstract class ButtonGroup {
         mFieldViews[7].setVisibility(View.GONE);
         mFieldViews[8].setVisibility(View.VISIBLE);
         // cleanup gone
+        mFieldViews[6].setText(mFieldViews[7].getText());
         mFieldViews[7].setText(null);
         return true;
     }
