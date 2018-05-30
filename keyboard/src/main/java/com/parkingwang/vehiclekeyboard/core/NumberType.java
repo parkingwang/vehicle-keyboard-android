@@ -1,5 +1,8 @@
 package com.parkingwang.vehiclekeyboard.core;
 
+import static com.parkingwang.vehiclekeyboard.core.VNumberChars.CHARS_PLA2012;
+import static com.parkingwang.vehiclekeyboard.core.VNumberChars.NUMERIC_123;
+
 /**
  * @author 陈哈哈 yoojiachen@gmail.com
  */
@@ -76,7 +79,7 @@ public enum NumberType {
         number = number.toUpperCase();
         final char firstChar = number.charAt(0);
         // 军队
-        if (contains(VNumberChars.PLA2012_IDX0, firstChar)) {
+        if (contains(CHARS_PLA2012, firstChar)) {
             return PLA2012;
         }
         // 使147001
@@ -84,7 +87,7 @@ public enum NumberType {
             return SHI2012;
         }
         // 146001使
-        if (contains(VNumberChars.NUMERIC_123, firstChar)) {
+        if (contains(NUMERIC_123, firstChar)) {
             return SHI2017;
         }
         // 民航

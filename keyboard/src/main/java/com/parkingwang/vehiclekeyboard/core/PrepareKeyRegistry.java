@@ -18,11 +18,11 @@ import static com.parkingwang.vehiclekeyboard.core.NumberType.WJ2012;
 import static com.parkingwang.vehiclekeyboard.core.Utils.append;
 import static com.parkingwang.vehiclekeyboard.core.Utils.mkEntitiesOf;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.CHARS_HK_MACAO;
+import static com.parkingwang.vehiclekeyboard.core.VNumberChars.CHARS_PLA2012;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.CIVIL_POST;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.CIVIL_PROVINCES;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.NUMERIC;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.NUMERIC_123;
-import static com.parkingwang.vehiclekeyboard.core.VNumberChars.PLA2012_IDX0;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.QWERTY_has_O;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.QWERTY_no_O;
 
@@ -108,8 +108,8 @@ class PrepareKeyRegistry {
         mCache.put(mkKey(SHI2012, 6), lettersNumeric);
 
         //// 2012式军牌
-        final List<KeyEntry> pla2012_0 = mkEntitiesOf(PLA2012_IDX0);
-        mCache.put(mkKey(PLA2012, SpecIndex.MORE_PREFIX), pla2012_0);
+        final List<KeyEntry> pla2012 = mkEntitiesOf(CHARS_PLA2012);
+        mCache.put(mkKey(PLA2012, SpecIndex.MORE_PREFIX), pla2012);
         mCache.put(mkKey(PLA2012, 1), lettersHasO);
         mCache.put(mkKey(PLA2012, 2), lettersNumeric);
         mCache.put(mkKey(PLA2012, 3), lettersNumeric);

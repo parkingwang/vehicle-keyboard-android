@@ -74,13 +74,26 @@ class LayoutRegistry {
      */
     public List<List<KeyEntry>> layout(Env env, int selectIndex) {
         // 动态的键盘布局
-        // - 武警第3位，要显示民用车牌的第1位布局（省份）；
-        // - 返回键盘
-        // - 其它按已注册缓存的来获取；
-        if (selectIndex == 2 && NumberType.WJ2012.equals(env.numberType)) {
-            return cached(0);
-        } else {
-            return cached(selectIndex);
+        switch (env.selectIndex) {
+            default:
+            case 0:
+                return cached(selectIndex);
+
+            // 第2位，特殊情况：民航
+            case 1:
+                if (NumberType.AVIATION.equals(env.numberType)) {
+                    return cached(MORE_POSTFIX);
+                } else {
+                    return cached(selectIndex);
+                }
+
+                // 第3位，特殊情况：武警车牌省份简称
+            case 2:
+                if (NumberType.WJ2012.equals(env.numberType)) {
+                    return cached(0);
+                } else {
+                    return cached(selectIndex);
+                }
         }
     }
 
