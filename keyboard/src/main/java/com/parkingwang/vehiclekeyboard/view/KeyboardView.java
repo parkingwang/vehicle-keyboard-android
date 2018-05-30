@@ -145,7 +145,7 @@ public class KeyboardView extends LinearLayout {
         // 触发键盘变更回调
         try {
             for (OnKeyboardChangedListener listener : mKeyboardChangedListeners) {
-                listener.onChanged(keyboard);
+                listener.onKeyboardChanged(keyboard);
             }
         } catch (Exception e) {
             Log.e(TAG, "On keyboard changed", e);

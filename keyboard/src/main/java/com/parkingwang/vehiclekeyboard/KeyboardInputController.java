@@ -18,6 +18,7 @@ import java.util.Set;
 
 /**
  * @author 陈哈哈 (yoojiachen@gmail.com)
+ * @author 陈永佳 (chenyongjia@parkingwang.com)
  */
 public class KeyboardInputController {
 
@@ -27,9 +28,6 @@ public class KeyboardInputController {
     private final InputView mInputView;
 
     private final Set<OnInputChangedListener> mOnInputChangedListeners = new LinkedHashSet<>(4);
-    private final Set<OnNumberTypeChangedListener> mOnNumberTypeChangedListeners = new LinkedHashSet<>(4);
-
-    private NumberType mCurrentNumberType = NumberType.AUTO_DETECT;
 
     private boolean mLockedOnNewEnergyType = false;
     private boolean mDebugEnabled = true;
@@ -63,16 +61,21 @@ public class KeyboardInputController {
                 if (mDebugEnabled) {
                     Log.w(TAG, "点击输入框更新键盘, 号码：" + number + "，序号：" + index);
                 }
-                mKeyboardView.update(number, index, mCurrentNumberType);
+                // 除非锁定新能源类型，否则都让引擎自己检测车牌类型
+                if (mLockedOnNewEnergyType) {
+                    mKeyboardView.update(number, index, NumberType.NEW_ENERGY);
+                } else {
+                    mKeyboardView.update(number, index, NumberType.AUTO_DETECT);
+                }
             }
         });
 
         // 绑定键盘按键点击事件：更新输入框字符操作，输入框长度变化
-        mKeyboardView.addKeyboardCallback(syncKeyboardInputState());
+        mKeyboardView.addKeyboardChangedListener(syncKeyboardInputState());
         // 检测键盘更新，尝试自动提交只有一位文本按键的操作
-//        mKeyboardView.addKeyboardCallback(triggerAutoCommit());
+        mKeyboardView.addKeyboardChangedListener(new AutoCommit(mInputView));
         // 触发键盘更新回调
-        mKeyboardView.addKeyboardCallback(triggerInputChangedCallback());
+        mKeyboardView.addKeyboardChangedListener(triggerInputChangedCallback());
     }
 
     /**
@@ -91,21 +94,15 @@ public class KeyboardInputController {
             }
         });
         // 新能源车牌绑定状态，同步键盘更新的新能源类型
-        mKeyboardView.addKeyboardCallback(new OnKeyboardChangedListener.Simple() {
+        mKeyboardView.addKeyboardChangedListener(new OnKeyboardChangedListener.Simple() {
             @Override
-            public void onChanged(KeyboardEntry keyboard) {
+            public void onKeyboardChanged(KeyboardEntry keyboard) {
                 // 如果键盘更新当前为新能源类型时，强制锁定为新能源类型
                 if (NumberType.NEW_ENERGY.equals(keyboard.currentNumberType)) {
                     tryLockNewEnergyType(true);
                 }
-                changeNumberType(keyboard.currentNumberType);
-            }
-        });
-        // 同步锁定按钮
-        addOnNumberTypeChangedListener(new OnNumberTypeChangedListener() {
-            @Override
-            public void onChanged(NumberType currentType) {
-                proxy.onNumberTypeChanged(NumberType.NEW_ENERGY.equals(currentType));
+                // 同步锁定按钮
+                proxy.onNumberTypeChanged(NumberType.NEW_ENERGY.equals(keyboard.currentNumberType));
             }
         });
         return this;
@@ -132,6 +129,30 @@ public class KeyboardInputController {
     }
 
     /**
+     * 更新输入组件的车牌号码，并默认选中最后编辑位。
+     *
+     * @param number 车牌号码
+     */
+    public void updateNumber(String number) {
+        updateNumberLockType(number, false);
+    }
+
+    /**
+     * 更新输入组件的车牌号码，指定是否锁定新能源类型，并默认选中最后编辑位。
+     *
+     * @param number                车牌号码
+     * @param lockedOnNewEnergyType 是否锁定为新能源类型
+     */
+    public void updateNumberLockType(String number, boolean lockedOnNewEnergyType) {
+        final String newNumber = number == null ? "" : number;
+        mLockedOnNewEnergyType = lockedOnNewEnergyType;
+        mInputView.updateNumber(newNumber);
+        mInputView.performLastItem();
+    }
+
+    ////
+
+    /**
      * 设置键盘提示消息回调接口
      *
      * @param handler 消息回调接口
@@ -139,28 +160,6 @@ public class KeyboardInputController {
      */
     public KeyboardInputController setMessageHandler(MessageHandler handler) {
         mMessageHandler = Objects.notNull(handler);
-        return this;
-    }
-
-    /**
-     * 添加号码类型发生变化的回调接口
-     *
-     * @param listener 回调接口
-     * @return KeyboardInputController
-     */
-    public KeyboardInputController addOnNumberTypeChangedListener(OnNumberTypeChangedListener listener) {
-        mOnNumberTypeChangedListeners.add(Objects.notNull(listener));
-        return this;
-    }
-
-    /**
-     * 移除号码类型变化回调接口
-     *
-     * @param listener 回调接口
-     * @return KeyboardInputController
-     */
-    public KeyboardInputController removeOnNumberTypeChangedListener(OnNumberTypeChangedListener listener) {
-        mOnNumberTypeChangedListeners.remove(Objects.notNull(listener));
         return this;
     }
 
@@ -197,33 +196,9 @@ public class KeyboardInputController {
         return this;
     }
 
-    /**
-     * 更新输入组件的车牌号码，并默认选中最后编辑位。
-     *
-     * @param number 车牌号码
-     */
-    public void updateNumber(String number) {
-        updateNumberLockType(number, false);
-    }
-
-    /**
-     * 更新输入组件的车牌号码，指定是否锁定新能源类型，并默认选中最后编辑位。
-     *
-     * @param number                车牌号码
-     * @param lockedOnNewEnergyType 是否锁定为新能源类型
-     */
-    public void updateNumberLockType(String number, boolean lockedOnNewEnergyType) {
-        final String newNumber = number == null ? "" : number;
-        mCurrentNumberType = NumberType.AUTO_DETECT;
-        mLockedOnNewEnergyType = lockedOnNewEnergyType;
-        mInputView.updateNumber(newNumber);
-        mInputView.performLastItem();
-    }
-
     //////
 
     private void updateInputViewItemsByNumberType(NumberType type) {
-        changeNumberType(type);
         // 如果检测到的车牌号码为新能源、地方武警，需要显示第8位车牌
         if (NumberType.NEW_ENERGY.equals(type) || NumberType.WJ2012.equals(type) || mLockedOnNewEnergyType) {
             mInputView.set8thItemVisibility(true, false);
@@ -262,7 +237,7 @@ public class KeyboardInputController {
 
     // 锁定新能源车牌
     private void triggerLockEnergyType(boolean completed) {
-        if (NumberType.NEW_ENERGY.equals(mCurrentNumberType) || Texts.isNewEnergyType(mInputView.getNumber())) {
+        if (Texts.isNewEnergyType(mInputView.getNumber())) {
             mLockedOnNewEnergyType = true;
             mMessageHandler.onMessageTip(R.string.pwk_now_is_energy);
             updateInputViewItemsByNumberType(NumberType.NEW_ENERGY);
@@ -315,46 +290,6 @@ public class KeyboardInputController {
         };
     }
 
-    // 单个键位自动提交
-    private OnKeyboardChangedListener triggerAutoCommit() {
-        return new OnKeyboardChangedListener.Simple() {
-
-            private boolean mIsDeleteAction = false;
-
-            @Override
-            public void onTextKey(String text) {
-                mIsDeleteAction = false;
-            }
-
-            @Override
-            public void onDeleteKey() {
-                mIsDeleteAction = true;
-            }
-
-            @Override
-            public void onChanged(KeyboardEntry keyboard) {
-                // 如果可点击键位只有一个，并且前一个操作不是删除键，则自动提交
-//                if ((1 == keyboard.index || 6 == keyboard.index) && !mIsDeleteAction) {
-//                    final List<KeyEntry> keys = Stream.of(keyboard.keyRows)
-//                            .flatMap(new Function<List<KeyEntry>, Stream<KeyEntry>>() {
-//                                @Override
-//                                public Stream<KeyEntry> apply(List<KeyEntry> entries) {
-//                                    return Stream.of(entries);
-//                                }
-//                            }).map(new Predicate<KeyEntry>() {
-//                                @Override
-//                                public boolean test(KeyEntry key) {
-//                                    return !key.isFunKey && key.enabled;
-//                                }
-//                            }).collect(Collectors.<KeyEntry>toList());
-//                    if (keys.size() == 1) {
-//                        mInputView.updateSelectedCharAndSelectNext(keys.get(0).text);
-//                    }
-//                }
-            }
-        };
-    }
-
     private OnKeyboardChangedListener syncKeyboardInputState() {
         return new OnKeyboardChangedListener.Simple() {
             @Override
@@ -368,7 +303,7 @@ public class KeyboardInputController {
             }
 
             @Override
-            public void onChanged(KeyboardEntry keyboard) {
+            public void onKeyboardChanged(KeyboardEntry keyboard) {
                 if (mDebugEnabled) {
                     Log.w(TAG, "键盘已更新，" +
                             "预设号码号码：" + keyboard.presetNumber +
@@ -378,17 +313,6 @@ public class KeyboardInputController {
                 updateInputViewItemsByNumberType(keyboard.currentNumberType);
             }
         };
-    }
-
-    private void changeNumberType(NumberType willType) {
-        if (mLockedOnNewEnergyType) {
-            mCurrentNumberType = NumberType.NEW_ENERGY;
-        } else {
-            mCurrentNumberType = willType;
-        }
-        for (OnNumberTypeChangedListener listener : mOnNumberTypeChangedListeners) {
-            listener.onChanged(mCurrentNumberType);
-        }
     }
 
     /**

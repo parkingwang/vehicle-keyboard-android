@@ -33,7 +33,7 @@ public interface OnKeyboardChangedListener {
      * 车牌键盘更新后的回调事件
      * @param keyboard 键盘信息
      */
-    void onChanged(KeyboardEntry keyboard);
+    void onKeyboardChanged(KeyboardEntry keyboard);
 
     //////
 
@@ -55,7 +55,7 @@ public interface OnKeyboardChangedListener {
         }
 
         @Override
-        public void onChanged(KeyboardEntry keyboard) {
+        public void onKeyboardChanged(KeyboardEntry keyboard) {
 
         }
     }
