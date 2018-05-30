@@ -1,6 +1,7 @@
 package com.parkingwang.vehiclekeyboard.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.DEL;
@@ -50,4 +51,11 @@ class Utils {
         return new KeyEntry(text, keyType, false, !keyType.equals(KeyType.GENERAL));
     }
 
+    public static boolean equals(Object a, Object b) {
+        return (a == b) || (a != null && a.equals(b));
+    }
+
+    public static int hash(Object... values) {
+        return Arrays.hashCode(values);
+    }
 }

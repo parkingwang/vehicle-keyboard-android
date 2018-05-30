@@ -59,6 +59,12 @@ public enum NumberType {
      */
     AVIATION;
 
+    /**
+     * 检测车牌号码所属的车牌号码类型
+     *
+     * @param number 车牌号码
+     * @return 号码类型
+     */
     public static NumberType detect(String number) {
         if (null == number) {
             return NumberType.AUTO_DETECT;
@@ -113,6 +119,17 @@ public enum NumberType {
             return NEW_ENERGY;
         } else {
             return CIVIL;
+        }
+    }
+
+    public int maxLength() {
+        switch (this) {
+            case WJ2012:
+            case NEW_ENERGY:
+                return 8;
+
+            default:
+                return 7;
         }
     }
 

@@ -15,46 +15,46 @@ public class Mixer {
         final int selectIndex;
         final NumberType numberType;
         final int limitLength;
-        final List<KeyEntry> keys;
+        final List<KeyEntry> availableKeys;
         final List<List<KeyEntry>> layout;
 
         public Env(String presetNumber, int selectIndex, NumberType numberType,
-                   int limitLength, List<KeyEntry> keys, List<List<KeyEntry>> layout) {
+                   int limitLength, List<KeyEntry> availableKeys, List<List<KeyEntry>> layout) {
             this.presetNumber = presetNumber;
             this.selectIndex = selectIndex;
             this.numberType = numberType;
             this.limitLength = limitLength;
-            this.keys = keys;
+            this.availableKeys = availableKeys;
             this.layout = layout;
         }
     }
 
-    public interface Filter {
-        KeyEntry filter(Env env, KeyEntry key);
+    public interface Mapper {
+        KeyEntry map(Env env, KeyEntry key);
     }
 
-    private final List<Filter> mFilters = new ArrayList<>();
+    private final List<Mapper> mMappers = new ArrayList<>();
 
     public List<List<KeyEntry>> mix(Env env) {
         final List<List<KeyEntry>> output = new ArrayList<>();
-        for (List<KeyEntry> rows : env.layout) {
-            final List<KeyEntry> newRow = new ArrayList<>(rows.size());
-            for (KeyEntry r : rows) {
-                KeyEntry key = r;
-                for (Filter filter : mFilters) {
-                    final KeyEntry ret = filter.filter(env, key);
+        for (List<KeyEntry> layoutRow : env.layout) {
+            final List<KeyEntry> row = new ArrayList<>(layoutRow.size());
+            for (KeyEntry item : layoutRow) {
+                KeyEntry key = item;
+                for (Mapper mapper : mMappers) {
+                    final KeyEntry ret = mapper.map(env, key);
                     if (null != ret) {
                         key = ret;
                     }
                 }
-                newRow.add(key);
+                row.add(key);
             }
-            output.add(newRow);
+            output.add(row);
         }
         return output;
     }
 
-    public void addFilter(Filter filter) {
-        mFilters.add(filter);
+    public void addMapper(Mapper mapper) {
+        mMappers.add(mapper);
     }
 }

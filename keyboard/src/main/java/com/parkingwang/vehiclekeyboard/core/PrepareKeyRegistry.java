@@ -32,11 +32,11 @@ import static com.parkingwang.vehiclekeyboard.core.VNumberChars.QWERTY_no_O;
  *
  * @author 陈哈哈 yoojiachen@gmail.com
  */
-class KeysRegistry {
+class PrepareKeyRegistry {
 
     private Map<String, List<KeyEntry>> mKeys = new HashMap<>();
 
-    KeysRegistry() {
+    PrepareKeyRegistry() {
         //// 民用车牌
         final List<KeyEntry> lettersNumeric = mkEntitiesOf(QWERTY_no_O + NUMERIC);
         final List<KeyEntry> civilProvince = mkEntitiesOf(CIVIL_PROVINCES);

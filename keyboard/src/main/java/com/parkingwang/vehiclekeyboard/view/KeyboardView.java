@@ -149,42 +149,14 @@ public class KeyboardView extends LinearLayout {
      * 更新车牌键盘。
      * 此操作会触发KeyboardCallback回调。
      *
-     * @param number     当前已输入的车牌
-     * @param showIndex  当前正在修改的车牌的坐标
-     * @param numberType 车牌号类型
+     * @param number          当前已输入的车牌
+     * @param showIndex       当前正在修改的车牌的坐标
+     * @param fixedNumberType 车牌号类型
      */
-    public void update(@NonNull final String number, final int showIndex, final NumberType numberType) {
-        KeyboardEntry layout = mEngine.update(number, showIndex, numberType);
+    public void update(@NonNull final String number, final int showIndex, final NumberType fixedNumberType) {
+        KeyboardEntry layout = mEngine.update(number, showIndex, fixedNumberType);
         updateKeyboardLayout(layout);
         triggerCallback(layout);
-//        final long start = System.nanoTime();
-//        RUNNER_THREAD.submit(new Runnable() {
-//            @Override
-//            public void run() {
-//                mEngine.start();
-//                final int finalIndex = showIndex < 0 ? 0 : showIndex;
-//                final KeyboardEntry keyboard =
-//                        mEngine.update(mKeyboardType, finalIndex, number, numberType);
-//                final long escaped = TimeUnit.MILLISECONDS.convert((System.nanoTime() - start), TimeUnit.NANOSECONDS);
-//                if (BuildConfig.DEBUG) {
-//                    Log.w("KeyboardView", "--> jskeyboard.engine.update: " + escaped + "ms");
-//                }
-//                KeyboardView.this.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (keyboard == null) {
-//                            return;
-//                        }
-//                        try {
-//                            updateKeyboardLayout(keyboard);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                        triggerCallback(keyboard);
-//                    }
-//                });
-//            }
-//        });
     }
 
     private void triggerCallback(KeyboardEntry keyboard) {
@@ -229,7 +201,7 @@ public class KeyboardView extends LinearLayout {
                 } else {
                     keyView.setText(key.text);
                 }
-                if(Texts.isEnglishLetterOrDigit(key.text)) {
+                if (Texts.isEnglishLetterOrDigit(key.text)) {
                     keyView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mENTextSize);
                 } else {
                     keyView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mCNTextSize);
@@ -242,6 +214,7 @@ public class KeyboardView extends LinearLayout {
 
     /**
      * 设置当前键盘类型
+     *
      * @param keyboardType 要设置的键盘类型
      */
     public void setKeyboardType(@NonNull KeyboardType keyboardType) {
@@ -268,6 +241,7 @@ public class KeyboardView extends LinearLayout {
 
     /**
      * 设置按键的数字或字母大小
+     *
      * @param textSize 按键数字或字母大小，单位为sp
      * @since 0.6
      */
@@ -277,7 +251,8 @@ public class KeyboardView extends LinearLayout {
 
     /**
      * 设置按键的数字或字母大小
-     * @param unit 单位
+     *
+     * @param unit     单位
      * @param textSize 大小的值
      */
     public void setCNTextSize(int unit, float textSize) {
@@ -286,6 +261,7 @@ public class KeyboardView extends LinearLayout {
 
     /**
      * 设置按键的汉字大小
+     *
      * @param textSize 按键汉字大小，单位为sp
      * @since 0.6
      */
@@ -295,7 +271,8 @@ public class KeyboardView extends LinearLayout {
 
     /**
      * 设置按键的中文字体大小
-     * @param unit 单位
+     *
+     * @param unit     单位
      * @param textSize 大小的值
      */
     public void setENTextSize(int unit, float textSize) {
@@ -367,7 +344,7 @@ public class KeyboardView extends LinearLayout {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getPointerCount() > 1)  {
+        if (ev.getPointerCount() > 1) {
             if (ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
                 float x = ev.getX(ev.getActionIndex());
                 float y = ev.getY(ev.getActionIndex());

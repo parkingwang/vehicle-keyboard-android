@@ -5,11 +5,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
-import com.annimon.stream.function.Function;
-import com.annimon.stream.function.Predicate;
-import com.parkingwang.vehiclekeyboard.core.KeyEntry;
 import com.parkingwang.vehiclekeyboard.core.KeyboardEntry;
 import com.parkingwang.vehiclekeyboard.core.NumberType;
 import com.parkingwang.vehiclekeyboard.support.Objects;
@@ -19,12 +14,10 @@ import com.parkingwang.vehiclekeyboard.view.KeyboardCallback;
 import com.parkingwang.vehiclekeyboard.view.KeyboardView;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
  * @author 陈哈哈 (yoojiachen@gmail.com)
- * @since 2017-10-31 0.1
  */
 public class KeyboardInputController {
 
@@ -268,8 +261,7 @@ public class KeyboardInputController {
 
     // 锁定新能源车牌
     private void triggerLockEnergyType(boolean completed) {
-        if (NumberType.NEW_ENERGY.equals(mCurrentNumberType)
-                || Texts.isNewEnergyType(mInputView.getNumber())) {
+        if (NumberType.NEW_ENERGY.equals(mCurrentNumberType) || Texts.isNewEnergyType(mInputView.getNumber())) {
             mLockedOnNewEnergyType = true;
             mMessageHandler.onMessageTip(R.string.pwk_now_is_energy);
             updateInputViewItemsByNumberType(NumberType.NEW_ENERGY);
@@ -341,23 +333,23 @@ public class KeyboardInputController {
             @Override
             public void onUpdateKeyboard(KeyboardEntry keyboard) {
                 // 如果可点击键位只有一个，并且前一个操作不是删除键，则自动提交
-                if ((1 == keyboard.index || 6 == keyboard.index) && !mIsDeleteAction) {
-                    final List<KeyEntry> keys = Stream.of(keyboard.keyRows)
-                            .flatMap(new Function<List<KeyEntry>, Stream<KeyEntry>>() {
-                                @Override
-                                public Stream<KeyEntry> apply(List<KeyEntry> entries) {
-                                    return Stream.of(entries);
-                                }
-                            }).filter(new Predicate<KeyEntry>() {
-                                @Override
-                                public boolean test(KeyEntry key) {
-                                    return !key.isFunKey && key.enabled;
-                                }
-                            }).collect(Collectors.<KeyEntry>toList());
-                    if (keys.size() == 1) {
-                        mInputView.updateSelectedCharAndSelectNext(keys.get(0).text);
-                    }
-                }
+//                if ((1 == keyboard.index || 6 == keyboard.index) && !mIsDeleteAction) {
+//                    final List<KeyEntry> keys = Stream.of(keyboard.keyRows)
+//                            .flatMap(new Function<List<KeyEntry>, Stream<KeyEntry>>() {
+//                                @Override
+//                                public Stream<KeyEntry> apply(List<KeyEntry> entries) {
+//                                    return Stream.of(entries);
+//                                }
+//                            }).map(new Predicate<KeyEntry>() {
+//                                @Override
+//                                public boolean test(KeyEntry key) {
+//                                    return !key.isFunKey && key.enabled;
+//                                }
+//                            }).collect(Collectors.<KeyEntry>toList());
+//                    if (keys.size() == 1) {
+//                        mInputView.updateSelectedCharAndSelectNext(keys.get(0).text);
+//                    }
+//                }
             }
         };
     }

@@ -21,8 +21,21 @@ public class KeyEntry {
         return "KeyEntry{" +
                 "text='" + text + '\'' +
                 ", keyType=" + keyType +
-                ", isFunKey=" + isFunKey +
                 ", enabled=" + enabled +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof KeyEntry)) return false;
+        KeyEntry keyEntry = (KeyEntry) o;
+        return Utils.equals(text, keyEntry.text) &&
+                keyType == keyEntry.keyType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Utils.hash(text, keyType);
     }
 }
