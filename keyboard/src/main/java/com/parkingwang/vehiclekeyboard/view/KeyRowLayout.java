@@ -142,13 +142,10 @@ class KeyRowLayout extends LinearLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        if (mFunKeyCount > 0) {
-            // 位移删除键
-            ViewCompat.offsetLeftAndRight(getChildAt(mFunKeyIndex), mWidthUnused);
-            if (mFunKeyCount == 2) {
-                // 位移确定键
-                ViewCompat.offsetLeftAndRight(getChildAt(mFunKeyIndex + 1), mWidthUnused + (mFunKeySpace - mGeneralKeySpace));
-            }
+        // 位移功能键
+        final int offset = mFunKeySpace - mGeneralKeySpace;
+        for (int i = 0; i < mFunKeyCount; i++) {
+            ViewCompat.offsetLeftAndRight(getChildAt(mFunKeyIndex + i), mWidthUnused + i * offset);
         }
     }
 }
