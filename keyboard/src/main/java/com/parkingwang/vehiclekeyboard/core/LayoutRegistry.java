@@ -94,6 +94,18 @@ class LayoutRegistry {
                 } else {
                     return cached(selectIndex);
                 }
+
+                // 第7位，特殊情况：
+                // - 港澳车牌
+                // - 新式大使馆
+            case 6:
+                switch (env.numberType) {
+                    case HK_MACAO:
+                    case SHI2017:
+                        return cached(MORE_POSTFIX);
+                    default:
+                        return cached(selectIndex);
+                }
         }
     }
 
