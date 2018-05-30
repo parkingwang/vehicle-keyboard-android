@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         mTestNumber.add("粤BD12345");
         mTestNumber.add("粤C0");
         mTestNumber.add("粤");
-        mTestNumber.add("WJ12345");
         mTestNumber.add("WJ粤12345");
+        mTestNumber.add("WJ粤12");
 
         // 创建弹出键盘
         mPopupKeyboard = new PopupKeyboard(this);
