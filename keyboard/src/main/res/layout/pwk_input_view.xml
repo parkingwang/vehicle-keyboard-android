@@ -42,6 +42,7 @@
 
     <Button
         android:id="@+id/number_6_of_end"
+        android:visibility="gone"
         style="@style/PWKInputItemStyleRight"/>
 
     <Button
