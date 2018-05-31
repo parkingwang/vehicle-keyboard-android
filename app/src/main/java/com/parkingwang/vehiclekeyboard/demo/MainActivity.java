@@ -64,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mInputView.performFirstFieldView();
+    }
+
     public void onClick(View view) {
         int id = view.getId();
         // 切换键盘类型
