@@ -14,17 +14,19 @@ import java.util.List;
 /**
  * @author 陈小锅 (yoojiachen@gmail.com)
  */
-abstract class ButtonGroup {
+abstract class FieldViewGroup {
 
     private static final String TAG = "InputView.ButtonGroup";
 
     private final Button[] mFieldViews = new Button[9];
 
-    private Button[] mFieldCaches;
+    private static final int REUSE_INDEX = 6;
+
+    private Button[] mFieldsCache;
     private int mFieldsCacheVersion = -1;
     private int mFieldsCurrtVersion = 0;
 
-    public ButtonGroup() {
+    public FieldViewGroup() {
         final int[] resIds = new int[]{
                 R.id.number_0,
                 R.id.number_1,
@@ -41,7 +43,7 @@ abstract class ButtonGroup {
             mFieldViews[i].setTag("[RAW.idx:" + i + "]");
         }
         // 默认时，显示8位
-        changeTo8FieldViews();
+        changeTo8Fields();
     }
 
     protected abstract Button findViewById(int id);
@@ -54,12 +56,12 @@ abstract class ButtonGroup {
 
         final char[] chars = text.toCharArray();
         if (chars.length >= 8) {
-            changeTo8FieldViews();
+            changeTo8Fields();
         } else {
-            changeTo7FieldViews();
+            changeTo7Fields();
         }
         // 显示到对应键位
-        final Button[] fields = getAvailableFieldViews();
+        final Button[] fields = getAvailableFields();
         for (int i = 0; i < fields.length; i++) {
             final String txt;
             if (i < chars.length) {
@@ -71,14 +73,14 @@ abstract class ButtonGroup {
         }
     }
 
-    public Button[] getAvailableFieldViews() {
+    public Button[] getAvailableFields() {
         if (mFieldsCurrtVersion == mFieldsCacheVersion) {
-            return mFieldCaches;
+            return mFieldsCache;
         }
         Log.d(TAG, "[## ReCache ###] Rebuild field views cache");
         final List<Button> output = new ArrayList<>(8);
         for (int i = 0; i < mFieldViews.length; i++) {
-            if (i < 6) {
+            if (i < REUSE_INDEX) {
                 output.add(mFieldViews[i]);
             } else {
                 if (mFieldViews[i].isShown()) {
@@ -87,19 +89,19 @@ abstract class ButtonGroup {
             }
         }
         mFieldsCacheVersion = mFieldsCurrtVersion;
-        mFieldCaches = output.toArray(new Button[output.size()]);
-        return mFieldCaches;
+        mFieldsCache = output.toArray(new Button[output.size()]);
+        return mFieldsCache;
     }
 
-    public Button getFieldViewAt(int index) {
-        if (index < 6) {
+    public Button getFieldAt(int index) {
+        if (index < REUSE_INDEX) {
             return mFieldViews[index];
         } else {
-            if (index == 6) {
-                if (mFieldViews[6].isShown()) {
-                    return mFieldViews[6];
+            if (index == REUSE_INDEX) {
+                if (mFieldViews[REUSE_INDEX].isShown()) {
+                    return mFieldViews[REUSE_INDEX];
                 } else {
-                    return mFieldViews[7];
+                    return mFieldViews[REUSE_INDEX + 1];
                 }
             } else {
                 return mFieldViews[index + 1];
@@ -107,7 +109,7 @@ abstract class ButtonGroup {
         }
     }
 
-    public boolean changeTo7FieldViews() {
+    public boolean changeTo7Fields() {
         if (mFieldViews[7].isShown()) {
             return false;
         }
@@ -121,7 +123,7 @@ abstract class ButtonGroup {
         return true;
     }
 
-    public boolean changeTo8FieldViews() {
+    public boolean changeTo8Fields() {
         if (mFieldViews[8].isShown()) {
             return false;
         }
@@ -135,7 +137,7 @@ abstract class ButtonGroup {
         return true;
     }
 
-    public Button getLastFieldView() {
+    public Button getLastField() {
         if (mFieldViews[8].isShown()) {
             return mFieldViews[8];
         } else {
@@ -143,8 +145,8 @@ abstract class ButtonGroup {
         }
     }
 
-    public Button getFirstSelectedOrNull() {
-        for (Button field : getAvailableFieldViews()) {
+    public Button getFirstSelectedFieldOrNull() {
+        for (Button field : getAvailableFields()) {
             if (field.isSelected()) {
                 return field;
             }
@@ -152,8 +154,8 @@ abstract class ButtonGroup {
         return null;
     }
 
-    public Button getLastFilledOrNull() {
-        final Button[] fields = getAvailableFieldViews();
+    public Button getLastFilledFieldOrNull() {
+        final Button[] fields = getAvailableFields();
         for (int i = fields.length - 1; i >= 0; i--) {
             if (!TextUtils.isEmpty(fields[i].getText())) {
                 return fields[i];
@@ -162,8 +164,8 @@ abstract class ButtonGroup {
         return null;
     }
 
-    public Button getFirstEmpty() {
-        final Button[] fields = getAvailableFieldViews();
+    public Button getFirstEmptyField() {
+        final Button[] fields = getAvailableFields();
         Button out = fields[0];
         for (Button field : fields) {
             out = field;
@@ -176,8 +178,8 @@ abstract class ButtonGroup {
         return out;
     }
 
-    public int getNextIndexOf(Button target) {
-        final Button[] fields = getAvailableFieldViews();
+    public int getNextIndexOfField(Button target) {
+        final Button[] fields = getAvailableFields();
         for (int i = 0; i < fields.length; i++) {
             if (target == fields[i]) {
                 return Math.min(fields.length - 1, i + 1);
@@ -186,8 +188,8 @@ abstract class ButtonGroup {
         return 0;
     }
 
-    public boolean isAllFilled() {
-        for (Button field : getAvailableFieldViews()) {
+    public boolean isAllFieldsFilled() {
+        for (Button field : getAvailableFields()) {
             if (TextUtils.isEmpty(field.getText())) {
                 return false;
             }
@@ -197,19 +199,19 @@ abstract class ButtonGroup {
 
     public String getText() {
         final StringBuilder sb = new StringBuilder();
-        for (Button field : getAvailableFieldViews()) {
+        for (Button field : getAvailableFields()) {
             sb.append(field.getText());
         }
         return sb.toString();
     }
 
-    public void setAllFieldViewsTextSize(float size) {
+    public void setupAllFieldsTextSize(float size) {
         for (Button field : mFieldViews) {
             field.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
         }
     }
 
-    public void setAllFieldViewsOnClickListener(View.OnClickListener listener) {
+    public void setupAllFieldsOnClickListener(View.OnClickListener listener) {
         for (Button field : mFieldViews) {
             field.setOnClickListener(listener);
         }
