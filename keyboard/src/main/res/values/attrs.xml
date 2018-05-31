@@ -4,15 +4,6 @@
   -->
 
 <resources>
-    <!--键盘类型-->
-    <declare-styleable name="KeyboardView">
-        <attr name="pwkKeyboardType" format="enum">
-            <enum name="FULL" value="0"/>
-            <enum name="CIVIL" value="1"/>
-            <enum name="CIVIL_WJ" value="2"/>
-        </attr>
-    </declare-styleable>
-
     <!--输入框字体大小-->
     <declare-styleable name="InputView">
         <attr name="pwkInputTextSize" format="dimension"/>
