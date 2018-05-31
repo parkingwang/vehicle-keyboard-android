@@ -32,32 +32,35 @@ public class InputView extends LinearLayout {
     private final FieldViewGroup mFieldViewGroup;
 
     /**
-     * 输入框被点击时，有以下逻辑：
-     * 1. 检查当前输入框是否可以被选中。可选中条件是：
-     * - 选中序号为0，任何时候都可以被选中；
-     * - 序号大于0，最大可点击序号为当前车牌长度；
-     * 2. 清除另一个被选中状态，设置当前为选中状态；
-     * 3. 触发选中回调；
+     * 点击选中输入框时，只可以从左到右顺序输入，不可隔位
      */
     private final OnClickListener mOnFieldViewClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.d(TAG, "Click Handler: ----");
-            final ClickMetas clickMetas = getClickedMeta((Button) v);
-            if (clickMetas.clickIndex <= clickMetas.numberLength) {
-                // 更新选中状态
-                if (clickMetas.clickIndex != clickMetas.selectedIndex) {
-                    if (clickMetas.selectedIndex >= 0) {
-                        clearSelectedState(mFieldViewGroup.getFieldAt(clickMetas.selectedIndex));
-                    }
-                    Log.d(TAG, "当前点击序号: " + clickMetas.clickIndex);
-                    setFieldViewSelected(mFieldViewGroup.getFieldAt(clickMetas.clickIndex));
-                }
-                // 触发选中回调
-                for (OnFieldViewSelectedListener listener : mOnFieldViewSelectedListeners) {
-                    listener.onSelectedAt(clickMetas.clickIndex);
-                }
+            final Button field = (Button) v;
+            final ClickMeta clickMeta = getClickMeta(field);
+            Log.d(TAG, "当前点击信息: " + clickMeta);
+
+            final int numberLength = mFieldViewGroup.getText().length();
+            // 空车牌只能点击第一个
+            if (numberLength == 0 && clickMeta.clickIndex != 0) {
+                return;
             }
+            // 不可大于车牌长度
+            if (clickMeta.clickIndex > numberLength) {
+                return;
+            }
+
+            // 点击位置是否变化
+            if (clickMeta.clickIndex != clickMeta.selectedIndex) {
+                setFieldViewSelected(field);
+            }
+
+            // 触发选中事件
+            for (OnFieldViewSelectedListener listener : mOnFieldViewSelectedListeners) {
+                listener.onSelectedAt(clickMeta.clickIndex);
+            }
+
         }
     };
 
@@ -182,9 +185,9 @@ public class InputView extends LinearLayout {
      * 如果当前输入框是空字符，则重新触发当前输入框的点击事件。
      */
     public void performNextFieldView() {
-        final ClickMetas clickMetas = getClickedMeta(null);
-        if (clickMetas.selectedIndex >= 0) {
-            final Button current = mFieldViewGroup.getFieldAt(clickMetas.selectedIndex);
+        final ClickMeta meta = getClickMeta(null);
+        if (meta.selectedIndex >= 0) {
+            final Button current = mFieldViewGroup.getFieldAt(meta.selectedIndex);
             if (!TextUtils.isEmpty(current.getText())) {
                 performNextFieldViewBy(current);
             } else {
@@ -197,9 +200,9 @@ public class InputView extends LinearLayout {
      * 重新触发当前输入框选中状态
      */
     public void rePerformCurrentFieldView() {
-        final ClickMetas clickMetas = getClickedMeta(null);
-        if (clickMetas.selectedIndex >= 0) {
-            performFieldViewSetToSelected(mFieldViewGroup.getFieldAt(clickMetas.selectedIndex));
+        final ClickMeta clickMeta = getClickMeta(null);
+        if (clickMeta.selectedIndex >= 0) {
+            performFieldViewSetToSelected(mFieldViewGroup.getFieldAt(clickMeta.selectedIndex));
         }
     }
 
@@ -252,52 +255,53 @@ public class InputView extends LinearLayout {
         performFieldViewSetToSelected(mFieldViewGroup.getFieldAt(nextIndex));
     }
 
-    private void clearSelectedState(Button target) {
-        target.setSelected(false);
-    }
-
     private void setFieldViewSelected(Button target) {
         for (Button btn : mFieldViewGroup.getAvailableFields()) {
             btn.setSelected((btn == target));
         }
     }
 
-    private ClickMetas getClickedMeta(Button clicked) {
-        short selected = -1;
-        short current = 0;
-        short length = 0;
+    private ClickMeta getClickMeta(Button clicked) {
+        int selectedIndex = -1;
+        int currentIndex = -1;
         final Button[] fields = mFieldViewGroup.getAvailableFields();
         for (int i = 0; i < fields.length; i++) {
-            final Button item = fields[i];
-            if (item == clicked) {
-                current = (short) i;
+            final Button field = fields[i];
+            if (currentIndex < 0 && field == clicked) {
+                currentIndex = i;
             }
-            if (item.isSelected()) {
-                selected = (short) i;
-            }
-            if (!isButtonEmpty(item)) {
-                length += 1;
+            if (selectedIndex < 0 && field.isSelected()) {
+                selectedIndex = i;
             }
         }
-        return new ClickMetas(selected, current, length);
-    }
-
-    private static boolean isButtonEmpty(Button button) {
-        return button.getText().length() == 0;
+        return new ClickMeta(selectedIndex, currentIndex);
     }
 
     //////
 
-    private static class ClickMetas {
+    private static class ClickMeta {
 
-        final short selectedIndex;
-        final short clickIndex;
-        final short numberLength;
+        /**
+         * 当前输入框已选中的序号
+         */
+        final int selectedIndex;
 
-        private ClickMetas(short selectedIndex, short clickIndex, short numberLength) {
+        /**
+         * 当前点击的输入框序号
+         */
+        final int clickIndex;
+
+        private ClickMeta(int selectedIndex, int currentIndex) {
             this.selectedIndex = selectedIndex;
-            this.clickIndex = clickIndex;
-            this.numberLength = numberLength;
+            this.clickIndex = currentIndex;
+        }
+
+        @Override
+        public String toString() {
+            return "ClickMeta{" +
+                    "selectedIndex=" + selectedIndex +
+                    ", clickIndex=" + clickIndex +
+                    '}';
         }
     }
 

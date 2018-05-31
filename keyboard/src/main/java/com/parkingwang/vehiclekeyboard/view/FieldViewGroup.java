@@ -18,13 +18,9 @@ abstract class FieldViewGroup {
 
     private static final String TAG = "InputView.ButtonGroup";
 
-    private final Button[] mFieldViews = new Button[9];
-
     private static final int REUSE_INDEX = 6;
 
-    private Button[] mFieldsCache;
-    private int mFieldsCacheVersion = -1;
-    private int mFieldsCurrtVersion = 0;
+    private final Button[] mFieldViews = new Button[9];
 
     public FieldViewGroup() {
         final int[] resIds = new int[]{
@@ -74,10 +70,6 @@ abstract class FieldViewGroup {
     }
 
     public Button[] getAvailableFields() {
-        if (mFieldsCurrtVersion == mFieldsCacheVersion) {
-            return mFieldsCache;
-        }
-        Log.d(TAG, "[## ReCache ###] Rebuild field views cache");
         final List<Button> output = new ArrayList<>(8);
         for (int i = 0; i < mFieldViews.length; i++) {
             if (i < REUSE_INDEX) {
@@ -88,9 +80,7 @@ abstract class FieldViewGroup {
                 }
             }
         }
-        mFieldsCacheVersion = mFieldsCurrtVersion;
-        mFieldsCache = output.toArray(new Button[output.size()]);
-        return mFieldsCache;
+        return output.toArray(new Button[output.size()]);
     }
 
     public Button getFieldAt(int index) {
@@ -113,10 +103,9 @@ abstract class FieldViewGroup {
         if (mFieldViews[7].isShown()) {
             return false;
         }
-        mFieldsCurrtVersion++;
-        mFieldViews[6].setVisibility(View.GONE);
-        mFieldViews[7].setVisibility(View.VISIBLE);
-        mFieldViews[8].setVisibility(View.GONE);
+        mFieldViews[6].setVisibility(View.GONE);    // 连接位
+        mFieldViews[7].setVisibility(View.VISIBLE); // 终止位
+        mFieldViews[8].setVisibility(View.GONE);    // 终止位
         // cleanup gone
         mFieldViews[6].setText(null);
         mFieldViews[8].setText(null);
@@ -127,10 +116,9 @@ abstract class FieldViewGroup {
         if (mFieldViews[8].isShown()) {
             return false;
         }
-        mFieldsCurrtVersion++;
-        mFieldViews[6].setVisibility(View.VISIBLE);
-        mFieldViews[7].setVisibility(View.GONE);
-        mFieldViews[8].setVisibility(View.VISIBLE);
+        mFieldViews[6].setVisibility(View.VISIBLE); // 连接位
+        mFieldViews[7].setVisibility(View.GONE);    // 终止位
+        mFieldViews[8].setVisibility(View.VISIBLE); // 终止位
         // cleanup gone
         mFieldViews[6].setText(mFieldViews[7].getText());
         mFieldViews[7].setText(null);
