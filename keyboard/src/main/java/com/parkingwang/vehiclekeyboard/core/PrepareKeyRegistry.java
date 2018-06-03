@@ -149,7 +149,7 @@ class PrepareKeyRegistry {
         final List<KeyEntry> auto = append(civilProvince, lettersNumeric, mkEntitiesOf("民使"));
         mCache.put(mkKey(AUTO_DETECT, SpecIndex.MORE_PREFIX), auto);
         mCache.put(mkKey(AUTO_DETECT, 0), auto);
-        mCache.put(mkKey(AUTO_DETECT, 1), append(lettersHasO, mkEntitiesOf("航J")));
+        mCache.put(mkKey(AUTO_DETECT, 1), append(lettersHasO, numeric123, mkEntitiesOf("航J")));
         mCache.put(mkKey(AUTO_DETECT, 2), lettersNumeric);
         mCache.put(mkKey(AUTO_DETECT, 3), lettersNumeric);
         mCache.put(mkKey(AUTO_DETECT, 4), lettersNumeric);

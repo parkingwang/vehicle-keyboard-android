@@ -1,6 +1,7 @@
 package com.parkingwang.vehiclekeyboard.core;
 
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.CHARS_PLA2012;
+import static com.parkingwang.vehiclekeyboard.core.VNumberChars.LING;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.NUMERIC_123;
 
 /**
@@ -72,8 +73,8 @@ public enum NumberType {
         if (null == number) {
             return NumberType.AUTO_DETECT;
         }
-        final int size = number.length();
-        if (0 == size) {
+        final int length = number.length();
+        if (0 == length) {
             return NumberType.AUTO_DETECT;
         }
         number = number.toUpperCase();
@@ -98,30 +99,29 @@ public enum NumberType {
         if (VNumberChars.WJ_W == firstChar) {
             return WJ2012;
         }
-        final char lastChar = number.charAt(Math.max(0, size - 1));
-        // 领事馆
-        if (VNumberChars.LING == lastChar) {
-            // 粤17601领
-            // 粤A0011领
-            if (size > 2) {
-                final char secondChar = number.charAt(1);
-                if (contains(VNumberChars.QWERTY_has_O, secondChar)) {
-                    return LING2012;
-                } else {
-                    return LING2018;
-                }
-            } else {
-                return LING2018;
-            }
-        }
         // 港澳
         if (number.startsWith("粤Z") || number.contains(VNumberChars.CHARS_HK_MACAO)) {
             return HK_MACAO;
         }
-        if (size == 8) {
-            return NEW_ENERGY;
+        if (length >= 2) {
+            final char secondChar = number.charAt(1);
+            // 判断2018新式领事馆
+            if (contains(VNumberChars.NUMERIC_123, secondChar)) {
+                return LING2018;
+            } else {
+                final char lastChar = number.charAt(Math.max(0, length - 1));
+                if (lastChar == LING) {
+                    return LING2012;
+                } else {
+                    if (length == 8) {
+                        return NEW_ENERGY;
+                    } else {
+                        return CIVIL;
+                    }
+                }
+            }
         } else {
-            return CIVIL;
+            return AUTO_DETECT;
         }
     }
 

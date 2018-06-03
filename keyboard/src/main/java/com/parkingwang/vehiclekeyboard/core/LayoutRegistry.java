@@ -102,6 +102,8 @@ class LayoutRegistry {
                 switch (env.numberType) {
                     case HK_MACAO:
                     case SHI2017:
+                    case LING2012:
+                    case LING2018:
                         return cached(MORE_POSTFIX);
                     default:
                         return cached(selectIndex);
