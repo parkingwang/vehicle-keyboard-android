@@ -68,18 +68,26 @@ class LayoutRegistry {
     /**
      * 获取键盘布局
      *
-     * @param env          环境变量
-     * @param selectIndex  当前选中序号
+     * @param env         环境变量
+     * @param selectIndex 当前选中序号
      * @return 键盘布局
      */
     public List<List<KeyEntry>> layout(Env env, int selectIndex) {
         // 动态的键盘布局
         switch (env.selectIndex) {
-            default:
             case 0:
-                return cached(selectIndex);
+                switch (env.numberType) {
+                    case SHI2012:
+                    case SHI2017:
+                    case PLA2012:
+                    case WJ2012:
+                    case AVIATION:
+                        return cached(MORE_PREFIX);
+                    default:
+                        return cached(selectIndex);
+                }
 
-            // 第2位，特殊情况：民航
+                // 第2位，特殊情况：民航
             case 1:
                 if (NumberType.AVIATION.equals(env.numberType)) {
                     return cached(MORE_POSTFIX);
@@ -90,6 +98,7 @@ class LayoutRegistry {
                 // 第3位，特殊情况：武警车牌省份简称
             case 2:
                 if (NumberType.WJ2012.equals(env.numberType)) {
+                    // 序号 0： 省份简称的布局
                     return cached(0);
                 } else {
                     return cached(selectIndex);
@@ -108,6 +117,9 @@ class LayoutRegistry {
                     default:
                         return cached(selectIndex);
                 }
+
+            default:
+                return cached(selectIndex);
         }
     }
 
