@@ -10,20 +10,50 @@ import java.util.List;
  */
 public class Mixer {
 
-    public interface Mapper {
-        KeyEntry map(Env env, KeyEntry key);
+    public interface KeyTransformer {
+        KeyEntry transformKey(Env env, KeyEntry key);
     }
 
-    private final List<Mapper> mMappers = new ArrayList<>();
+    /**
+     * 特定键位类型过滤处理
+     */
+    public static abstract class AbstractTypedKeyTransformer implements KeyTransformer {
 
+        private final KeyType mKeyType;
+
+        public AbstractTypedKeyTransformer(KeyType keyType) {
+            mKeyType = keyType;
+        }
+
+        @Override
+        final public KeyEntry transformKey(Env env, KeyEntry key) {
+            if (mKeyType.equals(key.keyType)) {
+                return transform(env, key);
+            } else {
+                return key;
+            }
+        }
+
+        protected abstract KeyEntry transform(Env env, KeyEntry key);
+    }
+
+    private final List<KeyTransformer> mKeyTransformers = new ArrayList<>();
+
+    /**
+     * 使用键位变换器来处理布局
+     *
+     * @param env    Env
+     * @param layout 布局
+     * @return 键位列表
+     */
     public List<List<KeyEntry>> mix(Env env, List<List<KeyEntry>> layout) {
         final List<List<KeyEntry>> output = new ArrayList<>();
         for (List<KeyEntry> layoutRow : layout) {
             final List<KeyEntry> row = new ArrayList<>(layoutRow.size());
             for (KeyEntry item : layoutRow) {
                 KeyEntry key = item;
-                for (Mapper mapper : mMappers) {
-                    final KeyEntry ret = mapper.map(env, key);
+                for (KeyTransformer keyTransformer : mKeyTransformers) {
+                    final KeyEntry ret = keyTransformer.transformKey(env, key);
                     if (null != ret) {
                         key = ret;
                     }
@@ -35,7 +65,7 @@ public class Mixer {
         return output;
     }
 
-    public void addMapper(Mapper mapper) {
-        mMappers.add(mapper);
+    public void addMapper(KeyTransformer keyTransformer) {
+        mKeyTransformers.add(keyTransformer);
     }
 }

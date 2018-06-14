@@ -16,14 +16,15 @@ import static com.parkingwang.vehiclekeyboard.core.Utils.mkEntitiesOf;
  *
  * @author 陈哈哈 yoojiachen@gmail.com
  */
-class LayoutRegistry {
+class LayoutManager {
 
-    private final Map<String, List<List<KeyEntry>>> mCache = new HashMap<>();
+    ////
 
-    LayoutRegistry() {
-        //// 民用键盘
+    private final Map<String, List<List<KeyEntry>>> mPresetLayouts = new HashMap<>();
+
+    LayoutManager() {
         // 军用车牌: QVKHBSLJNGCEZ
-        mCache.put(keyAt(MORE_PREFIX), createRows(
+        mPresetLayouts.put(keyAt(MORE_PREFIX), createRows(
                 "123456789",
                 "QWEYCVBN0",
                 "ASDFGHJKL",
@@ -31,7 +32,7 @@ class LayoutRegistry {
         ));
 
         // 第2位/末位可以选择的字符
-        mCache.put(keyAt(MORE_POSTFIX), createRows(
+        mPresetLayouts.put(keyAt(MORE_POSTFIX), createRows(
                 "学警港澳使领航挂试超",
                 "1234567890",
                 "ABCDEFGHJK",
@@ -39,13 +40,13 @@ class LayoutRegistry {
         ));
 
         //// 民用键盘
-        mCache.put(keyAt(0), createRows(
+        mPresetLayouts.put(keyAt(0), createRows(
                 "京津晋冀蒙辽吉黑沪",
                 "苏浙皖闽赣鲁豫鄂湘",
                 "粤桂琼渝川贵云藏陕",
                 "甘青宁新" + VNumberChars.MORE + "-+"
         ));
-        mCache.put(keyAt(1), createRows(
+        mPresetLayouts.put(keyAt(1), createRows(
                 "1234567890",
                 "QWERTYUIOP",
                 "ASDFGHJKLM",
@@ -57,12 +58,12 @@ class LayoutRegistry {
                 "ASDFGHJKLB",
                 "ZXCV" + VNumberChars.MORE + "-+"
         );
-        mCache.put(keyAt(2), civil);
-        mCache.put(keyAt(3), civil);
-        mCache.put(keyAt(4), civil);
-        mCache.put(keyAt(5), civil);
-        mCache.put(keyAt(6), civil);
-        mCache.put(keyAt(7), civil);
+        mPresetLayouts.put(keyAt(2), civil);
+        mPresetLayouts.put(keyAt(3), civil);
+        mPresetLayouts.put(keyAt(4), civil);
+        mPresetLayouts.put(keyAt(5), civil);
+        mPresetLayouts.put(keyAt(6), civil);
+        mPresetLayouts.put(keyAt(7), civil);
     }
 
     /**
@@ -123,8 +124,10 @@ class LayoutRegistry {
         }
     }
 
+    ////
+
     private List<List<KeyEntry>> cached(int selectIndex) {
-        final List<List<KeyEntry>> found = mCache.get(keyAt(selectIndex));
+        final List<List<KeyEntry>> found = mPresetLayouts.get(keyAt(selectIndex));
         if (null != found) {
             return found;
         } else {

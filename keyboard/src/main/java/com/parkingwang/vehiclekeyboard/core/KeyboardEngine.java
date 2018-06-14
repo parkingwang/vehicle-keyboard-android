@@ -12,13 +12,13 @@ public class KeyboardEngine {
 
     private static final String TAG = "KeyboardEngine";
 
-    private final PrepareKeyRegistry mPrepareKeyRegistry = new PrepareKeyRegistry();
-    private final LayoutRegistry mLayoutRegistry = new LayoutRegistry();
+    private final AvailableKeyRegistry mAvailableKeyRegistry = new AvailableKeyRegistry();
+    private final LayoutManager mKeyboardLayout = new LayoutManager();
     private final Mixer mMixer = new Mixer();
 
     public KeyboardEngine() {
-        mMixer.addMapper(new RenameTextMapper());
-        mMixer.addMapper(new MoreKeyMapper());
+        mMixer.addMapper(new RenameTextKeyTransformer());
+        mMixer.addMapper(new MoreKeyKeyTransformer());
     }
 
     /**
@@ -46,9 +46,9 @@ public class KeyboardEngine {
                 selectCharIndex,
                 detectNumberType,
                 maxLength,
-                mPrepareKeyRegistry.available(detectNumberType, selectCharIndex));
+                mAvailableKeyRegistry.available(detectNumberType, selectCharIndex));
 
-        final List<List<KeyEntry>> layout = mLayoutRegistry.layout(env, selectCharIndex);
+        final List<List<KeyEntry>> layout = mKeyboardLayout.layout(env, selectCharIndex);
         final List<List<KeyEntry>> output = mMixer.mix(env, layout);
 
         return new KeyboardEntry(selectCharIndex, presetNumber, maxLength, output, detectNumberType);

@@ -8,9 +8,9 @@ import static com.parkingwang.vehiclekeyboard.core.VNumberChars.OK;
 /**
  * @author 陈哈哈 (yoojiachen@gmail.com)
  */
-public class RenameTextMapper implements Mixer.Mapper {
+public class RenameTextKeyTransformer implements Mixer.KeyTransformer {
     @Override
-    public KeyEntry map(Env env, KeyEntry key) {
+    public KeyEntry transformKey(Env env, KeyEntry key) {
         final boolean enabled;
         final String text;
         switch (key.text) {
