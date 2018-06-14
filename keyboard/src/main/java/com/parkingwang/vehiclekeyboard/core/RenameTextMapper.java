@@ -6,10 +6,9 @@ import static com.parkingwang.vehiclekeyboard.core.VNumberChars.MORE;
 import static com.parkingwang.vehiclekeyboard.core.VNumberChars.OK;
 
 /**
- * 通用的键位转换器
  * @author 陈哈哈 (yoojiachen@gmail.com)
  */
-public class GeneralKeyMapper implements Mixer.Mapper {
+public class RenameTextMapper implements Mixer.Mapper {
     @Override
     public KeyEntry map(Env env, KeyEntry key) {
         final boolean enabled;
@@ -29,9 +28,7 @@ public class GeneralKeyMapper implements Mixer.Mapper {
 
             case MORE:
                 text = "更多";
-                // 在第1位、第2位、以及第7位，可以选择更多。其它位置不可以。
-                final boolean pos = env.selectIndex == 0 || env.selectIndex == 1 || env.selectIndex == 6;
-                enabled = pos && (NumberType.CIVIL.equals(env.numberType) || NumberType.AUTO_DETECT.equals(env.numberType));
+                enabled = true;
                 break;
 
             case BACK:

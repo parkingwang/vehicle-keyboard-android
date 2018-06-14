@@ -17,7 +17,8 @@ public class KeyboardEngine {
     private final Mixer mMixer = new Mixer();
 
     public KeyboardEngine() {
-        mMixer.addMapper(new GeneralKeyMapper());
+        mMixer.addMapper(new RenameTextMapper());
+        mMixer.addMapper(new MoreKeyMapper());
     }
 
     /**
