@@ -6,6 +6,7 @@
 - `iOS` iOS客户端项目，为iOS客户端定制包括输入组件、键盘组件及相关控制逻辑实现；
 - `JavaScript(Vue.js)` JavaScript(Vue.js)项目，为H5页面定制，包括Web、微信、支付宝等，同样包括输入组件、键盘组件及相关控制逻辑实现
 
+![PWK GIF](./pwk_keyboard_usage.gif)
 ## 零、项目主页
 
 ### Android 版本
