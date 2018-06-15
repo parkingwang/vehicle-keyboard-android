@@ -8,7 +8,7 @@
     android:clipChildren="false"
     tools:context="com.parkingwang.vehiclekeyboard.demo.MainActivity">
 
-    <com.parkingwang.vehiclekeyboard.view.InputView
+    <com.parkingwang.keyboard.view.InputView
         android:id="@+id/input_view"
         android:layout_margin="6dp"
         app:pwkInputTextSize="22sp"
@@ -23,35 +23,10 @@
         android:layout_height="wrap_content"/>
 
     <LinearLayout
-        android:id="@+id/keyboard_types"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lock_type">
-        <Button
-            android:id="@+id/full"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="@string/full_keyboard"/>
-        <Button
-            android:id="@+id/civil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="@string/civil_keyboard"/>
-        <Button
-            android:id="@+id/civil_wj"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="@string/civil_wj_keyboard"/>
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/test_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/keyboard_types"
+        android:layout_below="@id/lock_type"
         android:orientation="horizontal">
 
         <Button
@@ -67,6 +42,13 @@
             android:layout_height="wrap_content"
             android:onClick="onClick"
             android:text="@string/clear_number"/>
+
+        <Button
+            android:id="@+id/hide_ok_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="@string/hide_ok_key"/>
     </LinearLayout>
 
     <Button
@@ -82,11 +64,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/popup_keyboard"/>
-    <!--<com.parkingwang.vehiclekeyboard.view.KeyboardView-->
-        <!--android:id="@+id/keyboard_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--app:pwkKeyboardType="CIVIL"/>-->
 
 </RelativeLayout>

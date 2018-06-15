@@ -20,12 +20,14 @@
 - GitHub项目主页： [https://github.com/parkingwang/vehicle-keyboard-js](https://github.com/parkingwang/vehicle-keyboard-js)
 - OSChina项目主页： [https://gitee.com/iRainIoT/vehicle-keyboard-js](https://gitee.com/iRainIoT/vehicle-keyboard-js)
 
+## 兼容性声明
+
+**注意：**
+当前版本v0.5，已修改为Java原生实现键盘逻辑，不再使用Javascript。项目包结构已发生重大修改，不再向0.4及以下版本兼容。
 
 ## 车牌号码规则
 
-1. 艾润物联公司整理的车牌号码规则：[停车王车牌号码专用键盘规则和设计说明](./NumberRules.md)
-
-1. [中华人民共和国民用机动车号牌](https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E6%B0%91%E7%94%A8%E6%9C%BA%E5%8A%A8%E8%BD%A6%E5%8F%B7%E7%89%8C)
+[中国车牌号码编码规则全解](http://yoojia.xyz/2018/05/09/chinese-vehicle-number/)
 
 ## 添加依赖
 
@@ -40,9 +42,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.4.0'
+    implementation 'com.parkingwang:keyboard:0.5.0'
     // OR
-    compile 'com.parkingwang:keyboard:0.4.0'
+    compile 'com.parkingwang:keyboard:0.5.0'
 ```
 
 ## 使用组件
@@ -57,7 +59,7 @@ InputView是用于手动输入车牌的组件，提供7-8个用户可选择修�
 
 ```xml
 
-    <com.parkingwang.vehiclekeyboard.view.InputView
+    <com.parkingwang.keyboard.view.InputView
         android:id="@+id/input_view"
         app:pwkInputTextSize="22sp"
         android:layout_width="match_parent"
@@ -67,19 +69,20 @@ InputView是用于手动输入车牌的组件，提供7-8个用户可选择修�
 
 ### 车牌号码键盘组件 - KeyboardView
 
-![](./PWK_KEYBOARD_VIEW.png)
+![](./pwk_keyboard_view_01.png)
+![](./pwk_keyboard_view_02.png)
 
 KeyboardView是车牌输入键盘组件，提供按车牌类型显示一定规则的键盘布局供用户点击，如上图所示。
 
 在XML中放置键盘组件：
 
 ```xml
-    <com.parkingwang.vehiclekeyboard.view.KeyboardView
-            android:id="@+id/keyboard"
+    <com.parkingwang.keyboard.view.InputView
+            android:id="@+id/input_view"
+            android:layout_margin="6dp"
+            app:pwkInputTextSize="22sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            app:pwkKeyboardType="CIVIL"/>
+            android:layout_height="60dp"/>
 ```
 
 ### 输入框和键盘控制器 - KeyboardInputController
@@ -88,39 +91,30 @@ KeyboardView是车牌输入键盘组件，提供按车牌类型显示一定规�
 
 ##### 使用弹出键盘
 
-详见 MainActivity 的演示代码。
+详见 MainActivity 的演示代码。见地址：[](./app/src/main/java/com/parkingwang/vehiclekeyboard/demo/MainActivity.java)
 
 ```java
-    // Init Views
+// Init Views
 
-    // 输入组件View
-    mInputView = findViewById(R.id.input_view);
-    // 锁定新能源车牌View
-    mLockType = findViewById(R.id.lock_type);
+// 创建弹出键盘
+mPopupKeyboard = new PopupKeyboard(this);
+// 弹出键盘内部包含一个KeyboardView，在此绑定输入两者关联。
+mPopupKeyboard.attach(mInputView, this);
 
-    // 创建弹出键盘
-    mPopupKeyboard = new PopupKeyboard(this);
-    // 弹出键盘内部包含一个KeyboardView，在此绑定输入两者关联。
-    mPopupKeyboard.attach(mInputView, this);
-    mPopupKeyboard.getKeyboardView()
-            .setKeyboardType(KeyboardType.CIVIL_WJ);
-
-    // KeyboardInputController提供一个默认实现的新能源车牌锁定按钮
-    mPopupKeyboard.getController()
-            .setDebugEnabled(true)
-            .bindLockTypeProxy(new KeyboardInputController.ButtonProxyImpl(mLockType) {
-                @Override
-                public void onNumberTypeChanged(boolean isNewEnergyType) {
-                    super.onNumberTypeChanged(isNewEnergyType);
-                    if (isNewEnergyType) {
-                        mLockType.setTextColor(getResources().getColor(android.R.color.holo_green_light));
-                    } else {
-                        mLockType.setTextColor(getResources().getColor(android.R.color.black));
-                    }
+// KeyboardInputController提供一个默认实现的新能源车牌锁定按钮
+mPopupKeyboard.getController()
+        .setDebugEnabled(true)
+        .bindLockTypeProxy(new KeyboardInputController.ButtonProxyImpl(lockTypeButton) {
+            @Override
+            public void onNumberTypeChanged(boolean isNewEnergyType) {
+                super.onNumberTypeChanged(isNewEnergyType);
+                if (isNewEnergyType) {
+                    lockTypeButton.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+                } else {
+                    lockTypeButton.setTextColor(getResources().getColor(android.R.color.black));
                 }
-            });
-
-
+            }
+        });
 ```
 
 ##### 不弹出键盘，直接显示
@@ -133,6 +127,12 @@ mController = KeyboardInputController
 
 mController.useDefaultMessageHandler();
 
+```
+
+##### 设置是否显示“确定”键
+
+```java
+mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
 ```
 
 ## 键盘样式设置
@@ -226,28 +226,6 @@ mController.useDefaultMessageHandler();
 
 ```
 
-## 设置键盘类型
-
-键盘组件支持三种键盘类型：
-
-- `KeyboardType.FULL` 全键盘模式，包括民用、警察、军队、使馆等车牌类型；
-- `KeyboardType.CIVIC` 民用车牌键盘；
-- `KeyboardType.CIVIL_WJ` 民用车牌+武警车牌类型；
-
-1. 在Java代码中设置
-
-```java
-    mKeyboardView.setKeyboardType(KeyboardType.CIVIL_WJ);
-```
-
-2. 在XML中设置
-
-```xml
-    <com.parkingwang.vehiclekeyboard.view.KeyboardView
-            ...
-            app:pwkKeyboardType="CIVIL"/>
-```
-
 ### 设置键盘按下时的气泡：
 
 1. 正确地显示气泡
@@ -264,51 +242,34 @@ mController.useDefaultMessageHandler();
     mKeyboardView.setShowBubble(false);
 ```
 
-## 混淆规则 - Proguard
-
-在项目的`proguard-rules.pro`中添加以下混淆规则：
-
-```groguard
-
-# rhino (javascript engine)
--dontwarn org.mozilla.javascript.**
--dontwarn org.mozilla.classfile.**
--keep class org.mozilla.classfile.** { *; }
--keep class org.mozilla.javascript.* { *; }
--keep class org.mozilla.javascript.annotations.** { *; }
--keep class org.mozilla.javascript.ast.** { *; }
--keep class org.mozilla.javascript.commonjs.module.** { *; }
--keep class org.mozilla.javascript.commonjs.module.provider.** { *; }
--keep class org.mozilla.javascript.debug.** { *; }
--keep class org.mozilla.javascript.jdk13.** { *; }
--keep class org.mozilla.javascript.jdk15.** { *; }
--keep class org.mozilla.javascript.json.** { *; }
--keep class org.mozilla.javascript.optimizer.** { *; }
--keep class org.mozilla.javascript.regexp.** { *; }
--keep class org.mozilla.javascript.serialize.** { *; }
--keep class org.mozilla.javascript.typedarrays.** { *; }
--keep class org.mozilla.javascript.v8dtoa.** { *; }
--keep class org.mozilla.javascript.xml.** { *; }
--keep class org.mozilla.javascript.xmlimpl.** { *; }
-
-```
-## 文档
-
 KeyboardInputController提供一系列有用的方法，详细参见DOC文档对应的类方法说明：
 
 [DOC文档](https://parkingwang.github.io/vehicle-keyboard-android/)
 
-## RoadMap
+### 停车王车牌键盘布局切换逻辑
 
-- 使用Java原生代码来替代JavaScript脚本实现核心引擎逻辑；
-- 增加二级键盘提示，应对特定场景下显示超出键盘布局容量的按键；
+停车王车牌键盘布局切换逻辑的思维导图，说明了当前版本的键盘布局的切换，以及“更多”、“返回”按钮的切换逻辑。
+
+![停车王车牌键盘布局切换逻辑](./pwk_layout_logic.png)
+
+百度脑图地址：[http://naotu.baidu.com/file/3f07c764a7a4e6b146a827ec56b9a059?token=9ea43f483a785175](http://naotu.baidu.com/file/3f07c764a7a4e6b146a827ec56b9a059?token=9ea43f483a785175)
 
 ## 版本更新
+
+### v0.5 2018.06.15
+
+> 说明：在此版本中，发生架构和项目结构的重大修改，不向下兼容，请按照当前版本的使用说明来修改；
+
+- 使用Java原生键盘引擎，替代原JavaScript。
+- 删除KeyboardType类型，不再需要配置键盘类型，本版本支持所有类型车牌；
+- 增加全类型车牌支持，增加“更多”和“返回”来切换键盘布局；
+- 优化InputView内部逻辑，简化其实现代码；
+- 优化整体操作性能，键盘输入更多流畅了；
 
 ### v0.4.0 2018.0424
 
 > 说明：在此版本中，如果使用`com.parkingwang.vehiclekeyboard.support.KeyboardInputController`包的相关类，
-> 会报告Deprecated,使用`com.parkingwang.vehiclekeyboard.KeyboardInputController`包的类即可。
+> 会报告Deprecated,使用`com.parkingwang.keyboard.KeyboardInputController`包的类即可。
 
 - 更新KeyboardInputController及相关类的包结构；
 - 增加Controller各个Set和Add接口的NullPointer检查；

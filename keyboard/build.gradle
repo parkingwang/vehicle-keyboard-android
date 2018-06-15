@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'com.jakewharton.hugo'
 
 group = GROUP
 
@@ -26,10 +27,7 @@ android {
 
 dependencies {
     api 'com.android.support:support-v4:25.1.0'
-
-    api 'org.mozilla:rhino:1.7.7.2'
     api 'com.annimon:stream:1.1.9'
-
     testImplementation 'junit:junit:4.12'
 }
 

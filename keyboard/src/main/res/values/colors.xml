@@ -7,7 +7,7 @@
     <color name="pwk_keyboard_divider">#CCC</color>
     <color name="pwk_keyboard_background">#E9E9E9</color>
 
-    <color name="pwk_text_color">#333333</color>
+    <color name="pwk_text_color">@android:color/black</color>
     <color name="pwk_border_gray">#d8d8d8</color>
 
     <color name="pwk_key_pressed_bubble_text">@color/pwk_primary_color</color>

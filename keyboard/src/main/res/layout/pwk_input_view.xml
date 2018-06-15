@@ -41,11 +41,12 @@
         style="@style/PWKInputItemStyleKey"/>
 
     <Button
-        android:id="@+id/number_6_as_end"
+        android:id="@+id/number_6_of_end"
+        android:visibility="gone"
         style="@style/PWKInputItemStyleRight"/>
 
     <Button
-        android:id="@+id/number_7"
+        android:id="@+id/number_7_of_end"
         android:visibility="gone"
         style="@style/PWKInputItemStyleRight"/>
 
