@@ -16,6 +16,7 @@ import static com.parkingwang.keyboard.engine.NumberType.WJ2012;
 import static com.parkingwang.keyboard.engine.Utils.append;
 import static com.parkingwang.keyboard.engine.Utils.mkEntitiesOf;
 import static com.parkingwang.keyboard.engine.VNumberChars.CHARS_HK_MACAO;
+import static com.parkingwang.keyboard.engine.VNumberChars.CHARS_PLA2012;
 import static com.parkingwang.keyboard.engine.VNumberChars.CIVIL_POST;
 import static com.parkingwang.keyboard.engine.VNumberChars.CIVIL_PROVINCES;
 import static com.parkingwang.keyboard.engine.VNumberChars.NUMERIC;
@@ -100,6 +101,7 @@ class AvailableKeyRegistry {
         mCache.put(mkKey(SHI2012, 6), lettersNumeric);
 
         //// 2012式军牌
+        mCache.put(mkKey(PLA2012, 0), mkEntitiesOf(CHARS_PLA2012));
         mCache.put(mkKey(PLA2012, 1), lettersHasO);
         mCache.put(mkKey(PLA2012, 2), lettersNumeric);
         mCache.put(mkKey(PLA2012, 3), lettersNumeric);
@@ -115,6 +117,7 @@ class AvailableKeyRegistry {
         mCache.put(mkKey(LING2018, 3), lettersNumeric);
         mCache.put(mkKey(LING2018, 4), lettersNumeric);
         mCache.put(mkKey(LING2018, 5), lettersNumeric);
+        mCache.put(mkKey(LING2018, 6), lettersNumeric);
 
         //// 2018式领事馆
         mCache.put(mkKey(LING2018, 0), civilProvince);
@@ -145,10 +148,6 @@ class AvailableKeyRegistry {
         mCache.put(mkKey(AUTO_DETECT, 6), civilPost);
     }
 
-    private static String mkKey(NumberType type, int index) {
-        return "@" + type.name() + "." + index;
-    }
-
     /**
      * 根据指定车牌号码类型和位置，返回当前可用的全部键位
      *
@@ -163,6 +162,10 @@ class AvailableKeyRegistry {
         } else {
             return new RowEntry(0);
         }
+    }
+
+    private static String mkKey(NumberType type, int index) {
+        return "@" + type.name() + "." + index;
     }
 
 }
