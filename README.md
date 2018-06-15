@@ -12,23 +12,23 @@
 ## 零、项目主页
 
 ### Android 版本
-- GitHub项目主页： [](https://github.com/parkingwang/vehicle-keyboard-android)
-- OSChina项目主页： [](https://gitee.com/iRainIoT/vehicle-keyboard-android)
+- [GitHub项目主页](https://github.com/parkingwang/vehicle-keyboard-android)
+- [OSChina项目主页](https://gitee.com/iRainIoT/vehicle-keyboard-android)
 
 ### iOS 版本
-- GitHub项目主页： [](https://github.com/parkingwang/vehicle-keyboard-ios)
-- OSChina项目主页： [](https://gitee.com/iRainIoT/vehicle-keyboard-ios)
+- [GitHub项目主页](https://github.com/parkingwang/vehicle-keyboard-ios)
+- [OSChina项目主页](https://gitee.com/iRainIoT/vehicle-keyboard-ios)
 
 ### JavaScript Vue.js 版本
-- GitHub项目主页： [](https://github.com/parkingwang/vehicle-keyboard-js)
-- OSChina项目主页： [](https://gitee.com/iRainIoT/vehicle-keyboard-js)
+- [GitHub项目主页](https://github.com/parkingwang/vehicle-keyboard-js)
+- [OSChina项目主页](https://gitee.com/iRainIoT/vehicle-keyboard-js)
 
 ### 兼容性声明
 
 **注意：**
 当前版本v0.5，已修改为Java原生实现键盘逻辑，不再使用Javascript。项目包结构已发生重大修改，不再向0.4及以下版本兼容。
 
-！[Gif](./pwk_keyboard_usage.gif)
+![Gif](./pwk_keyboard_usage.gif)
 
 ### 车牌号码规则
 
