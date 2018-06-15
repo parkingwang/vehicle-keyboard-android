@@ -18,7 +18,6 @@ import static com.parkingwang.keyboard.engine.NumberType.WJ2012;
 import static com.parkingwang.keyboard.engine.Utils.append;
 import static com.parkingwang.keyboard.engine.Utils.mkEntitiesOf;
 import static com.parkingwang.keyboard.engine.VNumberChars.CHARS_HK_MACAO;
-import static com.parkingwang.keyboard.engine.VNumberChars.CHARS_PLA2012;
 import static com.parkingwang.keyboard.engine.VNumberChars.CIVIL_POST;
 import static com.parkingwang.keyboard.engine.VNumberChars.CIVIL_PROVINCES;
 import static com.parkingwang.keyboard.engine.VNumberChars.NUMERIC;
@@ -103,7 +102,6 @@ class AvailableKeyRegistry {
         mCache.put(mkKey(SHI2012, 6), lettersNumeric);
 
         //// 2012式军牌
-        final List<KeyEntry> pla2012 = mkEntitiesOf(CHARS_PLA2012);
         mCache.put(mkKey(PLA2012, 1), lettersHasO);
         mCache.put(mkKey(PLA2012, 2), lettersNumeric);
         mCache.put(mkKey(PLA2012, 3), lettersNumeric);
@@ -164,7 +162,6 @@ class AvailableKeyRegistry {
             return Collections.emptyList();
         }
     }
-
 
     private static String mkKey(NumberType type, int index) {
         return "@" + type.name() + "." + index;
