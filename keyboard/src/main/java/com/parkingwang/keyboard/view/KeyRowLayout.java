@@ -25,11 +25,6 @@ final class KeyRowLayout extends LinearLayout {
      */
     private static final int NARROW_SPACE_KEY_COUNT = 10;
 
-    /**
-     * 删除键与确定的宽度计算方法如下：
-     * 删除与确定的宽度比例为：3:5。删除与确定及间距所占宽度与单行10个键盘的情况下3个按键及其间间距的总和相等。
-     */
-    private static final float RATIO_FUN_DEL = 3.0f / 8;
     private static final float RATIO_FUN_CONFIRM = 5.0f / 8;
 
     private int mGeneralKeySpace;
@@ -69,15 +64,13 @@ final class KeyRowLayout extends LinearLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int width = MeasureSpec.getSize(widthMeasureSpec);
-        int childCount = getChildCount();
+        final int width = MeasureSpec.getSize(widthMeasureSpec);
+        final int childCount = getChildCount();
 
-        // 删除+确定（不含间隔）：10个键的情况下，3个键的宽度+1个间隔
-        int delAndConfirmWidth = (width - 9 * mFunKeySpace) * 3 / 10 + mFunKeySpace;
-        int deleteKeyWidth = (int) (delAndConfirmWidth * RATIO_FUN_DEL);
-        int confirmKeyWidth = (int) (delAndConfirmWidth * RATIO_FUN_CONFIRM);
-
-        float generalKeyWidth = getGeneralKeyWidth(width, delAndConfirmWidth, confirmKeyWidth);
+        // 确定（不含间隔）：10个键的情况下，3个键的宽度+1个间隔的 5/8
+        final int functionKeyWidth = (int) (((width - 9 * mGeneralKeySpace) * 3 / 10 + mGeneralKeySpace)
+                * RATIO_FUN_CONFIRM);
+        final float generalKeyWidth = getGeneralKeyWidth(width, functionKeyWidth);
 
         int widthUsed = 0;
         mFunKeyIndex = 0;
@@ -92,19 +85,7 @@ final class KeyRowLayout extends LinearLayout {
             if (keyEntry.keyType == KeyType.GENERAL) {
                 params.width = (int) generalKeyWidth;
             } else {
-                if (keyEntry.keyType == KeyType.FUNC_DELETE) {
-                    if (mFunKeyCount == 2) {
-                        // 确定和删除都存在的情况下按设计的删除按键的大小
-                        params.width = deleteKeyWidth;
-                        // 2个功能键的情况下，当一行最多有11个键时，功能键的间隔和普通键的间隔不同，需要加上这个差值
-                        widthUsed += (mFunKeySpace - mGeneralKeySpace);
-                    } else {
-                        // 否则按确定的大小
-                        params.width = confirmKeyWidth;
-                    }
-                } else {
-                    params.width = confirmKeyWidth;
-                }
+                params.width = functionKeyWidth;
                 if (mFunKeyIndex == 0) {
                     mFunKeyIndex = i;
                 }
@@ -123,13 +104,11 @@ final class KeyRowLayout extends LinearLayout {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    private float getGeneralKeyWidth(int width, int delAndConfirmWidth, int confirmKeyWidth) {
+    private float getGeneralKeyWidth(int width, int functionKeyWidth) {
         float generalKeyWidth = (width - (mMaxColumn - 1) * mGeneralKeySpace) / mMaxColumn;
         int funKeyWidthUsed = 0;
-        if (mFunKeyCount == 1) {
-            funKeyWidthUsed = confirmKeyWidth + mGeneralKeySpace;
-        } else if (mFunKeyCount == 2) {
-            funKeyWidthUsed = delAndConfirmWidth + mGeneralKeySpace;
+        if (mFunKeyCount > 0) {
+            funKeyWidthUsed = functionKeyWidth * mFunKeyCount + mFunKeySpace * (mFunKeyCount - 1) + mGeneralKeySpace;
         }
         int generalKeyCount = getChildCount() - mFunKeyCount;
         float availableGeneralKeyWidth = width - funKeyWidthUsed - (generalKeyCount - 1) * mGeneralKeySpace;
@@ -142,10 +121,9 @@ final class KeyRowLayout extends LinearLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        // 位移功能键
-        final int offset = mFunKeySpace - mGeneralKeySpace;
+        // 功能键右对齐
         for (int i = 0; i < mFunKeyCount; i++) {
-            ViewCompat.offsetLeftAndRight(getChildAt(mFunKeyIndex + i), mWidthUnused + i * offset);
+            ViewCompat.offsetLeftAndRight(getChildAt(mFunKeyIndex + i), mWidthUnused);
         }
     }
 }
