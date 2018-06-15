@@ -60,7 +60,7 @@ class LayoutManager {
 
         // 末位特殊字符
         mNamedLayouts.put(NAME_LAST, createRows(
-                "学警港澳使领航挂试超",
+                "学警港澳航挂试超使领",
                 "1234567890",
                 "ABCDEFGHJK",
                 "WXYZ" + VNumberChars.BACK + "-+"

@@ -83,26 +83,32 @@ public enum NumberType {
         if (contains(CHARS_PLA2012, firstChar)) {
             return PLA2012;
         }
+
         // 使147001
         if (VNumberChars.SHI == firstChar) {
             return SHI2012;
         }
+
         // 146001使
         if (contains(NUMERIC_123, firstChar)) {
             return SHI2017;
         }
+
         // 民航
         if (VNumberChars.MIN == firstChar) {
             return AVIATION;
         }
+
         // 武警
         if (VNumberChars.WJ_W == firstChar) {
             return WJ2012;
         }
+
         // 港澳
         if (number.startsWith("粤Z") || number.contains(VNumberChars.CHARS_HK_MACAO)) {
             return HK_MACAO;
         }
+
         if (length >= 2) {
             final char secondChar = number.charAt(1);
             // 判断2018新式领事馆

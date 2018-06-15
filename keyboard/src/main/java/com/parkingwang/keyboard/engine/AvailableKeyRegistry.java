@@ -7,6 +7,7 @@ import static com.parkingwang.keyboard.engine.NumberType.AUTO_DETECT;
 import static com.parkingwang.keyboard.engine.NumberType.AVIATION;
 import static com.parkingwang.keyboard.engine.NumberType.CIVIL;
 import static com.parkingwang.keyboard.engine.NumberType.HK_MACAO;
+import static com.parkingwang.keyboard.engine.NumberType.LING2012;
 import static com.parkingwang.keyboard.engine.NumberType.LING2018;
 import static com.parkingwang.keyboard.engine.NumberType.NEW_ENERGY;
 import static com.parkingwang.keyboard.engine.NumberType.PLA2012;
@@ -111,13 +112,13 @@ class AvailableKeyRegistry {
 
         //// 2012式领事馆
         final RowEntry ling = mkEntitiesOf("领");
-        mCache.put(mkKey(LING2018, 0), civilProvince);
-        mCache.put(mkKey(LING2018, 1), lettersHasO);
-        mCache.put(mkKey(LING2018, 2), lettersNumeric);
-        mCache.put(mkKey(LING2018, 3), lettersNumeric);
-        mCache.put(mkKey(LING2018, 4), lettersNumeric);
-        mCache.put(mkKey(LING2018, 5), lettersNumeric);
-        mCache.put(mkKey(LING2018, 6), lettersNumeric);
+        mCache.put(mkKey(LING2012, 0), civilProvince);
+        mCache.put(mkKey(LING2012, 1), lettersHasO);
+        mCache.put(mkKey(LING2012, 2), lettersNumeric);
+        mCache.put(mkKey(LING2012, 3), lettersNumeric);
+        mCache.put(mkKey(LING2012, 4), lettersNumeric);
+        mCache.put(mkKey(LING2012, 5), lettersNumeric);
+        mCache.put(mkKey(LING2012, 6), ling);
 
         //// 2018式领事馆
         mCache.put(mkKey(LING2018, 0), civilProvince);
