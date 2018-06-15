@@ -242,6 +242,8 @@ KeyboardInputController提供一系列有用的方法，详细参见DOC文档对
 
 ![停车王车牌键盘布局切换逻辑](./pwk_layout_logic.png)
 
+百度脑图地址：[http://naotu.baidu.com/file/3f07c764a7a4e6b146a827ec56b9a059?token=9ea43f483a785175](http://naotu.baidu.com/file/3f07c764a7a4e6b146a827ec56b9a059?token=9ea43f483a785175)
+
 ## 版本更新
 
 ### v0.5 2018.06.19
