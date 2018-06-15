@@ -1,4 +1,4 @@
-com.parkingwang.vehiclekeyboard
-com.parkingwang.vehiclekeyboard.core
-com.parkingwang.vehiclekeyboard.support
-com.parkingwang.vehiclekeyboard.view
+com.parkingwang.keyboard
+com.parkingwang.keyboard.engine
+com.parkingwang.keyboard.neighbor
+com.parkingwang.keyboard.view
