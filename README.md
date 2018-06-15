@@ -20,6 +20,11 @@
 - GitHub项目主页： [https://github.com/parkingwang/vehicle-keyboard-js](https://github.com/parkingwang/vehicle-keyboard-js)
 - OSChina项目主页： [https://gitee.com/iRainIoT/vehicle-keyboard-js](https://gitee.com/iRainIoT/vehicle-keyboard-js)
 
+## 兼容性声明
+
+**注意：**当前版本v0.5，已修改为Java原生实现键盘逻辑，不再使用Javascript。项目包结构已发生重大修改，不再向0.4及以下版本兼容。
+**注意：**当前版本v0.5，已修改为Java原生实现键盘逻辑，不再使用Javascript。项目包结构已发生重大修改，不再向0.4及以下版本兼容。
+**注意：**当前版本v0.5，已修改为Java原生实现键盘逻辑，不再使用Javascript。项目包结构已发生重大修改，不再向0.4及以下版本兼容。
 
 ## 车牌号码规则
 
@@ -38,9 +43,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.6'
+    implementation 'com.parkingwang:keyboard:0.5'
     // OR
-    compile 'com.parkingwang:keyboard:0.6'
+    compile 'com.parkingwang:keyboard:0.5'
 ```
 
 ## 使用组件
