@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parkingwang.keyboard.KeyboardInputController;
@@ -16,17 +17,16 @@ import com.parkingwang.keyboard.view.InputView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
     private InputView mInputView;
+    private EditText mProvinceView;
 
     private final List<String> mTestNumber = new ArrayList<>();
 
-    private final Random mRandom = new Random();
-
     private PopupKeyboard mPopupKeyboard;
+    private long mTestIndex = 0;
 
     private boolean mHideOKKey = false;
 
@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mInputView = findViewById(R.id.input_view);
+        mProvinceView = findViewById(R.id.province_value);
+
         final Button lockTypeButton = findViewById(R.id.lock_type);
 
         mTestNumber.add("粤A12345");
@@ -89,7 +91,11 @@ public class MainActivity extends AppCompatActivity {
         // 切换键盘类型
         switch (id) {
             case R.id.test_number:
-                final int idx = mRandom.nextInt(mTestNumber.size());
+                final int idx = (int) (mTestIndex % mTestNumber.size());
+                mTestIndex++;
+                if (idx == 0) {
+                    mTestIndex = 0;
+                }
                 // 上面测试例子中，第12个，指定为新能源车牌，部分车牌
                 if (idx == 11) {
                     mPopupKeyboard.getController().updateNumberLockType(mTestNumber.get(idx), true);
@@ -102,10 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.popup_keyboard:
                 if (mPopupKeyboard.isShown()) {
-                    findViewById(R.id.edit_text).setEnabled(true);
                     mPopupKeyboard.dismiss(MainActivity.this);
-                }else{
-                    findViewById(R.id.edit_text).setEnabled(false);
+                } else {
                     mPopupKeyboard.show(MainActivity.this);
                 }
                 break;
@@ -113,7 +117,16 @@ public class MainActivity extends AppCompatActivity {
             case R.id.hide_ok_key:
                 mHideOKKey = !mHideOKKey;
                 mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
-                Toast.makeText(getBaseContext(), "“确定”键盘状态，将在下一个操作中生效", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(),
+                        "演示“确定”键盘状态，将在下一个操作中生效: " + (mHideOKKey ? "隐藏" : "显示"), Toast.LENGTH_SHORT)
+                        .show();
+                break;
+
+            case R.id.commit_province:
+                final String name = mProvinceView.getText().toString();
+                mPopupKeyboard.getKeyboardEngine().setLocalProvinceName(name);
+                Toast.makeText(getBaseContext(),
+                        "演示“周边省份”重新排序，将在下一个操作中生效：" + name, Toast.LENGTH_SHORT).show();
                 break;
         }
     }

@@ -6,7 +6,7 @@
 - `iOS` iOS客户端项目，为iOS客户端定制包括输入组件、键盘组件及相关控制逻辑实现；
 - `JavaScript(Vue.js)` JavaScript(Vue.js)项目，为H5页面定制，包括Web、微信、支付宝等，同样包括输入组件、键盘组件及相关控制逻辑实现
 
-## 项目主页
+## 零、项目主页
 
 ### Android 版本
 - GitHub项目主页： [https://github.com/parkingwang/vehicle-keyboard-android](https://github.com/parkingwang/vehicle-keyboard-android)
@@ -20,12 +20,12 @@
 - GitHub项目主页： [https://github.com/parkingwang/vehicle-keyboard-js](https://github.com/parkingwang/vehicle-keyboard-js)
 - OSChina项目主页： [https://gitee.com/iRainIoT/vehicle-keyboard-js](https://gitee.com/iRainIoT/vehicle-keyboard-js)
 
-## 兼容性声明
+### 兼容性声明
 
 **注意：**
 当前版本v0.5，已修改为Java原生实现键盘逻辑，不再使用Javascript。项目包结构已发生重大修改，不再向0.4及以下版本兼容。
 
-## 车牌号码规则
+## 一、车牌号码规则
 
 [中国车牌号码编码规则全解](http://yoojia.xyz/2018/05/09/chinese-vehicle-number/)
 
@@ -42,14 +42,14 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.5.1'
+    implementation 'com.parkingwang:keyboard:0.5.2'
     // OR
-    compile 'com.parkingwang:keyboard:0.5.1'
+    compile 'com.parkingwang:keyboard:0.5.2'
 ```
 
-## 使用组件
+## 二、使用组件
 
-### 车牌号码输入组件 InputView
+### 2.1 车牌号码输入组件 InputView
 
 ![](./PWK_INPUT_VIEW.png)
 
@@ -67,7 +67,7 @@ InputView是用于手动输入车牌的组件，提供7-8个用户可选择修�
 
 ```
 
-### 车牌号码键盘组件 - KeyboardView
+### 2.2 车牌号码键盘组件 - KeyboardView
 
 ![](./pwk_keyboard_view_01.png)
 ![](./pwk_keyboard_view_02.png)
@@ -85,11 +85,11 @@ KeyboardView是车牌输入键盘组件，提供按车牌类型显示一定规�
             android:layout_height="60dp"/>
 ```
 
-### 输入框和键盘控制器 - KeyboardInputController
+### 2.3 输入框和键盘控制器 - KeyboardInputController
 
 在代码中绑定输入组件与键盘的关联：
 
-##### 使用弹出键盘
+**使用弹出键盘**
 
 详见 MainActivity 的演示代码。见地址：[](./app/src/main/java/com/parkingwang/vehiclekeyboard/demo/MainActivity.java)
 
@@ -117,7 +117,7 @@ mPopupKeyboard.getController()
         });
 ```
 
-##### 不弹出键盘，直接显示
+**不弹出键盘，直接显示**
 
 ```java
 
@@ -126,18 +126,48 @@ mController = KeyboardInputController
                     .with(mKeyboardView, inputView);
 
 mController.useDefaultMessageHandler();
-
 ```
 
-##### 设置是否显示“确定”键
+## 三、键盘功能特性设置
+
+### 3.1 设置是否显示“确定”键
+
+根据需要，你可以通过调用KeyboardEngine的`setHideOKKey(boolean)`来设置是否隐藏“确定”键。
 
 ```java
 mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
 ```
 
-## 键盘样式设置
+### 3.2 优先显示周边省份
 
-### 设置键盘按钮文字大小
+根据需要，在不同地区的用户，输入车牌号码时，可以根据当地地理位置，显示周边省份的简称。
+获取地理位置需要的定位功能，需要你外部调用定位API，获取到对应的省份名称后，设置到KeyboardEngine中。
+使用如下代码：
+
+```java
+mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
+```
+
+### 3.3 设置键盘按下时的气泡：
+
+1. 正确地显示气泡
+
+由于顶层按键的气泡会显示到键盘之外，因此需要键盘所在的父布局增加以下属性（如果气泡范围超出父布局，则需往上递归设置）：
+
+```xml
+    android:clipChildren="false"
+```
+
+2. 不显示气泡
+
+```java
+    mKeyboardView.setShowBubble(false);
+```
+
+
+## 四、键盘样式设置
+
+### 4.1 设置键盘按钮文字大小
 
 在Java代码中添加以下设置：
 ```java
@@ -145,7 +175,7 @@ mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
     mKeyboardView.setENTextSize(float); //设置英文字母或数字字体大小
 ```
 
-### 设置键盘主题颜色
+### 4.2 设置键盘主题颜色
 
 在colors.xml中覆盖以下颜色值以修改键盘主题色
 ```xml
@@ -153,7 +183,7 @@ mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
     <!--确定按键按下时的颜色-->
     <color name="pwk_primary_dark_color">#3A7CE0</color>
 ```
-### 设置输入组件字体大小：
+### 4.3 设置输入组件字体大小：
 
 ```xml
     <com.parkingwang.vehiclekeyboard.view.InputView
@@ -161,11 +191,11 @@ mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
             ..../>
 ```
 
-### 设置输入组件的样式
+### 4.4 设置输入组件的样式
 
 默认提供两种输入组件样式：
 
-#### 1. 混合紧排样式（默认样式） - MIXED
+#### 4.4.1. 混合紧排样式（默认样式） - MIXED
 
 ![](./PWK_INPUT_MIXED_STYLE.png)
 
@@ -178,7 +208,7 @@ mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
     <style name="PWKInputViewStyle" parent="PWKInputViewStyle_MIXED"/>
 ```
 
-#### 2. 分隔块状样式 - DIVIDED
+#### 4.4.2. 分隔块状样式 - DIVIDED
 
 ![](./PWK_INPUT_DIVIDED_STYLE.png)
 
@@ -194,7 +224,7 @@ mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
 
 在项目的`styles.xml`中覆盖设置以上两种样式配置，可以切换显示不同的样式。可参考 App 的配置代码。
 
-##### 如何修改自己的样式
+### 4.5 如何修改自己的样式
 
 覆盖`PWKInputItemStyleKey / PWKInputItemStyleLeft / PWKInputItemStyleRight`和`PWKInputViewStyle`来实现。
 
@@ -203,7 +233,7 @@ mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
 - `PWKInputItemStyleRight` 控制输入组件内最右侧输入框的按键Button样式，样式作用于一个Button；
 - `PWKInputViewStyle` 控制输入组件的整体样式，作用于LinearLayout；
 
-##### InputView的样式选项
+#### 4.5.1 InputView的样式选项
 
 通过覆盖以下样式配置，可以修改默认样式
 
@@ -226,35 +256,21 @@ mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
 
 ```
 
-### 设置键盘按下时的气泡：
+## 五、停车王车牌键盘布局切换逻辑
 
-1. 正确地显示气泡
-
-由于顶层按键的气泡会显示到键盘之外，因此需要键盘所在的父布局增加以下属性（如果气泡范围超出父布局，则需往上递归设置）：
-
-```xml
-    android:clipChildren="false"
-```
-
-2. 不显示气泡
-
-```java
-    mKeyboardView.setShowBubble(false);
-```
-
-KeyboardInputController提供一系列有用的方法，详细参见DOC文档对应的类方法说明：
+### 5.1 DOC文档
 
 [DOC文档](https://parkingwang.github.io/vehicle-keyboard-android/)
 
-### 停车王车牌键盘布局切换逻辑
+### 5.2 停车王车牌键盘布局切换逻辑
 
 停车王车牌键盘布局切换逻辑的思维导图，说明了当前版本的键盘布局的切换，以及“更多”、“返回”按钮的切换逻辑。
 
 ![停车王车牌键盘布局切换逻辑](./pwk_layout_logic.png)
 
-百度脑图地址：[http://naotu.baidu.com/file/3f07c764a7a4e6b146a827ec56b9a059?token=9ea43f483a785175](http://naotu.baidu.com/file/3f07c764a7a4e6b146a827ec56b9a059?token=9ea43f483a785175)
+[百度脑图地址](http://naotu.baidu.com/file/3f07c764a7a4e6b146a827ec56b9a059?token=9ea43f483a785175)
 
-## 版本更新
+## 六、版本更新
 
 ### v0.5 2018.06.15
 
@@ -265,6 +281,7 @@ KeyboardInputController提供一系列有用的方法，详细参见DOC文档对
 - 增加全类型车牌支持，增加“更多”和“返回”来切换键盘布局；
 - 优化InputView内部逻辑，简化其实现代码；
 - 优化整体操作性能，键盘输入更多流畅了；
+- 增加周边省份功能设定；
 
 ### v0.4.0 2018.0424
 

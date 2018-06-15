@@ -8,7 +8,7 @@ import static com.parkingwang.keyboard.engine.VNumberChars.OK;
 /**
  * @author 陈哈哈 (yoojiachen@gmail.com)
  */
-public class FuncKeyTransformer implements Mixer.KeyTransformer {
+public class FuncKeyTransformer implements LayoutMixer.KeyTransformer {
     @Override
     public KeyEntry transformKey(Context context, KeyEntry key) {
         final boolean enabled;

@@ -19,7 +19,7 @@ import static com.parkingwang.keyboard.engine.NumberType.WJ2012;
  *
  * @author 陈哈哈 (yoojiachen@gmail.com)
  */
-public class MoreKeyTransformer extends Mixer.AbstractTypedKeyTransformer {
+public class MoreKeyTransformer extends LayoutMixer.AbstractTypedKeyTransformer {
 
     public MoreKeyTransformer() {
         super(KeyType.FUNC_MORE);

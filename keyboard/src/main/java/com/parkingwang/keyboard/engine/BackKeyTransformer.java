@@ -17,7 +17,7 @@ import static com.parkingwang.keyboard.engine.NumberType.WJ2012;
  *
  * @author 陈哈哈 (yoojiachen@gmail.com)
  */
-public class BackKeyTransformer extends Mixer.AbstractTypedKeyTransformer {
+public class BackKeyTransformer extends LayoutMixer.AbstractTypedKeyTransformer {
 
     public BackKeyTransformer() {
         super(KeyType.FUNC_BACK);

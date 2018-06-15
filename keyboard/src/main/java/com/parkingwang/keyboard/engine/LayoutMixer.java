@@ -8,16 +8,39 @@ import java.util.List;
  *
  * @author 陈哈哈 (yoojiachen@gmail.com)
  */
-public class Mixer {
-
-    private final List<KeyTransformer> mKeyTransformers = new ArrayList<>();
-    private boolean mRemoveFuncOK = false;
+public class LayoutMixer {
 
     /**
-     * @param removeFuncOK 设置是否删除“确定”键
+     * 键位转换接口
      */
-    public void setRemoveFuncOK(boolean removeFuncOK) {
-        mRemoveFuncOK = removeFuncOK;
+    public interface KeyTransformer {
+        KeyEntry transformKey(Context context, KeyEntry key);
+    }
+
+    /**
+     * 布局转换接口
+     */
+    public interface LayoutTransformer {
+        LayoutEntry transformLayout(Context context, LayoutEntry layout);
+    }
+
+    private final List<KeyTransformer> mKeyTransformers = new ArrayList<>();
+    private final List<LayoutTransformer> mLayoutTransformers = new ArrayList<>();
+
+    /**
+     * @param context
+     * @param layout
+     * @return
+     */
+    public LayoutEntry transform(Context context, LayoutEntry layout) {
+        LayoutEntry out = layout;
+        for (LayoutTransformer t : mLayoutTransformers) {
+            final LayoutEntry ret = t.transformLayout(context, out);
+            if (null != ret) {
+                out = ret;
+            }
+        }
+        return out;
     }
 
     /**
@@ -33,9 +56,6 @@ public class Mixer {
             final RowEntry row = new RowEntry(layoutRow.size());
             for (KeyEntry item : layoutRow) {
                 KeyEntry key = item;
-                if (mRemoveFuncOK && KeyType.FUNC_OK.equals(key.keyType)) {
-                    continue;
-                }
                 for (KeyTransformer keyTransformer : mKeyTransformers) {
                     final KeyEntry ret = keyTransformer.transformKey(context, key);
                     if (null != ret) {
@@ -49,13 +69,15 @@ public class Mixer {
         return output;
     }
 
-    public void addMapper(KeyTransformer keyTransformer) {
+    public void addKeyTransformer(KeyTransformer keyTransformer) {
         mKeyTransformers.add(keyTransformer);
     }
 
-    public interface KeyTransformer {
-        KeyEntry transformKey(Context context, KeyEntry key);
+    public void addLayoutTransformer(LayoutTransformer transformer) {
+        mLayoutTransformers.add(transformer);
     }
+
+    ////
 
     /**
      * 特定键位类型过滤处理

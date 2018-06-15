@@ -1,5 +1,7 @@
 package com.parkingwang.keyboard.engine;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,10 @@ import static com.parkingwang.keyboard.engine.Utils.mkEntitiesOf;
  * @author 陈哈哈 yoojiachen@gmail.com
  */
 class LayoutManager {
+
+    interface LayoutProvider {
+        LayoutEntry get(Context ctx);
+    }
 
     private final static String NAME_PROVINCE = "layout.province";
     private final static String NAME_FIRST = "layout.first.spec";
@@ -89,19 +95,23 @@ class LayoutManager {
         return layout;
     }
 
-    public LayoutEntry getLayout(Context ctx) {
-        LayoutEntry layout = null;
+    /**
+     * 返回布局对象
+     *
+     * @param ctx Context
+     * @return 缓存布局对象的副本
+     */
+    @NonNull
+    public LayoutEntry getLayout(@NonNull Context ctx) {
+        LayoutEntry layout = new LayoutEntry();
         for (LayoutProvider provider : mProviders) {
-            layout = provider.get(ctx);
-            if (null != layout) {
+            final LayoutEntry ret = provider.get(ctx);
+            if (null != ret) {
+                layout = ret;
                 break;
             }
         }
-        return layout;
-    }
-
-    interface LayoutProvider {
-        LayoutEntry get(Context ctx);
+        return layout.newCopy();
     }
 
     /**

@@ -1,5 +1,8 @@
 package com.parkingwang.keyboard.engine;
 
+import com.parkingwang.keyboard.neighbor.NeighborManager;
+import com.parkingwang.keyboard.neighbor.Province;
+
 /**
  * @author 陈哈哈 yoojiachen@gmail.com
  */
@@ -7,19 +10,36 @@ public class KeyboardEngine {
 
     private final AvailableKeyRegistry mKeyRegistry = new AvailableKeyRegistry();
     private final LayoutManager mKeyboardLayout = new LayoutManager();
-    private final Mixer mMixer = new Mixer();
+    private final NeighborManager mNeighborManager = new NeighborManager();
+    private final LayoutMixer mLayoutMixer = new LayoutMixer();
+
+    private final RemoveOKLayoutTransformer mRemoveOKLayoutTransformer = new RemoveOKLayoutTransformer();
+    private String mLocationProvince;
 
     public KeyboardEngine() {
-        mMixer.addMapper(new FuncKeyTransformer());
-        mMixer.addMapper(new MoreKeyTransformer());
-        mMixer.addMapper(new BackKeyTransformer());
+        // keys
+        mLayoutMixer.addKeyTransformer(new FuncKeyTransformer());
+        mLayoutMixer.addKeyTransformer(new MoreKeyTransformer());
+        mLayoutMixer.addKeyTransformer(new BackKeyTransformer());
+        // layout
+        mLayoutMixer.addLayoutTransformer(mRemoveOKLayoutTransformer);
+        mLayoutMixer.addLayoutTransformer(new NeighborLayoutTransformer());
     }
 
     /**
      * @param hide 设置是否不显示“确定”键
      */
     public void setHideOKKey(boolean hide) {
-        mMixer.setRemoveFuncOK(hide);
+        mRemoveOKLayoutTransformer.setRemoveEnabled(hide);
+    }
+
+    /**
+     * 设置当前位置省份名称。如果设置此名称，会重新调整省份布局，将当前省份周边的几个省份，排列在第一行前几位。
+     *
+     * @param provinceName 省份名称
+     */
+    public void setLocalProvinceName(String provinceName) {
+        mLocationProvince = provinceName;
     }
 
     /**
@@ -42,6 +62,9 @@ public class KeyboardEngine {
         // 车牌限制长度
         final int maxLength = detectNumberType.maxLength();
 
+        // 根据预设省份，重排键盘布局
+        final Province province = mNeighborManager.getLocation(mLocationProvince);
+
         // 混合成可以输出使用的键位
         final Context context = new Context(
                 presetNumber,
@@ -49,10 +72,12 @@ public class KeyboardEngine {
                 detectNumberType,
                 maxLength,
                 mKeyRegistry.available(detectNumberType, selectCharIndex),
-                showMoreLayout);
+                showMoreLayout,
+                province);
 
         final LayoutEntry layout = mKeyboardLayout.getLayout(context);
-        final LayoutEntry output = mMixer.mix(context, layout);
+        final LayoutEntry tr = mLayoutMixer.transform(context, layout);
+        final LayoutEntry output = mLayoutMixer.mix(context, tr);
 
         return new KeyboardEntry(selectCharIndex, presetNumber, maxLength, output, detectNumberType);
     }
