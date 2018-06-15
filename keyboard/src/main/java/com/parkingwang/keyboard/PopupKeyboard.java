@@ -3,6 +3,7 @@ package com.parkingwang.keyboard;
 import android.app.Activity;
 import android.content.Context;
 
+import com.parkingwang.keyboard.engine.KeyboardEngine;
 import com.parkingwang.keyboard.view.InputView;
 import com.parkingwang.keyboard.view.KeyboardView;
 
@@ -45,6 +46,10 @@ public class PopupKeyboard {
 
     public KeyboardInputController getController() {
         return checkAttachedController();
+    }
+
+    public KeyboardEngine getKeyboardEngine() {
+        return mKeyboardView.getKeyboardEngine();
     }
 
     public void show(Activity activity) {

@@ -108,6 +108,10 @@ public class KeyboardView extends LinearLayout {
         });
     }
 
+    public KeyboardEngine getKeyboardEngine() {
+        return mKeyboardEngine;
+    }
+
     /**
      * 更新车牌键盘。
      * 此操作会触发KeyboardCallback回调。

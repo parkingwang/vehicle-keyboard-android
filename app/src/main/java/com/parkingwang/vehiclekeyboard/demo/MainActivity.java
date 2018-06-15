@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.parkingwang.keyboard.KeyboardInputController;
 import com.parkingwang.keyboard.PopupKeyboard;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private final Random mRandom = new Random();
 
     private PopupKeyboard mPopupKeyboard;
+
+    private boolean mHideOKKey = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
         mPopupKeyboard = new PopupKeyboard(this);
         // 弹出键盘内部包含一个KeyboardView，在此绑定输入两者关联。
         mPopupKeyboard.attach(mInputView, this);
+
+        // 隐藏确定按钮
+        mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
 
         // KeyboardInputController提供一个默认实现的新能源车牌锁定按钮
         mPopupKeyboard.getController()
@@ -96,6 +102,12 @@ public class MainActivity extends AppCompatActivity {
                     findViewById(R.id.edit_text).setEnabled(false);
                     mPopupKeyboard.show(MainActivity.this);
                 }
+                break;
+
+            case R.id.hide_ok_key:
+                mHideOKKey = !mHideOKKey;
+                mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
+                Toast.makeText(getBaseContext(), "“确定”键盘状态，将在下一个操作中生效", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

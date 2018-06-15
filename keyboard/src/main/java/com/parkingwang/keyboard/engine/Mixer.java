@@ -39,6 +39,15 @@ public class Mixer {
 
     private final List<KeyTransformer> mKeyTransformers = new ArrayList<>();
 
+    private boolean mRemoveFuncOK = false;
+
+    /**
+     * @param removeFuncOK 设置是否删除“确定”键
+     */
+    public void setRemoveFuncOK(boolean removeFuncOK) {
+        mRemoveFuncOK = removeFuncOK;
+    }
+
     /**
      * 使用键位变换器来处理布局
      *
@@ -52,6 +61,9 @@ public class Mixer {
             final List<KeyEntry> row = new ArrayList<>(layoutRow.size());
             for (KeyEntry item : layoutRow) {
                 KeyEntry key = item;
+                if (mRemoveFuncOK && KeyType.FUNC_OK.equals(key.keyType)) {
+                    continue;
+                }
                 for (KeyTransformer keyTransformer : mKeyTransformers) {
                     final KeyEntry ret = keyTransformer.transformKey(context, key);
                     if (null != ret) {

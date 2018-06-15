@@ -6,5 +6,6 @@
     <string name="civil_wj_keyboard">民用武警键盘</string>
     <string name="test_number">测试车牌</string>
     <string name="clear_number">清除车牌</string>
+    <string name="hide_ok_key">隐藏/显示“确定”键</string>
     <string name="popup_keyboard">弹出/隐藏键盘</string>
 </resources>

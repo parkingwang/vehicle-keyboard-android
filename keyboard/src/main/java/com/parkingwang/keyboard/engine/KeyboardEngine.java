@@ -7,9 +7,6 @@ import java.util.List;
  */
 public class KeyboardEngine {
 
-    public static final int INDEX_POSTFIX = SpecIndex.MORE_POSTFIX;
-    public static final int INDEX_PREFIX = SpecIndex.MORE_PREFIX;
-
     private final AvailableKeyRegistry mKeyRegistry = new AvailableKeyRegistry();
     private final LayoutManager mKeyboardLayout = new LayoutManager();
     private final Mixer mMixer = new Mixer();
@@ -18,6 +15,13 @@ public class KeyboardEngine {
         mMixer.addMapper(new FuncKeyTransformer());
         mMixer.addMapper(new MoreKeyTransformer());
         mMixer.addMapper(new BackKeyTransformer());
+    }
+
+    /**
+     * @param hide 设置是否不显示“确定”键
+     */
+    public void setHideOKKey(boolean hide) {
+        mMixer.setRemoveFuncOK(hide);
     }
 
     /**

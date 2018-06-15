@@ -129,6 +129,12 @@ mController.useDefaultMessageHandler();
 
 ```
 
+##### 设置是否显示“确定”键
+
+```java
+mPopupKeyboard.getKeyboardEngine().setHideOKKey(mHideOKKey);
+```
+
 ## 键盘样式设置
 
 ### 设置键盘按钮文字大小

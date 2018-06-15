@@ -42,6 +42,13 @@
             android:layout_height="wrap_content"
             android:onClick="onClick"
             android:text="@string/clear_number"/>
+
+        <Button
+            android:id="@+id/hide_ok_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="@string/hide_ok_key"/>
     </LinearLayout>
 
     <Button
