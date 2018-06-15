@@ -36,16 +36,16 @@ class LayoutManager {
     LayoutManager() {
         // 省份简称布局
         mNamedLayouts.put(NAME_PROVINCE, createRows(
-                "京津晋冀蒙辽吉黑沪",
-                "苏浙皖闽赣鲁豫鄂湘",
-                "粤桂琼渝川贵云藏陕",
-                "甘青宁新" + VNumberChars.MORE + "-+"
+                "京津晋冀蒙辽吉黑沪苏",
+                "浙皖闽赣鲁豫鄂湘粤桂",
+                "琼渝川贵云藏陕甘",
+                "青宁新台" + VNumberChars.MORE + "-+"
         ));
 
         // 首位特殊字符布局
         mNamedLayouts.put(NAME_FIRST, createRows(
-                "123456789",
-                "QWEYCVBN0",
+                "1234567890",
+                "QWERTYCVBN",
                 "ASDFGHJKL",
                 "ZX民使" + VNumberChars.BACK + "-+"
         ));
