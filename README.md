@@ -1,36 +1,53 @@
-# 停车王车牌号码专用键盘 VehicleKeyboard - Android
+# 停车王车牌键盘 VehicleKeyboard - Android
 
-`VehicleKeyboard`是停车王品牌的各端产品线的基础组件，专为提高中国车牌号码输入速度而定制开发的专用键盘组件，包括以下三个项目：
+`VehicleKeyboard`是停车王品牌的各端产品线的基础组件，专为提高中国车牌号码输入速度而定制开发的专用键盘组件。
+为停车行业的用户输入车牌号码，提供非常便捷有效的输入方式。
+
+包括以下三个项目：
 
 - `Android` Android项目，为Android客户端定制包括输入组件、键盘组件及相关控制逻辑实现；
 - `iOS` iOS客户端项目，为iOS客户端定制包括输入组件、键盘组件及相关控制逻辑实现；
 - `JavaScript(Vue.js)` JavaScript(Vue.js)项目，为H5页面定制，包括Web、微信、支付宝等，同样包括输入组件、键盘组件及相关控制逻辑实现
 
-![PWK GIF](./pwk_keyboard_usage.gif)
 ## 零、项目主页
 
 ### Android 版本
-- GitHub项目主页： [https://github.com/parkingwang/vehicle-keyboard-android](https://github.com/parkingwang/vehicle-keyboard-android)
-- OSChina项目主页： [https://gitee.com/iRainIoT/vehicle-keyboard-android](https://gitee.com/iRainIoT/vehicle-keyboard-android)
+- GitHub项目主页： [](https://github.com/parkingwang/vehicle-keyboard-android)
+- OSChina项目主页： [](https://gitee.com/iRainIoT/vehicle-keyboard-android)
 
 ### iOS 版本
-- GitHub项目主页： [https://github.com/parkingwang/vehicle-keyboard-ios](https://github.com/parkingwang/vehicle-keyboard-ios)
-- OSChina项目主页： [https://gitee.com/iRainIoT/vehicle-keyboard-ios](https://gitee.com/iRainIoT/vehicle-keyboard-ios)
+- GitHub项目主页： [](https://github.com/parkingwang/vehicle-keyboard-ios)
+- OSChina项目主页： [](https://gitee.com/iRainIoT/vehicle-keyboard-ios)
 
 ### JavaScript Vue.js 版本
-- GitHub项目主页： [https://github.com/parkingwang/vehicle-keyboard-js](https://github.com/parkingwang/vehicle-keyboard-js)
-- OSChina项目主页： [https://gitee.com/iRainIoT/vehicle-keyboard-js](https://gitee.com/iRainIoT/vehicle-keyboard-js)
+- GitHub项目主页： [](https://github.com/parkingwang/vehicle-keyboard-js)
+- OSChina项目主页： [](https://gitee.com/iRainIoT/vehicle-keyboard-js)
 
 ### 兼容性声明
 
 **注意：**
 当前版本v0.5，已修改为Java原生实现键盘逻辑，不再使用Javascript。项目包结构已发生重大修改，不再向0.4及以下版本兼容。
 
-## 一、车牌号码规则
+！[Gif](./pwk_keyboard_usage.gif)
+
+### 车牌号码规则
 
 [中国车牌号码编码规则全解](http://yoojia.xyz/2018/05/09/chinese-vehicle-number/)
 
-## 添加依赖
+### 支持输入车牌类型
+
+支持中华人民共和国现行绝大部分车牌号码类型：
+
+1. 民用蓝牌、黄牌；
+2. 新能源车牌；
+3. 港澳车牌；
+4. 武警车牌；
+5. 军队车牌；
+6. 新旧大使馆车牌；
+7. 新旧领事馆车牌；
+8. 民航车牌；
+
+## 一、添加到项目
 
 增加仓库地址：
 
