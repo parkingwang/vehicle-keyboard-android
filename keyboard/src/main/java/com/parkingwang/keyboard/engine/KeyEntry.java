@@ -16,6 +16,10 @@ public class KeyEntry {
         this.isFunKey = !KeyType.GENERAL.equals(keyType);
     }
 
+    public static KeyEntry newOfSetEnable(KeyEntry key, boolean enabled) {
+        return new KeyEntry(key.text, key.keyType, enabled);
+    }
+
     @Override
     public String toString() {
         return "KeyEntry{" +

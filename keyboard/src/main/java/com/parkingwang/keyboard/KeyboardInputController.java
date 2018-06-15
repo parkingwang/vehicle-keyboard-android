@@ -65,9 +65,9 @@ public class KeyboardInputController {
                 }
                 // 除非锁定新能源类型，否则都让引擎自己检测车牌类型
                 if (mLockedOnNewEnergyType) {
-                    mKeyboardView.update(number, index, NumberType.NEW_ENERGY);
+                    mKeyboardView.update(number, index, false, NumberType.NEW_ENERGY);
                 } else {
-                    mKeyboardView.update(number, index, NumberType.AUTO_DETECT);
+                    mKeyboardView.update(number, index, false, NumberType.AUTO_DETECT);
                 }
             }
         });

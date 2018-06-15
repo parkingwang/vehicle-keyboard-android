@@ -12,15 +12,15 @@ class Context {
     final NumberType numberType;
     final int limitLength;
     final List<KeyEntry> availableKeys;
-
-    boolean isSpecialLayout;
+    final boolean reqSpecLayout;
 
     public Context(String presetNumber, int selectIndex, NumberType numberType,
-                   int limitLength, List<KeyEntry> availableKeys) {
+                   int limitLength, List<KeyEntry> availableKeys, boolean reqSpecLayout) {
         this.presetNumber = presetNumber;
         this.selectIndex = selectIndex;
         this.numberType = numberType;
         this.limitLength = limitLength;
         this.availableKeys = availableKeys;
+        this.reqSpecLayout = reqSpecLayout;
     }
 }

@@ -7,12 +7,10 @@ import java.util.List;
  */
 public class KeyboardEngine {
 
-    public static final int INDEX_PREFIX = SpecIndex.MORE_PREFIX;
     public static final int INDEX_POSTFIX = SpecIndex.MORE_POSTFIX;
+    public static final int INDEX_PREFIX = SpecIndex.MORE_PREFIX;
 
-    private static final String TAG = "KeyboardEngine";
-
-    private final AvailableKeyRegistry mAvailableKeyRegistry = new AvailableKeyRegistry();
+    private final AvailableKeyRegistry mKeyRegistry = new AvailableKeyRegistry();
     private final LayoutManager mKeyboardLayout = new LayoutManager();
     private final Mixer mMixer = new Mixer();
 
@@ -27,10 +25,11 @@ public class KeyboardEngine {
      *
      * @param presetNumber    预设车牌号码
      * @param selectCharIndex 当前选中的车牌字符序号
+     * @param showMoreLayout  是否显示对应序号的“更多”状态的键盘布局
      * @param fixedNumberType 指定车牌号码类型。要求引擎内部只按此类型来处理。
      * @return 键盘布局
      */
-    public KeyboardEntry update(String presetNumber, int selectCharIndex, NumberType fixedNumberType) {
+    public KeyboardEntry update(String presetNumber, int selectCharIndex, boolean showMoreLayout, NumberType fixedNumberType) {
         final NumberType detectNumberType;
         if (NumberType.AUTO_DETECT.equals(fixedNumberType)) {
             detectNumberType = NumberType.detect(presetNumber);
@@ -47,9 +46,10 @@ public class KeyboardEngine {
                 selectCharIndex,
                 detectNumberType,
                 maxLength,
-                mAvailableKeyRegistry.available(detectNumberType, selectCharIndex));
+                mKeyRegistry.available(detectNumberType, selectCharIndex),
+                showMoreLayout);
 
-        final List<List<KeyEntry>> layout = mKeyboardLayout.layout(context, selectCharIndex);
+        final List<List<KeyEntry>> layout = mKeyboardLayout.getLayout(context);
         final List<List<KeyEntry>> output = mMixer.mix(context, layout);
 
         return new KeyboardEntry(selectCharIndex, presetNumber, maxLength, output, detectNumberType);

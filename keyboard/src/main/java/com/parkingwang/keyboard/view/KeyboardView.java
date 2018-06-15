@@ -67,6 +67,7 @@ public class KeyboardView extends LinearLayout {
     // 缓存当前状态，用于切换“更多”与“返回”的状态
     private String mStashedNumber;
     private int mStashedIndex;
+    private boolean mStashedShowMore;
     private NumberType mStashedNumberType;
 
     public KeyboardView(Context context) {
@@ -108,25 +109,6 @@ public class KeyboardView extends LinearLayout {
     }
 
     /**
-     * 更新车牌键盘
-     *
-     * @param number 当前已输入的车牌
-     */
-    public final void update(@NonNull String number) {
-        this.update(number, number.length(), NumberType.AUTO_DETECT);
-    }
-
-    /**
-     * 更新车牌键盘
-     *
-     * @param number 当前已输入的车牌
-     * @param index  当前正在修改的车牌坐标
-     */
-    public final void update(@NonNull String number, int index) {
-        this.update(number, index, NumberType.AUTO_DETECT);
-    }
-
-    /**
      * 更新车牌键盘。
      * 此操作会触发KeyboardCallback回调。
      *
@@ -135,15 +117,13 @@ public class KeyboardView extends LinearLayout {
      * @param fixedNumberType 车牌号类型
      */
     @DebugLog
-    public void update(@NonNull final String number, final int showIndex, final NumberType fixedNumberType) {
+    public void update(@NonNull final String number, final int showIndex, final boolean showMore, final NumberType fixedNumberType) {
         mStashedNumber = number;
+        mStashedIndex = showIndex;
+        mStashedShowMore = showMore;
         mStashedNumberType = fixedNumberType;
-        // 不保存功能性序号
-        if (showIndex != KeyboardEngine.INDEX_POSTFIX && showIndex != KeyboardEngine.INDEX_PREFIX) {
-            mStashedIndex = showIndex;
-        }
         // 更新键盘布局
-        final KeyboardEntry keyboard = mKeyboardEngine.update(number, showIndex, fixedNumberType);
+        final KeyboardEntry keyboard = mKeyboardEngine.update(number, showIndex, showMore, fixedNumberType);
         renderLayout(keyboard);
         // 触发键盘变更回调
         try {
@@ -179,15 +159,11 @@ public class KeyboardView extends LinearLayout {
                 break;
 
             case FUNC_MORE:
-                if (0 == mStashedIndex) {
-                    update(mStashedNumber, KeyboardEngine.INDEX_PREFIX, mStashedNumberType);
-                } else {
-                    update(mStashedNumber, KeyboardEngine.INDEX_POSTFIX, mStashedNumberType);
-                }
+                update(mStashedNumber, mStashedIndex, true, mStashedNumberType);
                 break;
 
             case FUNC_BACK:
-                update(mStashedNumber, mStashedIndex, mStashedNumberType);
+                update(mStashedNumber, mStashedIndex, false, mStashedNumberType);
                 break;
 
 

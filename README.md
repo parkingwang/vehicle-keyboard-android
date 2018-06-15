@@ -38,9 +38,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.5'
+    implementation 'com.parkingwang:keyboard:0.6'
     // OR
-    compile 'com.parkingwang:keyboard:0.5'
+    compile 'com.parkingwang:keyboard:0.6'
 ```
 
 ## 使用组件
@@ -55,7 +55,7 @@ InputView是用于手动输入车牌的组件，提供7-8个用户可选择修�
 
 ```xml
 
-    <com.parkingwang.vehiclekeyboard.view.InputView
+    <com.parkingwang.keyboard.view.InputView
         android:id="@+id/input_view"
         app:pwkInputTextSize="22sp"
         android:layout_width="match_parent"
@@ -65,14 +65,15 @@ InputView是用于手动输入车牌的组件，提供7-8个用户可选择修�
 
 ### 车牌号码键盘组件 - KeyboardView
 
-![](./PWK_KEYBOARD_VIEW.png)
+![](./pwk_keyboard_view_01.png)
+![](./pwk_keyboard_view_02.png)
 
 KeyboardView是车牌输入键盘组件，提供按车牌类型显示一定规则的键盘布局供用户点击，如上图所示。
 
 在XML中放置键盘组件：
 
 ```xml
-    <com.parkingwang.vehiclekeyboard.view.KeyboardView
+    <com.parkingwang.keyboard.view.KeyboardView
             android:id="@+id/keyboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -241,15 +242,21 @@ KeyboardInputController提供一系列有用的方法，详细参见DOC文档对
 
 [DOC文档](https://parkingwang.github.io/vehicle-keyboard-android/)
 
+### 停车王车牌键盘布局切换逻辑
+
+停车王车牌键盘布局切换逻辑的思维导图，说明了当前版本的键盘布局的切换，以及“更多”、“返回”按钮的切换逻辑。
+
+![停车王车牌键盘布局切换逻辑](./停车王车牌键盘布局切换逻辑.svg)
+
 ## 版本更新
 
-### v0.5 2018.0531
+### v0.5 2018.06.19
 
-> 说明：在此版本中，原v0.4的@Deprecated标记类全部删除，如使用新版本，需要注意替换；
+> 说明：在此版本中，发生架构和项目结构的重大修改，不向下兼容，请按照当前版本的使用说明来修改；
 
 - 使用Java原生键盘引擎，替代原JavaScript。
 - 删除KeyboardType类型，不再需要配置键盘类型，本版本支持所有类型车牌；
-- 增加全类型车牌支持，增加“更多”来切换键盘布局；
+- 增加全类型车牌支持，增加“更多”和“返回”来切换键盘布局；
 - 优化InputView内部逻辑，简化其实现代码；
 - 优化整体操作性能，键盘输入更多流畅了；
 

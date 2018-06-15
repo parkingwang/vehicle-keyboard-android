@@ -1,13 +1,20 @@
 package com.parkingwang.keyboard.engine;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.parkingwang.keyboard.engine.SpecIndex.MORE_POSTFIX;
-import static com.parkingwang.keyboard.engine.SpecIndex.MORE_PREFIX;
+import static com.parkingwang.keyboard.engine.NumberType.AVIATION;
+import static com.parkingwang.keyboard.engine.NumberType.CIVIL;
+import static com.parkingwang.keyboard.engine.NumberType.HK_MACAO;
+import static com.parkingwang.keyboard.engine.NumberType.LING2012;
+import static com.parkingwang.keyboard.engine.NumberType.LING2018;
+import static com.parkingwang.keyboard.engine.NumberType.NEW_ENERGY;
+import static com.parkingwang.keyboard.engine.NumberType.PLA2012;
+import static com.parkingwang.keyboard.engine.NumberType.SHI2012;
+import static com.parkingwang.keyboard.engine.NumberType.SHI2017;
+import static com.parkingwang.keyboard.engine.NumberType.WJ2012;
 import static com.parkingwang.keyboard.engine.Utils.mkEntitiesOf;
 
 
@@ -18,127 +25,202 @@ import static com.parkingwang.keyboard.engine.Utils.mkEntitiesOf;
  */
 class LayoutManager {
 
-    ////
+    interface LayoutProvider {
+        List<List<KeyEntry>> get(Context ctx);
+    }
 
-    private final Map<String, List<List<KeyEntry>>> mPresetLayouts = new HashMap<>();
+    private final static String NAME_PROVINCE = "layout.province";
+    private final static String NAME_FIRST = "layout.first.spec";
+    private final static String NAME_LAST = "layout.last.spec";
+    private final static String NAME_WITH_IO = "layout.with.io";
+    private final static String NAME_WITHOUT_IO = "layout.without.io";
+
+    private final Map<String, List<List<KeyEntry>>> mNamedLayouts = new HashMap<>();
 
     LayoutManager() {
-        // 军用车牌: QVKHBSLJNGCEZ
-        mPresetLayouts.put(keyAt(MORE_PREFIX), createRows(
+        // 省份简称布局
+        mNamedLayouts.put(NAME_PROVINCE, createRows(
+                "京津晋冀蒙辽吉黑沪",
+                "苏浙皖闽赣鲁豫鄂湘",
+                "粤桂琼渝川贵云藏陕",
+                "甘青宁新" + VNumberChars.MORE + "-+"
+        ));
+
+        // 首位特殊字符布局
+        mNamedLayouts.put(NAME_FIRST, createRows(
                 "123456789",
                 "QWEYCVBN0",
                 "ASDFGHJKL",
                 "ZX民使" + VNumberChars.BACK + "-+"
         ));
 
-        // 第2位/末位可以选择的字符
-        mPresetLayouts.put(keyAt(MORE_POSTFIX), createRows(
+        // 带IO字母+数字
+        mNamedLayouts.put(NAME_WITH_IO, createRows(
+                "1234567890",
+                "QWERTYUIOP",
+                "ASDFGHJKLM",
+                "ZXCVBN-+"
+        ));
+
+        // 末位特殊字符
+        mNamedLayouts.put(NAME_LAST, createRows(
                 "学警港澳使领航挂试超",
                 "1234567890",
                 "ABCDEFGHJK",
                 "WXYZ" + VNumberChars.BACK + "-+"
         ));
 
-        //// 民用键盘
-        mPresetLayouts.put(keyAt(0), createRows(
-                "京津晋冀蒙辽吉黑沪",
-                "苏浙皖闽赣鲁豫鄂湘",
-                "粤桂琼渝川贵云藏陕",
-                "甘青宁新" + VNumberChars.MORE + "-+"
-        ));
-        mPresetLayouts.put(keyAt(1), createRows(
-                "1234567890",
-                "QWERTYUIOP",
-                "ASDFGHJKLM",
-                "ZXCVBN-+"
-        ));
-        final List<List<KeyEntry>> civil = createRows(
+        // 无IO字母+数字
+        mNamedLayouts.put(NAME_WITHOUT_IO, createRows(
                 "1234567890",
                 "QWERTYUPMN",
                 "ASDFGHJKLB",
                 "ZXCV" + VNumberChars.MORE + "-+"
-        );
-        mPresetLayouts.put(keyAt(2), civil);
-        mPresetLayouts.put(keyAt(3), civil);
-        mPresetLayouts.put(keyAt(4), civil);
-        mPresetLayouts.put(keyAt(5), civil);
-        mPresetLayouts.put(keyAt(6), civil);
-        mPresetLayouts.put(keyAt(7), civil);
+        ));
+
+        mProviders.add(new ProvinceLayoutProvider());
+        mProviders.add(new FirstSpecLayoutProvider());
+        mProviders.add(new WithIOLayoutProvider());
+        mProviders.add(new LastSpecLayoutProvider());
+        mProviders.add(new WithoutIOLayoutProvider());
+    }
+
+    private final List<LayoutProvider> mProviders = new ArrayList<>(5);
+
+    public List<List<KeyEntry>> getLayout(Context ctx) {
+        List<List<KeyEntry>> layout = null;
+        for (LayoutProvider provider : mProviders) {
+            layout = provider.get(ctx);
+            if (null != layout) {
+                break;
+            }
+        }
+        return layout;
     }
 
     /**
-     * 获取键盘布局
-     *
-     * @param context         环境变量
-     * @param selectIndex 当前选中序号
-     * @return 键盘布局
+     * 省份简称布局提供器。
+     * 1. 第1位，未知类型，非特殊状态；
+     * 2. 第1位，民用、新能源、港澳、新旧领事馆类型；
+     * 3. 第3位，武警类型；
      */
-    public List<List<KeyEntry>> layout(Context context, int selectIndex) {
-        context.isSpecialLayout = false;
-        // 动态的键盘布局
-        switch (context.selectIndex) {
-            case 0:
-                switch (context.numberType) {
-                    case SHI2012:
-                    case SHI2017:
-                    case PLA2012:
-                    case WJ2012:
-                    case AVIATION:
-                        context.isSpecialLayout = true;
-                        return cached(MORE_PREFIX);
-                    default:
-                        return cached(selectIndex);
-                }
-
-                // 第2位，特殊情况：民航
-            case 1:
-                if (NumberType.AVIATION.equals(context.numberType)) {
-                    context.isSpecialLayout = true;
-                    return cached(MORE_POSTFIX);
+    final class ProvinceLayoutProvider implements LayoutProvider {
+        @Override
+        public List<List<KeyEntry>> get(Context ctx) {
+            if (0 == ctx.selectIndex || 2 == ctx.selectIndex) {
+                if (0 == ctx.selectIndex && NumberType.AUTO_DETECT.equals(ctx.numberType) && !ctx.reqSpecLayout) {
+                    return mNamedLayouts.get(NAME_PROVINCE);
+                } else if (0 == ctx.selectIndex && ctx.numberType.isAnyOf(CIVIL, NEW_ENERGY, HK_MACAO, LING2012, LING2018)) {
+                    return mNamedLayouts.get(NAME_PROVINCE);
+                } else if (2 == ctx.selectIndex && NumberType.WJ2012.equals(ctx.numberType)) {
+                    return mNamedLayouts.get(NAME_PROVINCE);
                 } else {
-                    return cached(selectIndex);
+                    return null;
                 }
+            } else {
+                return null;
+            }
+        }
+    }
 
-                // 第3位，特殊情况：武警车牌省份简称
-            case 2:
-                if (NumberType.WJ2012.equals(context.numberType)) {
-                    // 序号 0： 省份简称的布局
-                    context.isSpecialLayout = true;
-                    return cached(0);
+    /**
+     * 首位特殊字符布局提供器。
+     * 1. 第1位，未知类型，且进入特殊布局状态；
+     * 1. 第1位，武警、军队、新旧使馆类型、民航类型；
+     */
+    final class FirstSpecLayoutProvider implements LayoutProvider {
+
+        @Override
+        public List<List<KeyEntry>> get(Context ctx) {
+            if (0 == ctx.selectIndex) {
+                if (ctx.numberType.isAnyOf(WJ2012, PLA2012, SHI2012, SHI2017, AVIATION)) {
+                    return mNamedLayouts.get(NAME_FIRST);
+                } else if (ctx.reqSpecLayout) {
+                    return mNamedLayouts.get(NAME_FIRST);
                 } else {
-                    return cached(selectIndex);
+                    return null;
                 }
+            } else {
+                return null;
+            }
+        }
+    }
 
-                // 第7位，特殊情况：
-                // - 港澳车牌
-                // - 新式大使馆
-            case 6:
-                switch (context.numberType) {
-                    case HK_MACAO:
-                    case SHI2017:
-                    case LING2012:
-                    case LING2018:
-                        context.isSpecialLayout = true;
-                        return cached(MORE_POSTFIX);
-                    default:
-                        return cached(selectIndex);
+    /**
+     * 带IO字母+数字布局提供器。
+     * 1. 第4-6位；
+     * 2. 第2位，非民航类型；
+     * 3. 第3位，非武警类型；
+     */
+    final class WithIOLayoutProvider implements LayoutProvider {
+
+        @Override
+        public List<List<KeyEntry>> get(Context ctx) {
+            if (3 == ctx.selectIndex || 4 == ctx.selectIndex || 5 == ctx.selectIndex) {
+                return mNamedLayouts.get(NAME_WITH_IO);
+            } else if (1 == ctx.selectIndex && !AVIATION.equals(ctx.numberType)) {
+                return mNamedLayouts.get(NAME_WITH_IO);
+            } else if (2 == ctx.selectIndex && !WJ2012.equals(ctx.numberType)) {
+                return mNamedLayouts.get(NAME_WITH_IO);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    /**
+     * 末位特殊字符布局提供器。
+     * 1. 第2位，民航车牌类型；
+     * 2. 第7位，进入特殊布局状态；
+     * 3. 第7位，港澳、新2017式大使馆、新旧领事馆类型；
+     */
+    final class LastSpecLayoutProvider implements LayoutProvider {
+
+        @Override
+        public List<List<KeyEntry>> get(Context ctx) {
+            if (1 == ctx.selectIndex) {
+                return mNamedLayouts.get(NAME_LAST);
+            } else if (6 == ctx.selectIndex) {
+                if (ctx.numberType.isAnyOf(HK_MACAO, SHI2017, LING2012, LING2018)) {
+                    return mNamedLayouts.get(NAME_LAST);
+                } else if (ctx.reqSpecLayout) {
+                    return mNamedLayouts.get(NAME_LAST);
+                } else {
+                    return null;
                 }
+            } else {
+                return null;
+            }
+        }
+    }
 
-            default:
-                return cached(selectIndex);
+    /**
+     * 无IO字符+数字布局提供器。
+     * 1. 第7位，民用类型，非特殊布局状态；
+     * 2. 第7位，新能源、武警、军队、旧2012式大使馆、民航；
+     * 3. 第8位；
+     */
+    final class WithoutIOLayoutProvider implements LayoutProvider {
+
+        @Override
+        public List<List<KeyEntry>> get(Context ctx) {
+            if (6 == ctx.selectIndex) {
+                if (NumberType.CIVIL.equals(ctx.numberType) && !ctx.reqSpecLayout) {
+                    return mNamedLayouts.get(NAME_WITHOUT_IO);
+                } else if (ctx.numberType.isAnyOf(NEW_ENERGY, WJ2012, PLA2012, SHI2012, AVIATION)) {
+                    return mNamedLayouts.get(NAME_WITHOUT_IO);
+                } else {
+                    return null;
+                }
+            } else if (7 == ctx.selectIndex) {
+                return mNamedLayouts.get(NAME_WITHOUT_IO);
+            } else {
+                return null;
+            }
         }
     }
 
     ////
-
-    private List<List<KeyEntry>> cached(int selectIndex) {
-        final List<List<KeyEntry>> found = mPresetLayouts.get(keyAt(selectIndex));
-        if (null != found) {
-            return found;
-        } else {
-            return Collections.emptyList();
-        }
-    }
 
     private static List<List<KeyEntry>> createRows(String... rows) {
         final List<List<KeyEntry>> layout = new ArrayList<>(rows.length);
@@ -146,10 +228,6 @@ class LayoutManager {
             layout.add(mkEntitiesOf(keys));
         }
         return layout;
-    }
-
-    private static String keyAt(int selectIndex) {
-        return "@Layout." + selectIndex;
     }
 
 }

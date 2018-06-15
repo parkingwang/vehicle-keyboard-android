@@ -136,6 +136,15 @@ public enum NumberType {
         }
     }
 
+    public boolean isAnyOf(NumberType... types) {
+        for (NumberType t : types) {
+            if (this.equals(t)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static boolean contains(String s, char c) {
         return s.indexOf(c) >= 0;
     }
