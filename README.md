@@ -256,7 +256,7 @@ KeyboardInputController提供一系列有用的方法，详细参见DOC文档对
 ### v0.4.0 2018.0424
 
 > 说明：在此版本中，如果使用`com.parkingwang.vehiclekeyboard.support.KeyboardInputController`包的相关类，
-> 会报告Deprecated,使用`com.parkingwang.vehiclekeyboard.KeyboardInputController`包的类即可。
+> 会报告Deprecated,使用`com.parkingwang.keyboard.KeyboardInputController`包的类即可。
 
 - 更新KeyboardInputController及相关类的包结构；
 - 增加Controller各个Set和Add接口的NullPointer检查；

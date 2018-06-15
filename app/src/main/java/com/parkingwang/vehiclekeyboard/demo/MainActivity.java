@@ -9,9 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.parkingwang.vehiclekeyboard.KeyboardInputController;
-import com.parkingwang.vehiclekeyboard.PopupKeyboard;
-import com.parkingwang.vehiclekeyboard.view.InputView;
+import com.parkingwang.keyboard.KeyboardInputController;
+import com.parkingwang.keyboard.PopupKeyboard;
+import com.parkingwang.keyboard.view.InputView;
 
 import java.util.ArrayList;
 import java.util.List;

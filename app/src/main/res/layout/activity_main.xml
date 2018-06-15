@@ -8,7 +8,7 @@
     android:clipChildren="false"
     tools:context="com.parkingwang.vehiclekeyboard.demo.MainActivity">
 
-    <com.parkingwang.vehiclekeyboard.view.InputView
+    <com.parkingwang.keyboard.view.InputView
         android:id="@+id/input_view"
         android:layout_margin="6dp"
         app:pwkInputTextSize="22sp"
@@ -57,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/popup_keyboard"/>
-    <!--<com.parkingwang.vehiclekeyboard.view.KeyboardView-->
+    <!--<com.parkingwang.keyboard.view.KeyboardView-->
         <!--android:id="@+id/keyboard_view"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
