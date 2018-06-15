@@ -38,7 +38,7 @@ class AutoCommit extends OnKeyboardChangedListener.Simple {
     public void onKeyboardChanged(KeyboardEntry keyboard) {
         // 在第2位和第7位的字符输入位置，存在着可以自动提交的单个键位。
         // FIXME 第2位按键存在问题：执行performClick但未能自动跳转到下一位。
-        if (6 != keyboard.selectedPosition) {
+        if (6 != keyboard.selectIndex) {
             return;
         }
         // 如果可点击键位只有一个，并且前一个操作不是删除键，则自动提交
@@ -55,7 +55,7 @@ class AutoCommit extends OnKeyboardChangedListener.Simple {
     }
 
     private KeyEntry singleKey(KeyboardEntry keyboard) {
-        final List<KeyEntry> keys = Stream.of(keyboard.keyRows)
+        final List<KeyEntry> keys = Stream.of(keyboard.layout)
                 .flatMap(new Function<List<KeyEntry>, Stream<KeyEntry>>() {
                     @Override
                     public Stream<KeyEntry> apply(List<KeyEntry> keyEntries) {

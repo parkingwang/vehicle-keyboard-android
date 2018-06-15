@@ -39,17 +39,6 @@ public class KeyboardInputController {
      *
      * @param keyboardView 键盘View
      * @param inputView    输入框View
-     * @return KeyboardInputController
-     */
-    public static KeyboardInputController with(KeyboardView keyboardView, InputView inputView) {
-        return new KeyboardInputController(keyboardView, inputView);
-    }
-
-    /**
-     * 使用键盘View和输入View，创建键盘输入控制器
-     *
-     * @param keyboardView 键盘View
-     * @param inputView    输入框View
      */
     public KeyboardInputController(KeyboardView keyboardView, InputView inputView) {
         mKeyboardView = keyboardView;
@@ -78,6 +67,17 @@ public class KeyboardInputController {
 //        mKeyboardView.addKeyboardChangedListener(new AutoCommit(mInputView));
         // 触发键盘更新回调
         mKeyboardView.addKeyboardChangedListener(triggerInputChangedCallback());
+    }
+
+    /**
+     * 使用键盘View和输入View，创建键盘输入控制器
+     *
+     * @param keyboardView 键盘View
+     * @param inputView    输入框View
+     * @return KeyboardInputController
+     */
+    public static KeyboardInputController with(KeyboardView keyboardView, InputView inputView) {
+        return new KeyboardInputController(keyboardView, inputView);
     }
 
     /**

@@ -125,6 +125,10 @@ public enum NumberType {
         }
     }
 
+    private static boolean contains(String s, char c) {
+        return s.indexOf(c) >= 0;
+    }
+
     public int maxLength() {
         switch (this) {
             case WJ2012:
@@ -143,10 +147,6 @@ public enum NumberType {
             }
         }
         return false;
-    }
-
-    private static boolean contains(String s, char c) {
-        return s.indexOf(c) >= 0;
     }
 }
 

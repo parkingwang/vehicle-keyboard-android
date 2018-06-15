@@ -1,7 +1,5 @@
 package com.parkingwang.keyboard.engine;
 
-import java.util.List;
-
 /**
  * @author 陈哈哈 yoojiachen@gmail.com
  */
@@ -53,8 +51,8 @@ public class KeyboardEngine {
                 mKeyRegistry.available(detectNumberType, selectCharIndex),
                 showMoreLayout);
 
-        final List<List<KeyEntry>> layout = mKeyboardLayout.getLayout(context);
-        final List<List<KeyEntry>> output = mMixer.mix(context, layout);
+        final LayoutEntry layout = mKeyboardLayout.getLayout(context);
+        final LayoutEntry output = mMixer.mix(context, layout);
 
         return new KeyboardEntry(selectCharIndex, presetNumber, maxLength, output, detectNumberType);
     }

@@ -8,6 +8,7 @@ import com.parkingwang.keyboard.engine.KeyboardEntry;
 
 /**
  * 键盘回调接口。
+ *
  * @author 黄浩杭 (huanghaohang@parkingwang.com)
  * @since 2017-09-26 0.1
  */
@@ -15,6 +16,7 @@ public interface OnKeyboardChangedListener {
 
     /**
      * 车牌键按下的回调事件。
+     *
      * @param text 所点击的按键的内容
      */
     void onTextKey(String text);
@@ -31,6 +33,7 @@ public interface OnKeyboardChangedListener {
 
     /**
      * 车牌键盘更新后的回调事件
+     *
      * @param keyboard 键盘信息
      */
     void onKeyboardChanged(KeyboardEntry keyboard);

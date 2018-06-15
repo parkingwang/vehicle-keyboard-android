@@ -279,6 +279,13 @@ public class InputView extends LinearLayout {
 
     //////
 
+    public interface OnFieldViewSelectedListener {
+
+        void onSelectedAt(int index);
+    }
+
+    //////////
+
     private static class ClickMeta {
 
         /**
@@ -303,13 +310,6 @@ public class InputView extends LinearLayout {
                     ", clickIndex=" + clickIndex +
                     '}';
         }
-    }
-
-    //////////
-
-    public interface OnFieldViewSelectedListener {
-
-        void onSelectedAt(int index);
     }
 
 }

@@ -1,8 +1,6 @@
 package com.parkingwang.keyboard.engine;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.parkingwang.keyboard.engine.NumberType.AUTO_DETECT;
@@ -33,14 +31,14 @@ import static com.parkingwang.keyboard.engine.VNumberChars.QWERTY_no_O;
  */
 class AvailableKeyRegistry {
 
-    private final Map<String, List<KeyEntry>> mCache = new HashMap<>();
+    private final Map<String, RowEntry> mCache = new HashMap<>();
 
     AvailableKeyRegistry() {
         //// 民用车牌
-        final List<KeyEntry> lettersNumeric = mkEntitiesOf(QWERTY_no_O + NUMERIC);
-        final List<KeyEntry> civilProvince = mkEntitiesOf(CIVIL_PROVINCES);
-        final List<KeyEntry> lettersHasO = mkEntitiesOf(QWERTY_has_O);
-        final List<KeyEntry> civilPost = append(lettersNumeric, mkEntitiesOf(CIVIL_POST));
+        final RowEntry lettersNumeric = mkEntitiesOf(QWERTY_no_O + NUMERIC);
+        final RowEntry civilProvince = mkEntitiesOf(CIVIL_PROVINCES);
+        final RowEntry lettersHasO = mkEntitiesOf(QWERTY_has_O);
+        final RowEntry civilPost = append(lettersNumeric, mkEntitiesOf(CIVIL_POST));
         mCache.put(mkKey(CIVIL, 0), civilProvince);
         mCache.put(mkKey(CIVIL, 1), lettersHasO);
         mCache.put(mkKey(CIVIL, 2), lettersNumeric);
@@ -50,7 +48,7 @@ class AvailableKeyRegistry {
         mCache.put(mkKey(CIVIL, 6), civilPost);
 
         //// 新能源车牌
-        final List<KeyEntry> numericDF = mkEntitiesOf(NUMERIC + "DF");
+        final RowEntry numericDF = mkEntitiesOf(NUMERIC + "DF");
         mCache.put(mkKey(NEW_ENERGY, 0), civilProvince);
         mCache.put(mkKey(NEW_ENERGY, 1), lettersHasO);
         mCache.put(mkKey(NEW_ENERGY, 2), numericDF);
@@ -61,7 +59,7 @@ class AvailableKeyRegistry {
         mCache.put(mkKey(NEW_ENERGY, 7), numericDF);
 
         //// 港澳车牌
-        List<KeyEntry> hkMacao = mkEntitiesOf(CHARS_HK_MACAO);
+        RowEntry hkMacao = mkEntitiesOf(CHARS_HK_MACAO);
         mCache.put(mkKey(HK_MACAO, 0), civilProvince);
         mCache.put(mkKey(HK_MACAO, 1), mkEntitiesOf("Z"));
         mCache.put(mkKey(HK_MACAO, 2), lettersNumeric);
@@ -81,9 +79,9 @@ class AvailableKeyRegistry {
         mCache.put(mkKey(WJ2012, 7), mkEntitiesOf(NUMERIC + "XBTSHJD"));
 
         //// 2017式大使馆
-        final List<KeyEntry> numeric = mkEntitiesOf(NUMERIC);
-        final List<KeyEntry> numeric123 = mkEntitiesOf(NUMERIC_123);
-        final List<KeyEntry> shi = mkEntitiesOf("使");
+        final RowEntry numeric = mkEntitiesOf(NUMERIC);
+        final RowEntry numeric123 = mkEntitiesOf(NUMERIC_123);
+        final RowEntry shi = mkEntitiesOf("使");
         mCache.put(mkKey(SHI2017, 0), numeric123);
         mCache.put(mkKey(SHI2017, 1), numeric);
         mCache.put(mkKey(SHI2017, 2), numeric);
@@ -110,7 +108,7 @@ class AvailableKeyRegistry {
         mCache.put(mkKey(PLA2012, 6), lettersNumeric);
 
         //// 2012式领事馆
-        final List<KeyEntry> ling = mkEntitiesOf("领");
+        final RowEntry ling = mkEntitiesOf("领");
         mCache.put(mkKey(LING2018, 0), civilProvince);
         mCache.put(mkKey(LING2018, 1), lettersHasO);
         mCache.put(mkKey(LING2018, 2), lettersNumeric);
@@ -137,7 +135,7 @@ class AvailableKeyRegistry {
         mCache.put(mkKey(AVIATION, 6), lettersNumeric);
 
         //// 未知类型
-        final List<KeyEntry> auto = append(civilProvince, lettersNumeric, mkEntitiesOf("民使"));
+        final RowEntry auto = append(civilProvince, lettersNumeric, mkEntitiesOf("民使"));
         mCache.put(mkKey(AUTO_DETECT, 0), auto);
         mCache.put(mkKey(AUTO_DETECT, 1), append(lettersHasO, numeric123, mkEntitiesOf("航J")));
         mCache.put(mkKey(AUTO_DETECT, 2), lettersNumeric);
@@ -147,6 +145,10 @@ class AvailableKeyRegistry {
         mCache.put(mkKey(AUTO_DETECT, 6), civilPost);
     }
 
+    private static String mkKey(NumberType type, int index) {
+        return "@" + type.name() + "." + index;
+    }
+
     /**
      * 根据指定车牌号码类型和位置，返回当前可用的全部键位
      *
@@ -154,17 +156,13 @@ class AvailableKeyRegistry {
      * @param selectedIndex 当前选择的位置
      * @return 全部可用键位
      */
-    public List<KeyEntry> available(NumberType type, int selectedIndex) {
-        final List<KeyEntry> found = mCache.get(mkKey(type, selectedIndex));
+    public RowEntry available(NumberType type, int selectedIndex) {
+        final RowEntry found = mCache.get(mkKey(type, selectedIndex));
         if (null != found) {
             return found;
         } else {
-            return Collections.emptyList();
+            return new RowEntry(0);
         }
-    }
-
-    private static String mkKey(NumberType type, int index) {
-        return "@" + type.name() + "." + index;
     }
 
 }

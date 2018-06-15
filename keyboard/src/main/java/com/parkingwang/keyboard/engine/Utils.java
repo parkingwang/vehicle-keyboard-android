@@ -1,8 +1,6 @@
 package com.parkingwang.keyboard.engine;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static com.parkingwang.keyboard.engine.VNumberChars.BACK;
 import static com.parkingwang.keyboard.engine.VNumberChars.DEL;
@@ -17,16 +15,16 @@ class Utils {
 
     }
 
-    static <T> List<T> append(List<T>... items) {
-        final List<T> output = new ArrayList<T>();
-        for (List<T> s : items) {
+    static RowEntry append(RowEntry... items) {
+        final RowEntry output = new RowEntry();
+        for (RowEntry s : items) {
             output.addAll(s);
         }
         return output;
     }
 
-    static List<KeyEntry> mkEntitiesOf(String keysStr) {
-        final List<KeyEntry> keys = new ArrayList<>();
+    static RowEntry mkEntitiesOf(String keysStr) {
+        final RowEntry keys = new RowEntry();
         for (int i = 0; i < keysStr.length(); i++) {
             String keyChar = String.valueOf(keysStr.charAt(i));
             keys.add(mkEntry(keyChar));
@@ -34,7 +32,7 @@ class Utils {
         return keys;
     }
 
-    private static KeyEntry mkEntry(String text) {
+    static KeyEntry mkEntry(String text) {
         final KeyType keyType;
         switch (text) {
             case DEL:

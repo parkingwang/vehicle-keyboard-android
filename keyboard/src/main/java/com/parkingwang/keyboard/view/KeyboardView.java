@@ -40,18 +40,20 @@ public class KeyboardView extends LinearLayout {
     private static final String TAG = "KeyboardView";
 
     private final Paint mDividerPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
-
+    private final List<OnKeyboardChangedListener> mKeyboardChangedListeners = new CopyOnWriteArrayList<>();
+    private final KeyboardEngine mKeyboardEngine = new KeyboardEngine();
+    private final KeyViewCacheHelper mKeyCacheHelper = new KeyViewCacheHelper();
     private int mRowSpace;
     private int mDefaultKeyHeight;
     private boolean mShowBubble = true;
     private float mCNTextSize;
     private float mENTextSize;
     private MotionEvent mLastEvent;
-
-    private final List<OnKeyboardChangedListener> mKeyboardChangedListeners = new CopyOnWriteArrayList<>();
-    private final KeyboardEngine mKeyboardEngine = new KeyboardEngine();
-    private final KeyViewCacheHelper mKeyCacheHelper = new KeyViewCacheHelper();
-
+    // 缓存当前状态，用于切换“更多”与“返回”的状态
+    private String mStashedNumber;
+    private int mStashedIndex;
+    private boolean mStashedShowMore;
+    private NumberType mStashedNumberType;
     private final OnClickListener mOnKeyPressedListener = new OnClickListener() {
 
         @Override
@@ -63,12 +65,6 @@ public class KeyboardView extends LinearLayout {
             onKeyPressed(key);
         }
     };
-
-    // 缓存当前状态，用于切换“更多”与“返回”的状态
-    private String mStashedNumber;
-    private int mStashedIndex;
-    private boolean mStashedShowMore;
-    private NumberType mStashedNumberType;
 
     public KeyboardView(Context context) {
         this(context, null);
@@ -243,15 +239,14 @@ public class KeyboardView extends LinearLayout {
 
     @DebugLog
     private void renderLayout(KeyboardEntry keyboard) {
-        final List<List<KeyEntry>> keyRows = keyboard.keyRows;
         // 以第一行的键盘数量为基准
-        final int maxColumn = keyRows.get(0).size();
+        final int maxColumn = keyboard.layout.get(0).size();
 
-        final int rowSize = keyRows.size();
+        final int rowSize = keyboard.layout.size();
         mKeyCacheHelper.recyclerKeyRows(this, rowSize);
 
         for (int rowIndex = 0; rowIndex < rowSize; rowIndex++) {
-            List<KeyEntry> keyEntryRow = keyRows.get(rowIndex);
+            List<KeyEntry> keyEntryRow = keyboard.layout.get(rowIndex);
             KeyRowLayout rowLayout = (KeyRowLayout) getChildAt(rowIndex);
             rowLayout.setMaxColumn(maxColumn);
 

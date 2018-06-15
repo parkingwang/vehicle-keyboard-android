@@ -23,10 +23,9 @@ import com.parkingwang.vehiclekeyboard.R;
  * @since 2017-09-26 0.1
  */
 final class KeyView extends TextView {
+    private final BubbleDrawable mBubbleDrawable;
     private KeyEntry mBoundKey;
     private Drawable mDeleteDrawable;
-
-    private final BubbleDrawable mBubbleDrawable;
     private boolean mDrawPressedText = false;
 
     private boolean mShowBubble;
@@ -112,14 +111,14 @@ final class KeyView extends TextView {
         int action = event.getActionMasked();
         if (action == MotionEvent.ACTION_DOWN) {
             mDrawPressedText = true;
-        } else if (action == MotionEvent.ACTION_MOVE){
+        } else if (action == MotionEvent.ACTION_MOVE) {
             float x = event.getX(event.getActionIndex());
             float y = event.getY(event.getActionIndex());
             if (mDrawPressedText && (x < 0 || x > getWidth() || y < 0 || y > getHeight())) {
                 mDrawPressedText = false;
                 invalidate();
             }
-        } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL){
+        } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
             mDrawPressedText = false;
             invalidate();
         }

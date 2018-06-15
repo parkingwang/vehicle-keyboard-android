@@ -10,6 +10,49 @@ import java.util.List;
  */
 public class Mixer {
 
+    private final List<KeyTransformer> mKeyTransformers = new ArrayList<>();
+    private boolean mRemoveFuncOK = false;
+
+    /**
+     * @param removeFuncOK 设置是否删除“确定”键
+     */
+    public void setRemoveFuncOK(boolean removeFuncOK) {
+        mRemoveFuncOK = removeFuncOK;
+    }
+
+    /**
+     * 使用键位变换器来处理布局
+     *
+     * @param context Env
+     * @param layout  布局
+     * @return 键位列表
+     */
+    public LayoutEntry mix(Context context, LayoutEntry layout) {
+        final LayoutEntry output = new LayoutEntry();
+        for (RowEntry layoutRow : layout) {
+            final RowEntry row = new RowEntry(layoutRow.size());
+            for (KeyEntry item : layoutRow) {
+                KeyEntry key = item;
+                if (mRemoveFuncOK && KeyType.FUNC_OK.equals(key.keyType)) {
+                    continue;
+                }
+                for (KeyTransformer keyTransformer : mKeyTransformers) {
+                    final KeyEntry ret = keyTransformer.transformKey(context, key);
+                    if (null != ret) {
+                        key = ret;
+                    }
+                }
+                row.add(key);
+            }
+            output.add(row);
+        }
+        return output;
+    }
+
+    public void addMapper(KeyTransformer keyTransformer) {
+        mKeyTransformers.add(keyTransformer);
+    }
+
     public interface KeyTransformer {
         KeyEntry transformKey(Context context, KeyEntry key);
     }
@@ -35,49 +78,5 @@ public class Mixer {
         }
 
         protected abstract KeyEntry transform(Context context, KeyEntry key);
-    }
-
-    private final List<KeyTransformer> mKeyTransformers = new ArrayList<>();
-
-    private boolean mRemoveFuncOK = false;
-
-    /**
-     * @param removeFuncOK 设置是否删除“确定”键
-     */
-    public void setRemoveFuncOK(boolean removeFuncOK) {
-        mRemoveFuncOK = removeFuncOK;
-    }
-
-    /**
-     * 使用键位变换器来处理布局
-     *
-     * @param context    Env
-     * @param layout 布局
-     * @return 键位列表
-     */
-    public List<List<KeyEntry>> mix(Context context, List<List<KeyEntry>> layout) {
-        final List<List<KeyEntry>> output = new ArrayList<>();
-        for (List<KeyEntry> layoutRow : layout) {
-            final List<KeyEntry> row = new ArrayList<>(layoutRow.size());
-            for (KeyEntry item : layoutRow) {
-                KeyEntry key = item;
-                if (mRemoveFuncOK && KeyType.FUNC_OK.equals(key.keyType)) {
-                    continue;
-                }
-                for (KeyTransformer keyTransformer : mKeyTransformers) {
-                    final KeyEntry ret = keyTransformer.transformKey(context, key);
-                    if (null != ret) {
-                        key = ret;
-                    }
-                }
-                row.add(key);
-            }
-            output.add(row);
-        }
-        return output;
-    }
-
-    public void addMapper(KeyTransformer keyTransformer) {
-        mKeyTransformers.add(keyTransformer);
     }
 }

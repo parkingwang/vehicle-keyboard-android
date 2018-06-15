@@ -25,17 +25,13 @@ import static com.parkingwang.keyboard.engine.Utils.mkEntitiesOf;
  */
 class LayoutManager {
 
-    interface LayoutProvider {
-        List<List<KeyEntry>> get(Context ctx);
-    }
-
     private final static String NAME_PROVINCE = "layout.province";
     private final static String NAME_FIRST = "layout.first.spec";
     private final static String NAME_LAST = "layout.last.spec";
     private final static String NAME_WITH_IO = "layout.with.io";
     private final static String NAME_WITHOUT_IO = "layout.without.io";
-
-    private final Map<String, List<List<KeyEntry>>> mNamedLayouts = new HashMap<>();
+    private final Map<String, LayoutEntry> mNamedLayouts = new HashMap<>();
+    private final List<LayoutProvider> mProviders = new ArrayList<>(5);
 
     LayoutManager() {
         // 省份简称布局
@@ -85,10 +81,16 @@ class LayoutManager {
         mProviders.add(new WithoutIOLayoutProvider());
     }
 
-    private final List<LayoutProvider> mProviders = new ArrayList<>(5);
+    private static LayoutEntry createRows(String... rows) {
+        final LayoutEntry layout = new LayoutEntry(rows.length);
+        for (String keys : rows) {
+            layout.add(mkEntitiesOf(keys));
+        }
+        return layout;
+    }
 
-    public List<List<KeyEntry>> getLayout(Context ctx) {
-        List<List<KeyEntry>> layout = null;
+    public LayoutEntry getLayout(Context ctx) {
+        LayoutEntry layout = null;
         for (LayoutProvider provider : mProviders) {
             layout = provider.get(ctx);
             if (null != layout) {
@@ -96,6 +98,10 @@ class LayoutManager {
             }
         }
         return layout;
+    }
+
+    interface LayoutProvider {
+        LayoutEntry get(Context ctx);
     }
 
     /**
@@ -106,7 +112,7 @@ class LayoutManager {
      */
     final class ProvinceLayoutProvider implements LayoutProvider {
         @Override
-        public List<List<KeyEntry>> get(Context ctx) {
+        public LayoutEntry get(Context ctx) {
             if (0 == ctx.selectIndex || 2 == ctx.selectIndex) {
                 if (0 == ctx.selectIndex && NumberType.AUTO_DETECT.equals(ctx.numberType) && !ctx.reqSpecLayout) {
                     return mNamedLayouts.get(NAME_PROVINCE);
@@ -131,7 +137,7 @@ class LayoutManager {
     final class FirstSpecLayoutProvider implements LayoutProvider {
 
         @Override
-        public List<List<KeyEntry>> get(Context ctx) {
+        public LayoutEntry get(Context ctx) {
             if (0 == ctx.selectIndex) {
                 if (ctx.numberType.isAnyOf(WJ2012, PLA2012, SHI2012, SHI2017, AVIATION)) {
                     return mNamedLayouts.get(NAME_FIRST);
@@ -155,7 +161,7 @@ class LayoutManager {
     final class WithIOLayoutProvider implements LayoutProvider {
 
         @Override
-        public List<List<KeyEntry>> get(Context ctx) {
+        public LayoutEntry get(Context ctx) {
             if (3 == ctx.selectIndex || 4 == ctx.selectIndex || 5 == ctx.selectIndex) {
                 return mNamedLayouts.get(NAME_WITH_IO);
             } else if (1 == ctx.selectIndex && !AVIATION.equals(ctx.numberType)) {
@@ -177,7 +183,7 @@ class LayoutManager {
     final class LastSpecLayoutProvider implements LayoutProvider {
 
         @Override
-        public List<List<KeyEntry>> get(Context ctx) {
+        public LayoutEntry get(Context ctx) {
             if (1 == ctx.selectIndex) {
                 return mNamedLayouts.get(NAME_LAST);
             } else if (6 == ctx.selectIndex) {
@@ -194,6 +200,8 @@ class LayoutManager {
         }
     }
 
+    ////
+
     /**
      * 无IO字符+数字布局提供器。
      * 1. 第7位，民用类型，非特殊布局状态；
@@ -203,7 +211,7 @@ class LayoutManager {
     final class WithoutIOLayoutProvider implements LayoutProvider {
 
         @Override
-        public List<List<KeyEntry>> get(Context ctx) {
+        public LayoutEntry get(Context ctx) {
             if (6 == ctx.selectIndex) {
                 if (NumberType.CIVIL.equals(ctx.numberType) && !ctx.reqSpecLayout) {
                     return mNamedLayouts.get(NAME_WITHOUT_IO);
@@ -218,16 +226,6 @@ class LayoutManager {
                 return null;
             }
         }
-    }
-
-    ////
-
-    private static List<List<KeyEntry>> createRows(String... rows) {
-        final List<List<KeyEntry>> layout = new ArrayList<>(rows.length);
-        for (String keys : rows) {
-            layout.add(mkEntitiesOf(keys));
-        }
-        return layout;
     }
 
 }
