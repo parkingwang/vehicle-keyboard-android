@@ -121,7 +121,7 @@ public class NeighborManager {
                 .link(zhejiang);
 
         fujian.link(zhejiang);
-        fujian.link(taiwan);
+        //fujian.link(taiwan);
 
         zhejiang.link(shanghai)
                 .link(anhui)
