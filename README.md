@@ -73,12 +73,12 @@ KeyboardView是车牌输入键盘组件，提供按车牌类型显示一定规�
 在XML中放置键盘组件：
 
 ```xml
-    <com.parkingwang.keyboard.view.KeyboardView
-            android:id="@+id/keyboard"
+    <com.parkingwang.keyboard.view.InputView
+            android:id="@+id/input_view"
+            android:layout_margin="6dp"
+            app:pwkInputTextSize="22sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            app:pwkKeyboardType="CIVIL"/>
+            android:layout_height="60dp"/>
 ```
 
 ### 输入框和键盘控制器 - KeyboardInputController
@@ -91,11 +91,6 @@ KeyboardView是车牌输入键盘组件，提供按车牌类型显示一定规�
 
 ```java
 // Init Views
-
-// 输入组件View
-mInputView = findViewById(R.id.input_view);
-// 锁定新能源车牌View
-mLockType = findViewById(R.id.lock_type);
 
 // 创建弹出键盘
 mPopupKeyboard = new PopupKeyboard(this);
@@ -116,7 +111,6 @@ mPopupKeyboard.getController()
                 }
             }
         });
-
 ```
 
 ##### 不弹出键盘，直接显示
@@ -246,7 +240,7 @@ KeyboardInputController提供一系列有用的方法，详细参见DOC文档对
 
 停车王车牌键盘布局切换逻辑的思维导图，说明了当前版本的键盘布局的切换，以及“更多”、“返回”按钮的切换逻辑。
 
-![停车王车牌键盘布局切换逻辑](./停车王车牌键盘布局切换逻辑.svg)
+![停车王车牌键盘布局切换逻辑](./pwk_layout_logic.png)
 
 ## 版本更新
 
