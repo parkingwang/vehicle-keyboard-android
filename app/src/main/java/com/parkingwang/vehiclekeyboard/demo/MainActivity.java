@@ -40,9 +40,17 @@ public class MainActivity extends AppCompatActivity {
 
         mTestNumber.add("粤A12345");
         mTestNumber.add("粤BD12345");
+        mTestNumber.add("粤Z1234港");
+        mTestNumber.add("WJ粤12345");
+        mTestNumber.add("WJ粤1234X");
+        mTestNumber.add("NA00001");
+        mTestNumber.add("123456使");
+        mTestNumber.add("使123456");
+        mTestNumber.add("粤A1234领");
+        mTestNumber.add("粤12345领");
+        mTestNumber.add("民航12345");
         mTestNumber.add("粤C0");
         mTestNumber.add("粤");
-        mTestNumber.add("WJ粤12345");
         mTestNumber.add("WJ粤12");
 
         // 创建弹出键盘
@@ -82,17 +90,15 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.test_number:
                 final int idx = mRandom.nextInt(mTestNumber.size());
-                if (idx == 3) {
-                    mPopupKeyboard.getController()
-                            .updateNumberLockType(mTestNumber.get(idx), true);
+                // 上面测试例子中，第12个，指定为新能源车牌，部分车牌
+                if (idx == 11) {
+                    mPopupKeyboard.getController().updateNumberLockType(mTestNumber.get(idx), true);
                 } else {
-                    mPopupKeyboard.getController()
-                            .updateNumber(mTestNumber.get(idx));
+                    mPopupKeyboard.getController().updateNumber(mTestNumber.get(idx));
                 }
                 break;
             case R.id.clear_number:
-                mPopupKeyboard.getController()
-                        .updateNumber("");
+                mPopupKeyboard.getController().updateNumber("");
                 break;
             case R.id.popup_keyboard:
                 if (mPopupKeyboard.isShown()) {
