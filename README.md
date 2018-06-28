@@ -60,9 +60,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.5.3'
+    implementation 'com.parkingwang:keyboard:0.5.4'
     // OR
-    compile 'com.parkingwang:keyboard:0.5.3'
+    compile 'com.parkingwang:keyboard:0.5.4'
 ```
 
 ## 二、使用组件
@@ -290,7 +290,12 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 
 ## 六、版本更新
 
-### v0.5 2018.06.15
+### v0.5.4 2018.06.28
+
+- 移除HK_MACAO车牌类型；
+- 仅当车牌"粤"字头时，才可以选择"港澳"汉字；
+
+### v0.5.3 2018.06.15
 
 > 说明：在此版本中，发生架构和项目结构的重大修改，不向下兼容，请按照当前版本的使用说明来修改；
 
