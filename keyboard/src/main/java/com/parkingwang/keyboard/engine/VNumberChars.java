@@ -11,8 +11,7 @@ class VNumberChars {
     static final String CHARS_PLA2012 = "QERTYUPASDFGHJKLZXCVBNM";
     static final String QWERTY_has_O = "QWERTYUOPASDFGHJKLZXCVBNM";
     static final String QWERTY_no_O = "QWERTYUPASDFGHJKLZXCVBNM";
-    static final String CHARS_HK_MACAO = "港澳";
-    static final String CIVIL_POST = "警学挂试超领";
+    static final String CIVIL_POST = "警学港澳挂试超领";
     static final char MIN = '民';
     static final char SHI = '使';
     static final char LING = '领';

@@ -24,11 +24,6 @@ public enum NumberType {
     NEW_ENERGY,
 
     /**
-     * 港澳
-     */
-    HK_MACAO,
-
-    /**
      * 新式武警车牌
      */
     WJ2012,
@@ -102,11 +97,6 @@ public enum NumberType {
         // 武警
         if (VNumberChars.WJ_W == firstChar) {
             return WJ2012;
-        }
-
-        // 港澳
-        if (number.startsWith("粤Z") || number.contains(VNumberChars.CHARS_HK_MACAO)) {
-            return HK_MACAO;
         }
 
         if (length >= 2) {

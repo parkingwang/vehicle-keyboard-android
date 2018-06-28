@@ -9,7 +9,6 @@ import java.util.Map;
 
 import static com.parkingwang.keyboard.engine.NumberType.AVIATION;
 import static com.parkingwang.keyboard.engine.NumberType.CIVIL;
-import static com.parkingwang.keyboard.engine.NumberType.HK_MACAO;
 import static com.parkingwang.keyboard.engine.NumberType.LING2012;
 import static com.parkingwang.keyboard.engine.NumberType.LING2018;
 import static com.parkingwang.keyboard.engine.NumberType.NEW_ENERGY;
@@ -117,7 +116,7 @@ class LayoutManager {
     /**
      * 省份简称布局提供器。
      * 1. 第1位，未知类型，非特殊状态；
-     * 2. 第1位，民用、新能源、港澳、新旧领事馆类型；
+     * 2. 第1位，民用、新能源、新旧领事馆类型；
      * 3. 第3位，武警类型；
      */
     final class ProvinceLayoutProvider implements LayoutProvider {
@@ -126,7 +125,7 @@ class LayoutManager {
             if (0 == ctx.selectIndex || 2 == ctx.selectIndex) {
                 if (0 == ctx.selectIndex && NumberType.AUTO_DETECT.equals(ctx.numberType) && !ctx.reqSpecLayout) {
                     return mNamedLayouts.get(NAME_PROVINCE);
-                } else if (0 == ctx.selectIndex && ctx.numberType.isAnyOf(CIVIL, NEW_ENERGY, HK_MACAO, LING2012, LING2018)) {
+                } else if (0 == ctx.selectIndex && ctx.numberType.isAnyOf(CIVIL, NEW_ENERGY, LING2012, LING2018)) {
                     return mNamedLayouts.get(NAME_PROVINCE);
                 } else if (2 == ctx.selectIndex && NumberType.WJ2012.equals(ctx.numberType)) {
                     return mNamedLayouts.get(NAME_PROVINCE);
@@ -188,7 +187,7 @@ class LayoutManager {
      * 末位特殊字符布局提供器。
      * 1. 第2位，民航车牌类型；
      * 2. 第7位，进入特殊布局状态；
-     * 3. 第7位，港澳、新2017式大使馆、新旧领事馆类型；
+     * 3. 第7位，新2017式大使馆、新旧领事馆类型；
      */
     final class LastSpecLayoutProvider implements LayoutProvider {
 
@@ -197,7 +196,7 @@ class LayoutManager {
             if (1 == ctx.selectIndex) {
                 return mNamedLayouts.get(NAME_LAST);
             } else if (6 == ctx.selectIndex) {
-                if (ctx.numberType.isAnyOf(HK_MACAO, SHI2017, LING2012, LING2018)) {
+                if (ctx.numberType.isAnyOf(SHI2017, LING2012, LING2018)) {
                     return mNamedLayouts.get(NAME_LAST);
                 } else if (ctx.reqSpecLayout) {
                     return mNamedLayouts.get(NAME_LAST);
