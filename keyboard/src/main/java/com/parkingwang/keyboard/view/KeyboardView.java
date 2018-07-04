@@ -52,7 +52,6 @@ public class KeyboardView extends LinearLayout {
     // 缓存当前状态，用于切换“更多”与“返回”的状态
     private String mStashedNumber;
     private int mStashedIndex;
-    private boolean mStashedShowMore;
     private NumberType mStashedNumberType;
     private final OnClickListener mOnKeyPressedListener = new OnClickListener() {
 
@@ -113,14 +112,14 @@ public class KeyboardView extends LinearLayout {
      * 此操作会触发KeyboardCallback回调。
      *
      * @param number          当前已输入的车牌
-     * @param showIndex       当前正在修改的车牌的坐标
-     * @param fixedNumberType 车牌号类型
+     * @param showIndex       当前正在修改的车牌字符所在的序号
+     * @param showMore        是否显示“更多”按钮
+     * @param fixedNumberType 指定车牌号类型
      */
     @DebugLog
     public void update(@NonNull final String number, final int showIndex, final boolean showMore, final NumberType fixedNumberType) {
         mStashedNumber = number;
         mStashedIndex = showIndex;
-        mStashedShowMore = showMore;
         mStashedNumberType = fixedNumberType;
         // 更新键盘布局
         final KeyboardEntry keyboard = mKeyboardEngine.update(number, showIndex, showMore, fixedNumberType);
@@ -165,7 +164,6 @@ public class KeyboardView extends LinearLayout {
             case FUNC_BACK:
                 update(mStashedNumber, mStashedIndex, false, mStashedNumberType);
                 break;
-
 
         }
     }
