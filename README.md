@@ -335,3 +335,15 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 
 - [陈永佳](https://github.com/yoojia) 联系方式：chenyongjia@parkingwang.com
 - [黄浩杭](https://github.com/msdx) 联系方式：huanghaohang@parkingwang.com
+
+## 疑问与交流
+
+如果你在使用此键盘时，出现一些问题，或者有相关疑问。可以添加以下微信技术群做讨论。
+
+![WxQRCode](./QrCode-Group.png)
+
+如果群二维码过期，可以通过以下微信加好友，注明“车牌键盘”，我会拉到专门技术群做讨论。
+
+![WxQRCode](./QrCode-Yoojia.png)
+
+
