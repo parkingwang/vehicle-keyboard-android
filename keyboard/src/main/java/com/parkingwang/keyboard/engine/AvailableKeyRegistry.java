@@ -6,7 +6,6 @@ import java.util.Map;
 import static com.parkingwang.keyboard.engine.NumberType.AUTO_DETECT;
 import static com.parkingwang.keyboard.engine.NumberType.AVIATION;
 import static com.parkingwang.keyboard.engine.NumberType.CIVIL;
-import static com.parkingwang.keyboard.engine.NumberType.HK_MACAO;
 import static com.parkingwang.keyboard.engine.NumberType.LING2012;
 import static com.parkingwang.keyboard.engine.NumberType.LING2018;
 import static com.parkingwang.keyboard.engine.NumberType.NEW_ENERGY;
@@ -16,7 +15,6 @@ import static com.parkingwang.keyboard.engine.NumberType.SHI2017;
 import static com.parkingwang.keyboard.engine.NumberType.WJ2012;
 import static com.parkingwang.keyboard.engine.Utils.append;
 import static com.parkingwang.keyboard.engine.Utils.mkEntitiesOf;
-import static com.parkingwang.keyboard.engine.VNumberChars.CHARS_HK_MACAO;
 import static com.parkingwang.keyboard.engine.VNumberChars.CHARS_PLA2012;
 import static com.parkingwang.keyboard.engine.VNumberChars.CIVIL_POST;
 import static com.parkingwang.keyboard.engine.VNumberChars.CIVIL_PROVINCES;
@@ -59,16 +57,6 @@ class AvailableKeyRegistry {
         mCache.put(mkKey(NEW_ENERGY, 5), lettersNumeric);
         mCache.put(mkKey(NEW_ENERGY, 6), lettersNumeric);
         mCache.put(mkKey(NEW_ENERGY, 7), numericDF);
-
-        //// 港澳车牌
-        RowEntry hkMacao = mkEntitiesOf(CHARS_HK_MACAO);
-        mCache.put(mkKey(HK_MACAO, 0), civilProvince);
-        mCache.put(mkKey(HK_MACAO, 1), mkEntitiesOf("Z"));
-        mCache.put(mkKey(HK_MACAO, 2), lettersNumeric);
-        mCache.put(mkKey(HK_MACAO, 3), lettersNumeric);
-        mCache.put(mkKey(HK_MACAO, 4), lettersNumeric);
-        mCache.put(mkKey(HK_MACAO, 5), lettersNumeric);
-        mCache.put(mkKey(HK_MACAO, 6), hkMacao);
 
         //// 武警2012式
         mCache.put(mkKey(WJ2012, 0), mkEntitiesOf("W"));

@@ -21,6 +21,7 @@ public class KeyboardEngine {
         mLayoutMixer.addKeyTransformer(new FuncKeyTransformer());
         mLayoutMixer.addKeyTransformer(new MoreKeyTransformer());
         mLayoutMixer.addKeyTransformer(new BackKeyTransformer());
+        mLayoutMixer.addKeyTransformer(new HKMacaoKeyTransformer());
         // layout
         mLayoutMixer.addLayoutTransformer(mRemoveOKLayoutTransformer);
         mLayoutMixer.addLayoutTransformer(new NeighborLayoutTransformer());
