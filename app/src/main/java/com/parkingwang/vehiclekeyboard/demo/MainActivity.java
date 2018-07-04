@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         mTestNumber.add("粤C0");
         mTestNumber.add("粤");
         mTestNumber.add("WJ粤12");
+        mTestNumber.add("湘E123456");
 
         // 创建弹出键盘
         mPopupKeyboard = new PopupKeyboard(this);
@@ -93,9 +94,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.test_number:
                 final int idx = (int) (mTestIndex % mTestNumber.size());
                 mTestIndex++;
-                if (idx == 0) {
-                    mTestIndex = 0;
-                }
                 // 上面测试例子中，第12个，指定为新能源车牌，部分车牌
                 if (idx == 11) {
                     mPopupKeyboard.getController().updateNumberLockType(mTestNumber.get(idx), true);
