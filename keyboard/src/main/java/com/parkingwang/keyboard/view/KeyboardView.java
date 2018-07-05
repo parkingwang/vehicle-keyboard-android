@@ -30,8 +30,6 @@ import com.parkingwang.vehiclekeyboard.R;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import hugo.weaving.DebugLog;
-
 /**
  * @author 黄浩杭 (huanghaohang@parkingwang.com)
  * @author 陈永佳 (chenyongjia@parkingwang.com)
@@ -116,7 +114,6 @@ public class KeyboardView extends LinearLayout {
      * @param showMore        是否显示“更多”按钮
      * @param fixedNumberType 指定车牌号类型
      */
-    @DebugLog
     public void update(@NonNull final String number, final int showIndex, final boolean showMore, final NumberType fixedNumberType) {
         mStashedNumber = number;
         mStashedIndex = showIndex;
@@ -235,7 +232,6 @@ public class KeyboardView extends LinearLayout {
         mENTextSize = TypedValue.applyDimension(unit, textSize, getResources().getDisplayMetrics());
     }
 
-    @DebugLog
     private void renderLayout(KeyboardEntry keyboard) {
         // 以第一行的键盘数量为基准
         final int maxColumn = keyboard.layout.get(0).size();
