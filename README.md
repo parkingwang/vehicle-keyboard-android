@@ -290,7 +290,7 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 
 ## 六、版本更新
 
-### v0.5.4 2018.06.28
+### v0.5.5 2018.07.02
 
 - 移除HK_MACAO车牌类型；
 - 仅当车牌"粤"字头时，才可以选择"港澳"汉字；
