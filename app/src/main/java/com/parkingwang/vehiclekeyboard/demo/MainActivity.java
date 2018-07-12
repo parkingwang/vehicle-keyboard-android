@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // 默认选中第一个车牌号码输入框
         mInputView.performFirstFieldView();
     }
 

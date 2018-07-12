@@ -60,9 +60,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.5.5'
+    implementation 'com.parkingwang:keyboard:0.5.6'
     // OR
-    compile 'com.parkingwang:keyboard:0.5.5'
+    compile 'com.parkingwang:keyboard:0.5.6'
 ```
 
 ## 二、使用组件
@@ -204,7 +204,7 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 ### 4.3 设置输入组件字体大小：
 
 ```xml
-    <com.parkingwang.vehiclekeyboard.view.InputView
+    <com.parkingwang.keyboard.view.InputView
             app:pwkInputTextSize="22sp"
             ..../>
 ```
@@ -308,7 +308,7 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 
 ### v0.4.0 2018.0424
 
-> 说明：在此版本中，如果使用`com.parkingwang.vehiclekeyboard.support.KeyboardInputController`包的相关类，
+> 说明：在此版本中，如果使用`com.parkingwang.keyboard.support.KeyboardInputController`包的相关类，
 > 会报告Deprecated,使用`com.parkingwang.keyboard.KeyboardInputController`包的类即可。
 
 - 更新KeyboardInputController及相关类的包结构；
