@@ -7,6 +7,8 @@
     <!--输入框字体大小-->
     <declare-styleable name="InputView">
         <attr name="pwkInputTextSize" format="dimension"/>
+        <attr name="pwkSelectedDrawable" format="string"/>
     </declare-styleable>
+    <attr name="pwkInputStyle" format="reference"/>
 
 </resources>
