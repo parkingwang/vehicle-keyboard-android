@@ -220,8 +220,6 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 ```xml
     <!--输入框按键样式，最左最右键样式设置-->
     <style name="PWKInputItemStyleKey" parent="PWKInputItemStyle_BORDER_KEY"/>
-    <style name="PWKInputItemStyleLeft" parent="PWKInputItemStyle_BORDER_LEFT"/>
-    <style name="PWKInputItemStyleRight" parent="PWKInputItemStyle_BORDER_RIGHT"/>
     <!--输入框外部样式-->
     <style name="PWKInputViewStyle" parent="PWKInputViewStyle_MIXED"/>
 ```
@@ -233,8 +231,6 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 ```xml
     <!--输入框按键样式，最左最右键样式设置-->
     <style name="PWKInputItemStyleKey" parent="PWKInputItemStyle_FILLED_KEY"/>
-    <style name="PWKInputItemStyleLeft" parent="PWKInputItemStyle_FILLED_LEFT"/>
-    <style name="PWKInputItemStyleRight" parent="PWKInputItemStyle_FILLED_RIGHT"/>
     <!--输入框外部样式-->
     <style name="PWKInputViewStyle" parent="PWKInputViewStyle_DIVIDED"/>
 
@@ -247,11 +243,25 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 覆盖`PWKInputItemStyleKey / PWKInputItemStyleLeft / PWKInputItemStyleRight`和`PWKInputViewStyle`来实现。
 
 - `PWKInputItemStyleKey` 控制输入组件内每个输入框的按键Button样式，样式作用于每个Button；
-- `PWKInputItemStyleLeft` 控制输入组件内最左侧输入框的按键Button样式，样式作用于一个Button；
-- `PWKInputItemStyleRight` 控制输入组件内最右侧输入框的按键Button样式，样式作用于一个Button；
 - `PWKInputViewStyle` 控制输入组件的整体样式，作用于LinearLayout；
 
 #### 4.5.1 InputView的样式选项
+
+**注意**
+最新版本需要配置 `InputView` 的 `style`。配置方法有以下两种：
+
+在布局文件中为 `InputView` 添加以下属性：
+
+```
+    style="@style/PWKInputViewStyle"
+```
+或者是在 `Application` 或 `Activity` 所配置的 `theme` 的 `style` 中添加配置（参考 demo 项目）：
+
+```
+    <item name="pwkInputStyle">@style/PWKInputViewStyle</item>
+```
+
+**常规配置**
 
 通过覆盖以下样式配置，可以修改默认样式
 
@@ -272,6 +282,15 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
     <!--输入框字体大小-->
     <dimen name="pwk_input_item_text_size">24sp</dimen>
 
+```
+
+### 4.5.2 如何自定义输入框的选中样式
+
+1. 继承 `SelectedDrawable` 并重写 `public void draw(@NonNull Canvas canvas)` 方法自己绘制选中效果。
+2. 然后将该类配置到 `InputView` 的 `app:pwkSelectedDrawable` 属性或其 `style` 中，如下所示：
+
+```
+    <item name="pwkSelectedDrawable">com.parkingwang.keyboard.view.SelectedDrawable</item>
 ```
 
 ## 五、停车王车牌键盘布局切换逻辑
