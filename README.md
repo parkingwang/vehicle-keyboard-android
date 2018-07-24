@@ -60,9 +60,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.5.6'
+    implementation 'com.parkingwang:keyboard:0.6.0'
     // OR
-    compile 'com.parkingwang:keyboard:0.5.6'
+    compile 'com.parkingwang:keyboard:0.6.0'
 ```
 
 ## 二、使用组件
@@ -308,6 +308,14 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 [百度脑图地址](http://naotu.baidu.com/file/3f07c764a7a4e6b146a827ec56b9a059?token=9ea43f483a785175)
 
 ## 六、版本更新
+
+### v0.6.0 2018.07.24
+
+- 重写选中样式的实现，使用更灵活的 Drawable 类来实现绘制选中样式，并解决原来设置背景来实现选中样式的局限。
+- 修改 InputView 的布局，去掉原来为实现选中样式而另外添加的一个 Button。
+- pwk_input_view 根标签改为 <merge></merge>，减少层级。注意：此修改将影响使用配置，相关说明见 README.md 的第 4.5.1 条“InputView 的样式选项”一节。
+- 原来对输入位是否显示的判断由 isShown() 改为 getVisibility() == View.VISIBLE，以解决在界面未显示时判断不正确的问题。
+- Fixes #19
 
 ### v0.5.5 2018.07.02
 
