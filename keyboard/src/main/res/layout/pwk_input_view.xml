@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              style="@style/PWKInputViewStyle"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:clipChildren="false"
-              android:paddingLeft="@dimen/pwk_input_view_border_width"
-              android:paddingRight="@dimen/pwk_input_view_border_width"
-              android:clipToPadding="false"
-              android:layout_height="match_parent">
+<merge style="@style/PWKInputViewStyle"
+       xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="horizontal"
+       tools:parentTag="com.parkingwang.keyboard.view.InputView">
 
     <Button
         android:id="@+id/number_0"
-        style="@style/PWKInputItemStyleLeft"/>
+        style="@style/PWKInputItemStyleKey"/>
 
     <Button
         android:id="@+id/number_1"
@@ -33,21 +31,13 @@
         android:id="@+id/number_5"
         style="@style/PWKInputItemStyleKey"/>
 
-    <!--使用切换Button来实现动态切换Button样式-->
-
     <Button
         android:id="@+id/number_6"
-        android:visibility="gone"
         style="@style/PWKInputItemStyleKey"/>
 
     <Button
-        android:id="@+id/number_6_of_end"
-        android:visibility="gone"
-        style="@style/PWKInputItemStyleRight"/>
+        android:id="@+id/number_7"
+        style="@style/PWKInputItemStyleKey"
+        android:visibility="gone"/>
 
-    <Button
-        android:id="@+id/number_7_of_end"
-        android:visibility="gone"
-        style="@style/PWKInputItemStyleRight"/>
-
-</LinearLayout>
+</merge>
