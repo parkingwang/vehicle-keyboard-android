@@ -31,20 +31,12 @@
         android:id="@+id/number_5"
         style="@style/PWKInputItemStyleKey"/>
 
-    <!--使用切换Button来实现动态切换Button样式-->
-
     <Button
         android:id="@+id/number_6"
-        style="@style/PWKInputItemStyleKey"
-        android:visibility="gone"/>
+        style="@style/PWKInputItemStyleKey"/>
 
     <Button
-        android:id="@+id/number_6_of_end"
-        style="@style/PWKInputItemStyleKey"
-        android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/number_7_of_end"
+        android:id="@+id/number_7"
         style="@style/PWKInputItemStyleKey"
         android:visibility="gone"/>
 

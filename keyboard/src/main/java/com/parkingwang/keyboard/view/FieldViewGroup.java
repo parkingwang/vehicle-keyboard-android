@@ -18,9 +18,7 @@ abstract class FieldViewGroup {
 
     private static final String TAG = "InputView.ButtonGroup";
 
-    private static final int REUSE_INDEX = 6;
-
-    private final Button[] mFieldViews = new Button[9];
+    private final Button[] mFieldViews = new Button[8];
 
     public FieldViewGroup() {
         final int[] resIds = new int[]{
@@ -31,8 +29,7 @@ abstract class FieldViewGroup {
                 R.id.number_4,
                 R.id.number_5,
                 R.id.number_6,
-                R.id.number_6_of_end,
-                R.id.number_7_of_end,
+                R.id.number_7
         };
         for (int i = 0; i < resIds.length; i++) {
             mFieldViews[i] = findViewById(resIds[i]);
@@ -71,65 +68,44 @@ abstract class FieldViewGroup {
 
     public Button[] getAvailableFields() {
         final List<Button> output = new ArrayList<>(8);
+        final int lastIndex = mFieldViews.length - 1;
+        Button fieldView;
         for (int i = 0; i < mFieldViews.length; i++) {
-            if (i < REUSE_INDEX) {
-                output.add(mFieldViews[i]);
-            } else {
-                if (mFieldViews[i].isShown()) {
-                    output.add(mFieldViews[i]);
-                }
+            fieldView = mFieldViews[i];
+            if (i != lastIndex || fieldView.getVisibility() == View.VISIBLE) {
+                output.add(fieldView);
             }
         }
         return output.toArray(new Button[output.size()]);
     }
 
     public Button getFieldAt(int index) {
-        if (index < REUSE_INDEX) {
-            return mFieldViews[index];
-        } else {
-            if (index == REUSE_INDEX) {
-                if (mFieldViews[REUSE_INDEX].isShown()) {
-                    return mFieldViews[REUSE_INDEX];
-                } else {
-                    return mFieldViews[REUSE_INDEX + 1];
-                }
-            } else {
-                return mFieldViews[index + 1];
-            }
-        }
+        return mFieldViews[index];
     }
 
     public boolean changeTo7Fields() {
-        if (mFieldViews[7].isShown()) {
+        if (mFieldViews[7].getVisibility() != View.VISIBLE) {
             return false;
         }
-        mFieldViews[6].setVisibility(View.GONE);    // 连接位
-        mFieldViews[7].setVisibility(View.VISIBLE); // 终止位
-        mFieldViews[8].setVisibility(View.GONE);    // 终止位
-        // cleanup gone
-        mFieldViews[6].setText(null);
-        mFieldViews[8].setText(null);
+        mFieldViews[7].setVisibility(View.GONE);
+        mFieldViews[7].setText(null);
         return true;
     }
 
     public boolean changeTo8Fields() {
-        if (mFieldViews[8].isShown()) {
+        if (mFieldViews[7].getVisibility() == View.VISIBLE) {
             return false;
         }
-        mFieldViews[6].setVisibility(View.VISIBLE); // 连接位
-        mFieldViews[7].setVisibility(View.GONE);    // 终止位
-        mFieldViews[8].setVisibility(View.VISIBLE); // 终止位
-        // cleanup gone
-        mFieldViews[6].setText(mFieldViews[7].getText());
+        mFieldViews[7].setVisibility(View.VISIBLE);
         mFieldViews[7].setText(null);
         return true;
     }
 
     public Button getLastField() {
-        if (mFieldViews[8].isShown()) {
-            return mFieldViews[8];
-        } else {
+        if (mFieldViews[7].getVisibility() == View.VISIBLE) {
             return mFieldViews[7];
+        } else {
+            return mFieldViews[6];
         }
     }
 
