@@ -331,10 +331,7 @@ public class InputView extends LinearLayout {
                     mSelectedDrawable.setPosition(SelectedDrawable.Position.MIDDLE);
                 }
                 final Rect rect = mSelectedDrawable.getRect();
-                rect.setEmpty();
-                getChildVisibleRect(selected, rect, null);
-                rect.right = rect.left + selected.getWidth();
-                rect.bottom = rect.top + selected.getHeight();
+                rect.set(selected.getLeft(), selected.getTop(), selected.getRight(), selected.getBottom());
                 mSelectedDrawable.draw(canvas);
                 break;
             }
