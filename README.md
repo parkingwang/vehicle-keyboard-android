@@ -60,9 +60,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.6.0'
+    implementation 'com.parkingwang:keyboard:0.6.1'
     // OR
-    compile 'com.parkingwang:keyboard:0.6.0'
+    compile 'com.parkingwang:keyboard:0.6.1'
 ```
 
 ## 二、使用组件
@@ -308,6 +308,10 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 [百度脑图地址](http://naotu.baidu.com/file/3f07c764a7a4e6b146a827ec56b9a059?token=9ea43f483a785175)
 
 ## 六、版本更新
+
+### v0.6.1 2018.08.02
+
+- 修复在4.4.2上选择框位置不正确的问题
 
 ### v0.6.0 2018.07.24
 
