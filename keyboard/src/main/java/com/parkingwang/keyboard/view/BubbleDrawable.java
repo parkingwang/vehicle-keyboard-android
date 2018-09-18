@@ -42,6 +42,10 @@ public class BubbleDrawable extends Drawable {
         mTextPaint.setFakeBoldText(true);
     }
 
+    public void setTextColor(int color) {
+        mTextPaint.setColor(color);
+    }
+
     public void setText(String text) {
         mText = text;
         if (Texts.isEnglishLetterOrDigit(text)) {

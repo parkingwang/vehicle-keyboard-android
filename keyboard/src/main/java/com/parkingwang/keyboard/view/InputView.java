@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -70,6 +71,8 @@ public class InputView extends LinearLayout {
     @Nullable
     private SelectedDrawable mSelectedDrawable;
 
+    private int mItemBorderSelectedColor;
+
     public InputView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, R.attr.pwkInputStyle);
     }
@@ -91,6 +94,8 @@ public class InputView extends LinearLayout {
         final TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.InputView, defStyleAttr, 0);
         final float textSize = ta.getDimension(R.styleable.InputView_pwkInputTextSize, 0);
         final String drawableClassName = ta.getString(R.styleable.InputView_pwkSelectedDrawable);
+        mItemBorderSelectedColor = ta.getColor(R.styleable.InputView_pwkItemBorderSelectedColor,
+                ContextCompat.getColor(context, R.color.pwk_primary_color));
         ta.recycle();
 
         initSelectedDrawable(context, drawableClassName);
@@ -110,12 +115,18 @@ public class InputView extends LinearLayout {
                 return;
             }
             mSelectedDrawable = (SelectedDrawable) cls.newInstance();
-            mSelectedDrawable.setColor(ContextCompat.getColor(context, R.color.pwk_primary_color));
+            mSelectedDrawable.setColor(mItemBorderSelectedColor);
             mSelectedDrawable.setWidth(getResources().getDimensionPixelSize(R.dimen.pwk_input_item_highlight_border_width));
             mSelectedDrawable.setRadius(getResources().getDimensionPixelSize(R.dimen.pwk_input_item_radius));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setItemBorderSelectedColor(@ColorInt int itemBorderSelectedColor) {
+        mItemBorderSelectedColor = itemBorderSelectedColor;
+        mSelectedDrawable.setColor(mItemBorderSelectedColor);
+        invalidate();
     }
 
     @Nullable

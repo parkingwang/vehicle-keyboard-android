@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (c) 2017. Xi'an iRain IOT Technology service CO., Ltd (ShenZhen). All Rights Reserved.
+  ~ Copyright (c) 2018. Xi'an iRain IOT Technology service CO., Ltd (ShenZhen). All Rights Reserved.
   -->
 
 <resources>
@@ -8,6 +8,11 @@
     <declare-styleable name="InputView">
         <attr name="pwkInputTextSize" format="dimension"/>
         <attr name="pwkSelectedDrawable" format="string"/>
+        <attr name="pwkItemBorderSelectedColor" format="color|reference"/>
+    </declare-styleable>
+    <declare-styleable name="KeyboardView">
+        <attr name="pwkBubbleColor" format="color|reference"/>
+        <attr name="pwkOKKeyColor" format="color|reference"/>
     </declare-styleable>
     <attr name="pwkInputStyle" format="reference"/>
 
