@@ -5,7 +5,9 @@
 package com.parkingwang.keyboard.view;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -51,6 +53,12 @@ public class KeyboardView extends LinearLayout {
     private String mStashedNumber;
     private int mStashedIndex;
     private NumberType mStashedNumberType;
+
+    //按下气泡文字的颜色
+    private int mBubbleTextColor = -1;
+    //确定键的背景颜色
+    private ColorStateList mOkKeyBackgroundColor;
+
     private final OnClickListener mOnKeyPressedListener = new OnClickListener() {
 
         @Override
@@ -69,6 +77,12 @@ public class KeyboardView extends LinearLayout {
 
     public KeyboardView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+
+        final TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.KeyboardView, 0, 0);
+        mBubbleTextColor = ta.getColor(R.styleable.KeyboardView_pwkBubbleColor, -1);
+        mOkKeyBackgroundColor = ta.getColorStateList(R.styleable.KeyboardView_pwkOKKeyColor);
+        ta.recycle();
+
         final Resources resources = getResources();
         mDefaultKeyHeight = resources.getDimensionPixelSize(R.dimen.pwk_keyboard_key_height);
 
@@ -99,6 +113,14 @@ public class KeyboardView extends LinearLayout {
                 // 避免键盘面板的点击事件往下层传
             }
         });
+    }
+
+    public void setBubbleTextColor(int bubbleTextColor) {
+        mBubbleTextColor = bubbleTextColor;
+    }
+
+    public void setOkKeyBackgroundColor(ColorStateList okKeyBackgroundColor) {
+        mOkKeyBackgroundColor = okKeyBackgroundColor;
     }
 
     public KeyboardEngine getKeyboardEngine() {
@@ -257,6 +279,13 @@ public class KeyboardView extends LinearLayout {
             for (int i = 0, size = keyEntryRow.size(); i < size; i++) {
                 KeyEntry key = keyEntryRow.get(i);
                 KeyView keyView = (KeyView) rowLayout.getChildAt(i);
+                if (mBubbleTextColor != -1) {
+                    keyView.setBubbleTextColor(mBubbleTextColor);
+                }
+
+                if (key.keyType == KeyType.FUNC_OK && mOkKeyBackgroundColor != null) {
+                    keyView.setOkKeyBackgroundColor(mOkKeyBackgroundColor);
+                }
                 keyView.bindKey(key);
                 if (key.keyType == KeyType.FUNC_DELETE) {
                     keyView.setText("");

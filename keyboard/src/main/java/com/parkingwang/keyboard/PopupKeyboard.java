@@ -2,6 +2,8 @@ package com.parkingwang.keyboard;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.support.annotation.ColorInt;
 
 import com.parkingwang.keyboard.engine.KeyboardEngine;
 import com.parkingwang.keyboard.view.InputView;
@@ -23,6 +25,12 @@ public class PopupKeyboard {
 
     public PopupKeyboard(Context context) {
         mKeyboardView = new KeyboardView(context);
+    }
+
+    public PopupKeyboard(Context context, @ColorInt int bubbleTextColor, ColorStateList okKeyBackgroundColor) {
+        mKeyboardView = new KeyboardView(context);
+        mKeyboardView.setBubbleTextColor(bubbleTextColor);
+        mKeyboardView.setOkKeyBackgroundColor(okKeyBackgroundColor);
     }
 
     public KeyboardView getKeyboardView() {
