@@ -8,6 +8,7 @@
     <declare-styleable name="InputView">
         <attr name="pwkInputTextSize" format="dimension"/>
         <attr name="pwkSelectedDrawable" format="string"/>
+        <attr name="pwkItemBorderSelectedColor" format="color|reference"/>
     </declare-styleable>
     <declare-styleable name="KeyboardView">
         <attr name="pwkBubbleColor" format="color|reference"/>
