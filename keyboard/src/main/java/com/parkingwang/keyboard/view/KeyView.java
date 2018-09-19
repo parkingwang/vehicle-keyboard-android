@@ -29,7 +29,6 @@ final class KeyView extends TextView {
     private boolean mDrawPressedText = false;
 
     private boolean mShowBubble;
-    private int mBubbleTextColor = -1;
     private ColorStateList mOkKeyTintColor;
 
     public KeyView(Context context) {
@@ -45,11 +44,9 @@ final class KeyView extends TextView {
     }
 
     public void setBubbleTextColor(int bubbleTextColor) {
-        mBubbleTextColor = bubbleTextColor;
-        if (mBubbleTextColor != -1) {
-            mBubbleDrawable.setTextColor(mBubbleTextColor);
-        }
+        mBubbleDrawable.setTextColor(bubbleTextColor);
     }
+
     public void setOkKeyTintColor(ColorStateList okKeyTintColor) {
         mOkKeyTintColor = okKeyTintColor;
     }
