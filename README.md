@@ -60,9 +60,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.6.1'
+    implementation 'com.parkingwang:keyboard:0.7'
     // OR
-    compile 'com.parkingwang:keyboard:0.6.1'
+    compile 'com.parkingwang:keyboard:0.7'
 ```
 
 ## 二、使用组件
@@ -308,6 +308,10 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 [百度脑图地址](http://naotu.baidu.com/file/3f07c764a7a4e6b146a827ec56b9a059?token=9ea43f483a785175)
 
 ## 六、版本更新
+
+### v0.7 2018.09.19
+
+- 增加动态设置气泡、按键主题色的方法
 
 ### v0.6.1 2018.08.02
 
