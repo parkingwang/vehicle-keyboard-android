@@ -30,7 +30,7 @@ public class PopupKeyboard {
     public PopupKeyboard(Context context, @ColorInt int bubbleTextColor, ColorStateList okKeyBackgroundColor) {
         mKeyboardView = new KeyboardView(context);
         mKeyboardView.setBubbleTextColor(bubbleTextColor);
-        mKeyboardView.setOkKeyBackgroundColor(okKeyBackgroundColor);
+        mKeyboardView.setOkKeyTintColor(okKeyBackgroundColor);
     }
 
     public KeyboardView getKeyboardView() {

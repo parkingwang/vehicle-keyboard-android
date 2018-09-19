@@ -57,7 +57,7 @@ public class KeyboardView extends LinearLayout {
     //按下气泡文字的颜色
     private int mBubbleTextColor = -1;
     //确定键的背景颜色
-    private ColorStateList mOkKeyBackgroundColor;
+    private ColorStateList mOkKeyTintColor;
 
     private final OnClickListener mOnKeyPressedListener = new OnClickListener() {
 
@@ -80,7 +80,7 @@ public class KeyboardView extends LinearLayout {
 
         final TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.KeyboardView, 0, 0);
         mBubbleTextColor = ta.getColor(R.styleable.KeyboardView_pwkBubbleColor, -1);
-        mOkKeyBackgroundColor = ta.getColorStateList(R.styleable.KeyboardView_pwkOKKeyColor);
+        mOkKeyTintColor = ta.getColorStateList(R.styleable.KeyboardView_pwkOKKeyColor);
         ta.recycle();
 
         final Resources resources = getResources();
@@ -119,8 +119,8 @@ public class KeyboardView extends LinearLayout {
         mBubbleTextColor = bubbleTextColor;
     }
 
-    public void setOkKeyBackgroundColor(ColorStateList okKeyBackgroundColor) {
-        mOkKeyBackgroundColor = okKeyBackgroundColor;
+    public void setOkKeyTintColor(ColorStateList okKeyTintColor) {
+        mOkKeyTintColor = okKeyTintColor;
     }
 
     public KeyboardEngine getKeyboardEngine() {
@@ -283,8 +283,8 @@ public class KeyboardView extends LinearLayout {
                     keyView.setBubbleTextColor(mBubbleTextColor);
                 }
 
-                if (key.keyType == KeyType.FUNC_OK && mOkKeyBackgroundColor != null) {
-                    keyView.setOkKeyBackgroundColor(mOkKeyBackgroundColor);
+                if (key.keyType == KeyType.FUNC_OK && mOkKeyTintColor != null) {
+                    keyView.setOkKeyTintColor(mOkKeyTintColor);
                 }
                 keyView.bindKey(key);
                 if (key.keyType == KeyType.FUNC_DELETE) {

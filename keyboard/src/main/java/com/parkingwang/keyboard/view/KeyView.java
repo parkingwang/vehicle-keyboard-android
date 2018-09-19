@@ -30,7 +30,7 @@ final class KeyView extends TextView {
 
     private boolean mShowBubble;
     private int mBubbleTextColor = -1;
-    private ColorStateList mOkKeyBackgroundColor;
+    private ColorStateList mOkKeyTintColor;
 
     public KeyView(Context context) {
         this(context, null);
@@ -41,6 +41,7 @@ final class KeyView extends TextView {
         setPadding(0, 0, 0, 0);
         setGravity(Gravity.CENTER);
         mBubbleDrawable = new BubbleDrawable(context);
+        mOkKeyTintColor = ContextCompat.getColorStateList(getContext(), R.color.pwk_keyboard_key_ok_tint_color);
     }
 
     public void setBubbleTextColor(int bubbleTextColor) {
@@ -49,8 +50,8 @@ final class KeyView extends TextView {
             mBubbleDrawable.setTextColor(mBubbleTextColor);
         }
     }
-    public void setOkKeyBackgroundColor(ColorStateList okKeyBackgroundColor) {
-        mOkKeyBackgroundColor = okKeyBackgroundColor;
+    public void setOkKeyTintColor(ColorStateList okKeyTintColor) {
+        mOkKeyTintColor = okKeyTintColor;
     }
 
 
@@ -63,10 +64,7 @@ final class KeyView extends TextView {
         mDrawPressedText = false;
         if (bindKey.keyType == KeyType.FUNC_OK) {
             final Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.pwk_keyboard_key_general_bg);
-            if (mOkKeyBackgroundColor == null) {
-                mOkKeyBackgroundColor = ContextCompat.getColorStateList(getContext(), R.color.pwk_keyboard_key_ok_tint_color);
-            }
-            final Drawable tintDrawable = DrawableTint.tint(drawable, mOkKeyBackgroundColor);
+            final Drawable tintDrawable = DrawableTint.tint(drawable, mOkKeyTintColor);
             setBackgroundDrawable(tintDrawable);
             setTextColor(ContextCompat.getColorStateList(getContext(), R.color.pwk_keyboard_key_ok_text));
         } else {

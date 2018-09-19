@@ -71,8 +71,6 @@ public class InputView extends LinearLayout {
     @Nullable
     private SelectedDrawable mSelectedDrawable;
 
-    private int mItemBorderSelectedColor;
-
     public InputView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, R.attr.pwkInputStyle);
     }
@@ -94,18 +92,18 @@ public class InputView extends LinearLayout {
         final TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.InputView, defStyleAttr, 0);
         final float textSize = ta.getDimension(R.styleable.InputView_pwkInputTextSize, 0);
         final String drawableClassName = ta.getString(R.styleable.InputView_pwkSelectedDrawable);
-        mItemBorderSelectedColor = ta.getColor(R.styleable.InputView_pwkItemBorderSelectedColor,
+        final int itemBorderSelectedColor = ta.getColor(R.styleable.InputView_pwkItemBorderSelectedColor,
                 ContextCompat.getColor(context, R.color.pwk_primary_color));
         ta.recycle();
 
-        initSelectedDrawable(context, drawableClassName);
+        initSelectedDrawable(drawableClassName, itemBorderSelectedColor);
 
         mFieldViewGroup.setupAllFieldsTextSize(textSize);
         mFieldViewGroup.setupAllFieldsOnClickListener(mOnFieldViewClickListener);
         mFieldViewGroup.changeTo7Fields();
     }
 
-    private void initSelectedDrawable(Context context, String className) {
+    private void initSelectedDrawable(String className, int selectedColor) {
         if (TextUtils.isEmpty(className)) {
             return;
         }
@@ -115,7 +113,7 @@ public class InputView extends LinearLayout {
                 return;
             }
             mSelectedDrawable = (SelectedDrawable) cls.newInstance();
-            mSelectedDrawable.setColor(mItemBorderSelectedColor);
+            mSelectedDrawable.setColor(selectedColor);
             mSelectedDrawable.setWidth(getResources().getDimensionPixelSize(R.dimen.pwk_input_item_highlight_border_width));
             mSelectedDrawable.setRadius(getResources().getDimensionPixelSize(R.dimen.pwk_input_item_radius));
         } catch (Exception e) {
@@ -124,8 +122,9 @@ public class InputView extends LinearLayout {
     }
 
     public void setItemBorderSelectedColor(@ColorInt int itemBorderSelectedColor) {
-        mItemBorderSelectedColor = itemBorderSelectedColor;
-        mSelectedDrawable.setColor(mItemBorderSelectedColor);
+        if (mSelectedDrawable != null) {
+            mSelectedDrawable.setColor(itemBorderSelectedColor);
+        }
         invalidate();
     }
 
