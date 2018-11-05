@@ -1,16 +1,11 @@
 package com.parkingwang.keyboard;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Point;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.parkingwang.keyboard.view.KeyboardView;
@@ -24,9 +19,9 @@ import com.parkingwang.vehiclekeyboard.R;
 public class PopupHelper {
 
     public static boolean showToActivity(final Activity activity, final KeyboardView keyboardView) {
-        View decorView = activity.getWindow().getDecorView();
+        View rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
 
-        FrameLayout keyboardWrapper = decorView.findViewById(R.id.keyboard_wrapper_id);
+        FrameLayout keyboardWrapper = rootView.findViewById(R.id.keyboard_wrapper_id);
         if (keyboardWrapper == null) {
             ViewParent keyboardViewParent = keyboardView.getParent();
             if (keyboardViewParent != null) {
@@ -40,12 +35,11 @@ public class PopupHelper {
                 keyboardWrapper = wrapKeyboardView(activity, keyboardView);
             }
 
-            if (decorView instanceof FrameLayout) {
+            if (rootView instanceof FrameLayout) {
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 params.gravity = Gravity.BOTTOM;
-                params.bottomMargin = getNavigationBarHeight(activity);
-                ((ViewGroup) decorView).addView(keyboardWrapper, params);
+                ((ViewGroup) rootView).addView(keyboardWrapper, params);
             }
             return true;
         } else {
@@ -65,26 +59,6 @@ public class PopupHelper {
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM);
         keyboardWrapper.addView(keyboardView, keyboardParams);
         return keyboardWrapper;
-    }
-
-    private static int getNavigationBarHeight(Context context) {
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        final int appUsableHeight = size.y;
-
-        if (Build.VERSION.SDK_INT >= 17) {
-            display.getRealSize(size);
-
-        } else {
-            try {
-                size.y = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
-            } catch (Exception e) {
-                return 0;
-            }
-        }
-        return size.y - appUsableHeight;
     }
 
     private static void makeSureHasNoParent(View view) {
