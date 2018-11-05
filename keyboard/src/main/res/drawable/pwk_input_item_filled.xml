@@ -9,8 +9,5 @@
     <shape>
         <corners android:radius="@dimen/pwk_input_item_radius"/>
         <solid android:color="@color/pwk_primary_color"/>
-        <stroke
-            android:width="1px"
-            android:color="@color/pwk_primary_color"/>
     </shape>
 </inset>
