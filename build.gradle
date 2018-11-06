@@ -2,12 +2,12 @@
 subprojects {
     buildscript {
         repositories {
+            google()
             jcenter()
             mavenCentral()
-            google()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:3.0.1'
+            classpath 'com.android.tools.build:gradle:3.2.1'
             classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
             classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
             classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.5.4"
@@ -16,8 +16,9 @@ subprojects {
     }
 
     repositories {
-        mavenCentral()
         google()
+        mavenCentral()
+        jcenter()
     }
 }
 
