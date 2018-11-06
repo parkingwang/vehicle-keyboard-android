@@ -19,6 +19,9 @@ if (project.plugins.hasPlugin('com.android.library')) {
             options.author true
             options.version true
 
+            // ignore R
+            options.addStringOption('Xdoclint:none R.java', '-quiet')
+
             // The Android online reference doesn't include package-list, so we have to use the local one
             String packageListRef = "${android.sdkDirectory}/docs/reference/"
             options.linksOffline 'http://d.android.com/reference/', packageListRef

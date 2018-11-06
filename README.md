@@ -60,9 +60,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.7'
+    implementation 'com.parkingwang:keyboard:0.7.1'
     // OR
-    compile 'com.parkingwang:keyboard:0.7'
+    compile 'com.parkingwang:keyboard:0.7.1'
 ```
 
 ## 二、使用组件
@@ -308,6 +308,10 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 [百度脑图地址](http://naotu.baidu.com/file/3f07c764a7a4e6b146a827ec56b9a059?token=9ea43f483a785175)
 
 ## 六、版本更新
+
+### v0.7.1 2018.11.05
+
+- 兼容 Android P 导航栏
 
 ### v0.7 2018.09.19
 
