@@ -375,7 +375,7 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 ## Contributors
 
 [VehicleKeyboard-Android](https://github.com/parkingwang/vehicle-keyboard-android)
-由西安艾润物联网技术服务有限公司第一事业部深圳研发中心开发和维护，旨在为停车行业同行进行技术交流和分享。
+由西安艾润物联网技术服务有限公司第一事业部深圳研发中心开发和维护，旨在与停车行业同行进行技术交流和分享。
 
 目前在两位开发者在开发维护，如您有相关问题，可以通过PullRequest和Issues来提交，也可以通过邮件与我们联系。
 
