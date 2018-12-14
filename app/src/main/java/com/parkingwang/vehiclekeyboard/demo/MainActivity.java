@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parkingwang.keyboard.KeyboardInputController;
+import com.parkingwang.keyboard.OnInputChangedListener;
 import com.parkingwang.keyboard.PopupKeyboard;
 import com.parkingwang.keyboard.view.InputView;
 
@@ -78,7 +79,19 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+        mPopupKeyboard.getController().addOnInputChangedListener(new OnInputChangedListener() {
+            @Override
+            public void onChanged(String number, boolean isCompleted) {
+                if (isCompleted) {
+                    mPopupKeyboard.dismiss(MainActivity.this);
+                }
+            }
 
+            @Override
+            public void onCompleted(String number, boolean isAutoCompleted) {
+                mPopupKeyboard.dismiss(MainActivity.this);
+            }
+        });
     }
 
     @Override
