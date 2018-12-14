@@ -67,6 +67,8 @@ repositories {
 
 ## 二、使用组件
 
+**注意：**有问题请先查看 [FAQ][1] 及搜索 [issue][2]。
+
 ### 2.1 车牌号码输入组件 InputView
 
 ![](./PWK_INPUT_VIEW.png)
@@ -390,4 +392,5 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 
 ![WxQRCode](./QrCode-Yoojia.png)
 
-
+[1]: https://github.com/parkingwang/vehicle-keyboard-android/blob/master/FAQ.md
+[2]: https://github.com/parkingwang/vehicle-keyboard-android/issues
