@@ -140,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(),
                         "演示“周边省份”重新排序，将在下一个操作中生效：" + name, Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.show_dialog:
+                new VehicleDialog().show(getSupportFragmentManager());
         }
     }
 }

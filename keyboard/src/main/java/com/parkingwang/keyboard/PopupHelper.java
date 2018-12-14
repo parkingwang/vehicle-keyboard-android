@@ -21,10 +21,14 @@ import com.parkingwang.vehiclekeyboard.R;
 public class PopupHelper {
 
     public static boolean showToActivity(final Activity activity, final KeyboardView keyboardView) {
-        return showToWindow(activity.getWindow(), keyboardView);
+        return showToWindow(activity.getWindow(), keyboardView, false);
     }
 
     public static boolean showToWindow(final Window window, final KeyboardView keyboardView) {
+        return showToWindow(window, keyboardView, false);
+    }
+
+    public static boolean showToWindow(final Window window, final KeyboardView keyboardView, boolean belowFirstView) {
         View rootView = window.getDecorView().findViewById(android.R.id.content);
 
         FrameLayout keyboardWrapper = rootView.findViewById(R.id.keyboard_wrapper_id);
@@ -45,6 +49,9 @@ public class PopupHelper {
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 params.gravity = Gravity.BOTTOM;
+                if (belowFirstView) {
+                    params.topMargin = ((ViewGroup) rootView).getChildAt(0).getHeight();
+                }
                 ((ViewGroup) rootView).addView(keyboardWrapper, params);
             }
             return true;

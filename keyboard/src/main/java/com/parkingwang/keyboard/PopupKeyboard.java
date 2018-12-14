@@ -1,6 +1,7 @@
 package com.parkingwang.keyboard;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.annotation.ColorInt;
@@ -21,6 +22,8 @@ public class PopupKeyboard {
 
     private KeyboardInputController mController;
 
+    private boolean isDialog = false;
+
     public PopupKeyboard(Context context) {
         mKeyboardView = new KeyboardView(context);
     }
@@ -36,10 +39,16 @@ public class PopupKeyboard {
     }
 
     public void attach(InputView inputView, final Activity activity) {
+        isDialog = false;
         attach(inputView, activity.getWindow());
     }
 
-    public void attach(InputView inputView, final Window window) {
+    public void attach(InputView inputView, final Dialog dialog) {
+        isDialog = true;
+        attach(inputView, dialog.getWindow());
+    }
+
+    private void attach(InputView inputView, final Window window) {
          if (mController == null) {
             mController = KeyboardInputController
                     .with(mKeyboardView, inputView);
@@ -68,7 +77,7 @@ public class PopupKeyboard {
 
     public void show(Window window) {
         checkAttachedController();
-        PopupHelper.showToWindow(window, mKeyboardView);
+        PopupHelper.showToWindow(window, mKeyboardView, isDialog);
     }
 
     public void dismiss(Activity activity) {
