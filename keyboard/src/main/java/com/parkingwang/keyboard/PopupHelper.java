@@ -1,11 +1,13 @@
 package com.parkingwang.keyboard;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.Window;
 import android.widget.FrameLayout;
 
 import com.parkingwang.keyboard.view.KeyboardView;
@@ -19,7 +21,11 @@ import com.parkingwang.vehiclekeyboard.R;
 public class PopupHelper {
 
     public static boolean showToActivity(final Activity activity, final KeyboardView keyboardView) {
-        View rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
+        return showToWindow(activity.getWindow(), keyboardView);
+    }
+
+    public static boolean showToWindow(final Window window, final KeyboardView keyboardView) {
+        View rootView = window.getDecorView().findViewById(android.R.id.content);
 
         FrameLayout keyboardWrapper = rootView.findViewById(R.id.keyboard_wrapper_id);
         if (keyboardWrapper == null) {
@@ -32,7 +38,7 @@ public class PopupHelper {
                 }
             }
             if (keyboardWrapper == null) {
-                keyboardWrapper = wrapKeyboardView(activity, keyboardView);
+                keyboardWrapper = wrapKeyboardView(keyboardView.getContext(), keyboardView);
             }
 
             if (rootView instanceof FrameLayout) {
@@ -50,8 +56,8 @@ public class PopupHelper {
     }
 
     @NonNull
-    private static FrameLayout wrapKeyboardView(Activity activity, KeyboardView keyboardView) {
-        FrameLayout keyboardWrapper = new FrameLayout(activity);
+    private static FrameLayout wrapKeyboardView(Context context, KeyboardView keyboardView) {
+        FrameLayout keyboardWrapper = new FrameLayout(context);
         keyboardWrapper.setId(R.id.keyboard_wrapper_id);
         keyboardWrapper.setClipChildren(false);
 
@@ -68,7 +74,11 @@ public class PopupHelper {
     }
 
     public static boolean dismissFromActivity(Activity activity) {
-        View view = activity.getWindow().getDecorView().findViewById(R.id.keyboard_wrapper_id);
+        return dismissFromWindow(activity.getWindow());
+    }
+
+    public static boolean dismissFromWindow(Window window) {
+        View view = window.getDecorView().findViewById(R.id.keyboard_wrapper_id);
         if (view == null) {
             return false;
         } else {
