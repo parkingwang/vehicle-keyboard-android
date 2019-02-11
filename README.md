@@ -377,20 +377,7 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 [VehicleKeyboard-Android](https://github.com/parkingwang/vehicle-keyboard-android)
 由西安艾润物联网技术服务有限公司第一事业部深圳研发中心开发和维护，旨在与停车行业同行进行技术交流和分享。
 
-目前在两位开发者在开发维护，如您有相关问题，可以通过PullRequest和Issues来提交，也可以通过邮件与我们联系。
-
-- [陈永佳](https://github.com/yoojia) 联系方式：chenyongjia@parkingwang.com
-- [黄浩杭](https://github.com/msdx) 联系方式：huanghaohang@parkingwang.com
-
 ## 疑问与交流
-
-如果你在使用此键盘时，出现一些问题，或者有相关疑问。可以添加以下微信技术群做讨论。
-
-![WxQRCode](./QrCode-Group.png)
-
-如果群二维码过期，可以通过以下微信加好友，注明“车牌键盘”，我会拉到专门技术群做讨论。
-
-![WxQRCode](./QrCode-Yoojia.png)
 
 [1]: https://github.com/parkingwang/vehicle-keyboard-android/blob/master/FAQ.md
 [2]: https://github.com/parkingwang/vehicle-keyboard-android/issues
