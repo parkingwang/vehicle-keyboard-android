@@ -236,7 +236,7 @@ public class KeyboardInputController {
 
     // 锁定新能源车牌
     private void triggerLockEnergyType(boolean completed) {
-        if (Texts.isNewEnergyType(mInputView.getNumber())) {
+        //if (Texts.isNewEnergyType(mInputView.getNumber())) {
             mLockedOnNewEnergyType = true;
             mMessageHandler.onMessageTip(R.string.pwk_now_is_energy);
             updateInputViewItemsByNumberType(NumberType.NEW_ENERGY);
@@ -245,9 +245,9 @@ public class KeyboardInputController {
             } else {
                 mInputView.rePerformCurrentFieldView();
             }
-        } else {
-            mMessageHandler.onMessageError(R.string.pwk_change_to_energy_disallow);
-        }
+        //} else {
+        //    mMessageHandler.onMessageError(R.string.pwk_change_to_energy_disallow);
+        //}
     }
 
     // 输入变更回调
