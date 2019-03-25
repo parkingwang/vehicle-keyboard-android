@@ -11,7 +11,7 @@ logger.info("VehicleKeyboardAndroid using version=$project.version")
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
@@ -63,6 +63,10 @@ install {
             developer {
                 id 'msdx'
                 name 'Huang Haohang'
+            }
+            developer {
+                id 'xiaoqiang'
+                name 'XiaoQiang Li'
             }
         }
     }
