@@ -30,6 +30,7 @@ public class KeyboardInputController {
 
     private boolean mLockedOnNewEnergyType = false;
     private boolean mDebugEnabled = true;
+    private boolean mSwitchVerify = true;
     private MessageHandler mMessageHandler;
 
     /**
@@ -185,6 +186,16 @@ public class KeyboardInputController {
     }
 
     /**
+     * 设置是否在新能源和普通车牌切换的时候校验规则
+     * @param verify 是否校验
+     * @return KeyboardInputController
+     */
+    public KeyboardInputController setSwitchVerify(boolean verify){
+        mSwitchVerify = verify;
+        return this;
+    }
+
+    /**
      * 设置是否启用调试信息
      *
      * @param enabled 是否启用
@@ -236,7 +247,7 @@ public class KeyboardInputController {
 
     // 锁定新能源车牌
     private void triggerLockEnergyType(boolean completed) {
-        //if (Texts.isNewEnergyType(mInputView.getNumber())) {
+        if (!mSwitchVerify || Texts.isNewEnergyType(mInputView.getNumber())) {
             mLockedOnNewEnergyType = true;
             mMessageHandler.onMessageTip(R.string.pwk_now_is_energy);
             updateInputViewItemsByNumberType(NumberType.NEW_ENERGY);
@@ -245,9 +256,9 @@ public class KeyboardInputController {
             } else {
                 mInputView.rePerformCurrentFieldView();
             }
-        //} else {
-        //    mMessageHandler.onMessageError(R.string.pwk_change_to_energy_disallow);
-        //}
+        } else {
+            mMessageHandler.onMessageError(R.string.pwk_change_to_energy_disallow);
+        }
     }
 
     // 输入变更回调

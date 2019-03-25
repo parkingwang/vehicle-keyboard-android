@@ -6,9 +6,13 @@ package com.parkingwang.vehiclekeyboard.demo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.parkingwang.keyboard.KeyboardInputController;
@@ -39,6 +43,14 @@ public class MainActivity extends AppCompatActivity {
         mInputView = findViewById(R.id.input_view);
         mProvinceView = findViewById(R.id.province_value);
 
+        final CheckBox verifyCheckButton = findViewById(R.id.verify_checkbutton);
+        verifyCheckButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mPopupKeyboard.getController().setSwitchVerify(isChecked);
+            }
+        });
+
         final Button lockTypeButton = findViewById(R.id.lock_type);
 
         mTestNumber.add("粤A12345");
@@ -68,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         // KeyboardInputController提供一个默认实现的新能源车牌锁定按钮
         mPopupKeyboard.getController()
                 .setDebugEnabled(true)
+                .setSwitchVerify(verifyCheckButton.isChecked())
                 .bindLockTypeProxy(new KeyboardInputController.ButtonProxyImpl(lockTypeButton) {
                     @Override
                     public void onNumberTypeChanged(boolean isNewEnergyType) {

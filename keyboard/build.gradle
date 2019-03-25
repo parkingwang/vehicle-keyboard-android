@@ -64,6 +64,10 @@ install {
                 id 'msdx'
                 name 'Huang Haohang'
             }
+            developer {
+                id 'xiaoqiang'
+                name 'XiaoQiang Li'
+            }
         }
     }
 }
