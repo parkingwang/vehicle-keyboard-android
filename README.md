@@ -60,9 +60,9 @@ repositories {
 添加库依赖：
 
 ```groovy
-    implementation 'com.parkingwang:keyboard:0.7.1'
-    // OR
-    compile 'com.parkingwang:keyboard:0.7.1'
+implementation 'com.parkingwang:keyboard:0.7.3'
+// OR
+compile 'com.parkingwang:keyboard:0.7.3'
 ```
 
 ## 二、使用组件
@@ -146,6 +146,12 @@ mController = KeyboardInputController
                     .with(mKeyboardView, inputView);
 
 mController.useDefaultMessageHandler();
+```
+
+**切换新能源和普通车牌是否校验**
+
+```java
+mController.setSwitchVerify(false) //不校验（默认校验）
 ```
 
 ## 三、键盘功能特性设置
@@ -310,6 +316,10 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 [百度脑图地址](http://naotu.baidu.com/file/3f07c764a7a4e6b146a827ec56b9a059?token=9ea43f483a785175)
 
 ## 六、版本更新
+
+### v0.7.3 2019.3.25
+
+- 添加了新能源和普通车牌是否需要规则校验控制选项
 
 ### v0.7.1 2018.11.05
 
