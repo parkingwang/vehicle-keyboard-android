@@ -30,10 +30,6 @@
 
 ![Gif](./pwk_keyboard_usage.gif)
 
-### 车牌号码规则
-
-[中国车牌号码编码规则全解](http://yoojia.xyz/2018/05/09/chinese-vehicle-number/)
-
 ### 支持输入车牌类型
 
 支持中华人民共和国现行绝大部分车牌号码类型：
