@@ -313,6 +313,10 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 
 ## 六、版本更新
 
+### v0.7.4 2019.11.27
+
+- 修改新能源车牌号输入及校验规则
+
 ### v0.7.3 2019.3.25
 
 - 添加了新能源和普通车牌是否需要规则校验控制选项

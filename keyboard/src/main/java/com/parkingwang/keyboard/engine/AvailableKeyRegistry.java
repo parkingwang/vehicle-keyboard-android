@@ -51,12 +51,12 @@ class AvailableKeyRegistry {
         final RowEntry numericDF = mkEntitiesOf(NUMERIC + "DF");
         mCache.put(mkKey(NEW_ENERGY, 0), civilProvince);
         mCache.put(mkKey(NEW_ENERGY, 1), lettersHasO);
-        mCache.put(mkKey(NEW_ENERGY, 2), numericDF);
+        mCache.put(mkKey(NEW_ENERGY, 2), lettersNumeric);
         mCache.put(mkKey(NEW_ENERGY, 3), lettersNumeric);
         mCache.put(mkKey(NEW_ENERGY, 4), lettersNumeric);
         mCache.put(mkKey(NEW_ENERGY, 5), lettersNumeric);
         mCache.put(mkKey(NEW_ENERGY, 6), lettersNumeric);
-        mCache.put(mkKey(NEW_ENERGY, 7), numericDF);
+        mCache.put(mkKey(NEW_ENERGY, 7), lettersNumeric);
 
         //// 武警2012式
         mCache.put(mkKey(WJ2012, 0), mkEntitiesOf("W"));

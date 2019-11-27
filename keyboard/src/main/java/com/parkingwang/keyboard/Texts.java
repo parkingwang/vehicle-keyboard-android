@@ -20,7 +20,7 @@ public class Texts {
             for (int i = 0; i < size; i++) {
                 number += "0";
             }
-            if (Pattern.matches("\\w[A-Z][0-9DF][0-9A-Z]\\d{3}[0-9DF]", number)) {
+            if (Pattern.matches("\\w[A-Z][0-9A-Z][0-9A-Z]\\w{3}[0-9A-Z]", number)) {
                 return true;
             } else {
                 return false;
