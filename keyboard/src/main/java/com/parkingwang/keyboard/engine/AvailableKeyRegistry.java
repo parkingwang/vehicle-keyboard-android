@@ -38,9 +38,10 @@ class AvailableKeyRegistry {
         final RowEntry lettersNumeric = mkEntitiesOf(QWERTY_no_O + NUMERIC);
         final RowEntry civilProvince = mkEntitiesOf(CIVIL_PROVINCES);
         final RowEntry lettersHasO = mkEntitiesOf(QWERTY_has_O);
+        final RowEntry lettersHasONumeric = mkEntitiesOf(NUMERIC + QWERTY_has_O);
         final RowEntry civilPost = append(lettersNumeric, mkEntitiesOf(CIVIL_POST));
         mCache.put(mkKey(CIVIL, 0), civilProvince);
-        mCache.put(mkKey(CIVIL, 1), lettersHasO);
+        mCache.put(mkKey(CIVIL, 1), lettersHasONumeric);
         mCache.put(mkKey(CIVIL, 2), lettersNumeric);
         mCache.put(mkKey(CIVIL, 3), lettersNumeric);
         mCache.put(mkKey(CIVIL, 4), lettersNumeric);
@@ -129,7 +130,7 @@ class AvailableKeyRegistry {
         //// 未知类型
         final RowEntry auto = append(civilProvince, lettersNumeric, mkEntitiesOf("民使"));
         mCache.put(mkKey(AUTO_DETECT, 0), auto);
-        mCache.put(mkKey(AUTO_DETECT, 1), append(lettersHasO, numeric123, mkEntitiesOf("航J")));
+        mCache.put(mkKey(AUTO_DETECT, 1), append(lettersHasO, numeric, mkEntitiesOf("航J")));
         mCache.put(mkKey(AUTO_DETECT, 2), lettersNumeric);
         mCache.put(mkKey(AUTO_DETECT, 3), lettersNumeric);
         mCache.put(mkKey(AUTO_DETECT, 4), lettersNumeric);
