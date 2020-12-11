@@ -313,6 +313,10 @@ mPopupKeyboard.getKeyboardEngine().setLocalProvinceName("广东省");
 
 ## 六、版本更新
 
+### v0.7.6 2020.12.11
+
+- 武警车牌号第三位放开字母输入限制
+
 ### v0.7.5 2020.06.03
 
 - 普通车牌放开第二位数字输入限制

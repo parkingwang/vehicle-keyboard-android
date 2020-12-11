@@ -35,6 +35,7 @@ class LayoutManager {
     private final static String NAME_LAST = "layout.last.spec";
     private final static String NAME_WITH_IO = "layout.with.io";
     private final static String NAME_WITHOUT_IO = "layout.without.io";
+    private final static String NAME_WITHOUT_IO_BACK = "layout.without.io.back";
     private final Map<String, LayoutEntry> mNamedLayouts = new HashMap<>();
     private final List<LayoutProvider> mProviders = new ArrayList<>(5);
 
@@ -61,6 +62,14 @@ class LayoutManager {
                 "QWERTYUIOP",
                 "ASDFGHJKLM",
                 "ZXCVBN-+"
+        ));
+
+        // 不带IO字母+数字 带返回按钮(军警车第三位使用)
+        mNamedLayouts.put(NAME_WITHOUT_IO_BACK, createRows(
+                "1234567890",
+                "QWERTYUBNP",
+                "ASDFGHJKLM",
+                "ZXCV" + VNumberChars.BACK + "-+"
         ));
 
         // 末位特殊字符
@@ -128,7 +137,11 @@ class LayoutManager {
                 } else if (0 == ctx.selectIndex && ctx.numberType.isAnyOf(CIVIL, NEW_ENERGY, LING2012, LING2018)) {
                     return mNamedLayouts.get(NAME_PROVINCE);
                 } else if (2 == ctx.selectIndex && NumberType.WJ2012.equals(ctx.numberType)) {
-                    return mNamedLayouts.get(NAME_PROVINCE);
+                    if (ctx.reqSpecLayout) {
+                        return mNamedLayouts.get(NAME_WITHOUT_IO_BACK);
+                    } else {
+                        return mNamedLayouts.get(NAME_PROVINCE);
+                    }
                 } else {
                     return null;
                 }

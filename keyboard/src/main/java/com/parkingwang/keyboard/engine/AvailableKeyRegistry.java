@@ -62,7 +62,7 @@ class AvailableKeyRegistry {
         //// 武警2012式
         mCache.put(mkKey(WJ2012, 0), mkEntitiesOf("W"));
         mCache.put(mkKey(WJ2012, 1), mkEntitiesOf("J"));
-        mCache.put(mkKey(WJ2012, 2), civilProvince);
+        mCache.put(mkKey(WJ2012, 2), append(civilProvince, lettersNumeric));
         mCache.put(mkKey(WJ2012, 3), lettersNumeric);
         mCache.put(mkKey(WJ2012, 4), lettersNumeric);
         mCache.put(mkKey(WJ2012, 5), lettersNumeric);

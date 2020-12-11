@@ -29,7 +29,7 @@ public class MoreKeyTransformer extends LayoutMixer.AbstractTypedKeyTransformer 
         if (0 == ctx.selectIndex && ctx.numberType.isAnyOf(CIVIL, NEW_ENERGY, LING2012, LING2018)) {
             return KeyEntry.newOfSetEnable(key, false);
         } else if (2 == ctx.selectIndex && WJ2012.equals(ctx.numberType)) {
-            return KeyEntry.newOfSetEnable(key, false);
+            return KeyEntry.newOfSetEnable(key, true);
         } else if (6 == ctx.selectIndex && ctx.numberType.isAnyOf(NEW_ENERGY, WJ2012, PLA2012, SHI2012, AVIATION)) {
             return KeyEntry.newOfSetEnable(key, false);
         } else if (7 == ctx.selectIndex) {
